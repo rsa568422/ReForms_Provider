@@ -21,7 +21,6 @@ import javax.persistence.NamedQuery;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
-import javax.validation.constraints.Size;
 import javax.xml.bind.annotation.XmlRootElement;
 
 /**
@@ -32,7 +31,7 @@ import javax.xml.bind.annotation.XmlRootElement;
 @Table(name = "mantenimiento")
 @XmlRootElement
 @NamedQueries({
-    @NamedQuery(name = "Mantenimiento.findAll", query = "SELECT m FROM Mantenimiento m")
+      @NamedQuery(name = "Mantenimiento.findAll", query = "SELECT m FROM Mantenimiento m")
     , @NamedQuery(name = "Mantenimiento.findById", query = "SELECT m FROM Mantenimiento m WHERE m.id = :id")
     , @NamedQuery(name = "Mantenimiento.findByTipo", query = "SELECT m FROM Mantenimiento m WHERE m.tipo = :tipo")
     , @NamedQuery(name = "Mantenimiento.findByFecha", query = "SELECT m FROM Mantenimiento m WHERE m.fecha = :fecha")
@@ -54,8 +53,7 @@ public class Mantenimiento implements Serializable {
     // @Max(value=?)  @Min(value=?)//if you know range of your decimal fields consider using these annotations to enforce field validation
     @Column(name = "coste")
     private Float coste;
-    @Size(max = 250)
-    @Column(name = "descripcion")
+    @Column(name = "descripcion", length = 250)
     private String descripcion;
     @JoinColumn(name = "vehiculo", referencedColumnName = "id")
     @ManyToOne(optional = false, fetch = FetchType.LAZY)

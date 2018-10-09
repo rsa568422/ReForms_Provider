@@ -22,8 +22,6 @@ import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
-import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Size;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlTransient;
 
@@ -35,7 +33,7 @@ import javax.xml.bind.annotation.XmlTransient;
 @Table(name = "vehiculo")
 @XmlRootElement
 @NamedQueries({
-    @NamedQuery(name = "Vehiculo.findAll", query = "SELECT v FROM Vehiculo v")
+      @NamedQuery(name = "Vehiculo.findAll", query = "SELECT v FROM Vehiculo v")
     , @NamedQuery(name = "Vehiculo.findById", query = "SELECT v FROM Vehiculo v WHERE v.id = :id")
     , @NamedQuery(name = "Vehiculo.findByMatricula", query = "SELECT v FROM Vehiculo v WHERE v.matricula = :matricula")
     , @NamedQuery(name = "Vehiculo.findByMarca", query = "SELECT v FROM Vehiculo v WHERE v.marca = :marca")
@@ -53,15 +51,11 @@ public class Vehiculo implements Serializable {
     @Column(name = "id")
     private Integer id;
     @Basic(optional = false)
-    @NotNull
-    @Size(min = 1, max = 10)
-    @Column(name = "matricula")
+    @Column(name = "matricula", nullable = false, length = 10)
     private String matricula;
-    @Size(max = 10)
-    @Column(name = "marca")
+    @Column(name = "marca", length = 10)
     private String marca;
-    @Size(max = 20)
-    @Column(name = "modelo")
+    @Column(name = "modelo", length = 20)
     private String modelo;
     @Column(name = "matriculacion")
     @Temporal(TemporalType.DATE)
@@ -71,13 +65,12 @@ public class Vehiculo implements Serializable {
     private Date adquisicion;
     @Column(name = "km")
     private Integer km;
-    @Size(max = 250)
-    @Column(name = "observaciones")
+    @Column(name = "observaciones", length = 250)
     private String observaciones;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "vehiculo", fetch = FetchType.LAZY)
-    private List<Mantenimiento> mantenimientoList;
+    private List<Mantenimiento> mantenimientos;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "vehiculo", fetch = FetchType.LAZY)
-    private List<Conductor> conductorList;
+    private List<Conductor> conductores;
 
     public Vehiculo() {
     }
@@ -156,21 +149,21 @@ public class Vehiculo implements Serializable {
     }
 
     @XmlTransient
-    public List<Mantenimiento> getMantenimientoList() {
-        return mantenimientoList;
+    public List<Mantenimiento> getMantenimientos() {
+        return mantenimientos;
     }
 
-    public void setMantenimientoList(List<Mantenimiento> mantenimientoList) {
-        this.mantenimientoList = mantenimientoList;
+    public void setMantenimientos(List<Mantenimiento> mantenimientos) {
+        this.mantenimientos = mantenimientos;
     }
 
     @XmlTransient
-    public List<Conductor> getConductorList() {
-        return conductorList;
+    public List<Conductor> getConductores() {
+        return conductores;
     }
 
-    public void setConductorList(List<Conductor> conductorList) {
-        this.conductorList = conductorList;
+    public void setConductores(List<Conductor> conductores) {
+        this.conductores = conductores;
     }
 
     @Override

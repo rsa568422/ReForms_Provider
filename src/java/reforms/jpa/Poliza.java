@@ -21,7 +21,6 @@ import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
-import javax.validation.constraints.NotNull;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlTransient;
 
@@ -33,7 +32,7 @@ import javax.xml.bind.annotation.XmlTransient;
 @Table(name = "poliza")
 @XmlRootElement
 @NamedQueries({
-    @NamedQuery(name = "Poliza.findAll", query = "SELECT p FROM Poliza p")
+      @NamedQuery(name = "Poliza.findAll", query = "SELECT p FROM Poliza p")
     , @NamedQuery(name = "Poliza.findById", query = "SELECT p FROM Poliza p WHERE p.id = :id")
     , @NamedQuery(name = "Poliza.findByNumero", query = "SELECT p FROM Poliza p WHERE p.numero = :numero")})
 public class Poliza implements Serializable {
@@ -45,9 +44,8 @@ public class Poliza implements Serializable {
     @Column(name = "id")
     private Integer id;
     @Basic(optional = false)
-    @NotNull
-    @Column(name = "numero")
-    private int numero;
+    @Column(name = "numero", nullable = false, length = 10)
+    private String numero;
     @JoinColumn(name = "cliente", referencedColumnName = "id")
     @ManyToOne(optional = false, fetch = FetchType.LAZY)
     private Cliente cliente;
@@ -55,7 +53,7 @@ public class Poliza implements Serializable {
     @ManyToOne(optional = false, fetch = FetchType.LAZY)
     private Propiedad propiedad;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "poliza", fetch = FetchType.LAZY)
-    private List<Siniestro> siniestroList;
+    private List<Siniestro> siniestros;
 
     public Poliza() {
     }
@@ -64,7 +62,7 @@ public class Poliza implements Serializable {
         this.id = id;
     }
 
-    public Poliza(Integer id, int numero) {
+    public Poliza(Integer id, String numero) {
         this.id = id;
         this.numero = numero;
     }
@@ -77,11 +75,11 @@ public class Poliza implements Serializable {
         this.id = id;
     }
 
-    public int getNumero() {
+    public String getNumero() {
         return numero;
     }
 
-    public void setNumero(int numero) {
+    public void setNumero(String numero) {
         this.numero = numero;
     }
 
@@ -102,12 +100,12 @@ public class Poliza implements Serializable {
     }
 
     @XmlTransient
-    public List<Siniestro> getSiniestroList() {
-        return siniestroList;
+    public List<Siniestro> getSiniestros() {
+        return siniestros;
     }
 
-    public void setSiniestroList(List<Siniestro> siniestroList) {
-        this.siniestroList = siniestroList;
+    public void setSiniestros(List<Siniestro> siniestros) {
+        this.siniestros = siniestros;
     }
 
     @Override

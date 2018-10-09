@@ -21,8 +21,6 @@ import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
-import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Size;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlTransient;
 
@@ -34,7 +32,7 @@ import javax.xml.bind.annotation.XmlTransient;
 @Table(name = "propiedad")
 @XmlRootElement
 @NamedQueries({
-    @NamedQuery(name = "Propiedad.findAll", query = "SELECT p FROM Propiedad p")
+      @NamedQuery(name = "Propiedad.findAll", query = "SELECT p FROM Propiedad p")
     , @NamedQuery(name = "Propiedad.findById", query = "SELECT p FROM Propiedad p WHERE p.id = :id")
     , @NamedQuery(name = "Propiedad.findByDireccion", query = "SELECT p FROM Propiedad p WHERE p.direccion = :direccion")
     , @NamedQuery(name = "Propiedad.findByNumero", query = "SELECT p FROM Propiedad p WHERE p.numero = :numero")
@@ -51,17 +49,13 @@ public class Propiedad implements Serializable {
     @Column(name = "id")
     private Integer id;
     @Basic(optional = false)
-    @NotNull
-    @Size(min = 1, max = 250)
-    @Column(name = "direccion")
+    @Column(name = "direccion", nullable = false, length = 250)
     private String direccion;
     @Column(name = "numero")
     private Integer numero;
-    @Size(max = 20)
-    @Column(name = "piso")
+    @Column(name = "piso", length = 20)
     private String piso;
-    @Size(max = 250)
-    @Column(name = "observaciones")
+    @Column(name = "observaciones", length = 250)
     private String observaciones;
     // @Max(value=?)  @Min(value=?)//if you know range of your decimal fields consider using these annotations to enforce field validation
     @Column(name = "geolat")
@@ -72,11 +66,11 @@ public class Propiedad implements Serializable {
     @ManyToOne(optional = false, fetch = FetchType.LAZY)
     private Localidad localidad;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "propiedad", fetch = FetchType.LAZY)
-    private List<Poliza> polizaList;
+    private List<Poliza> polizas;
     @OneToMany(mappedBy = "afectado", fetch = FetchType.LAZY)
-    private List<Siniestro> siniestroList;
+    private List<Siniestro> siniestros;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "propiedad", fetch = FetchType.LAZY)
-    private List<Trabajador> trabajadorList;
+    private List<Trabajador> trabajadores;
 
     public Propiedad() {
     }
@@ -155,30 +149,30 @@ public class Propiedad implements Serializable {
     }
 
     @XmlTransient
-    public List<Poliza> getPolizaList() {
-        return polizaList;
+    public List<Poliza> getPolizas() {
+        return polizas;
     }
 
-    public void setPolizaList(List<Poliza> polizaList) {
-        this.polizaList = polizaList;
-    }
-
-    @XmlTransient
-    public List<Siniestro> getSiniestroList() {
-        return siniestroList;
-    }
-
-    public void setSiniestroList(List<Siniestro> siniestroList) {
-        this.siniestroList = siniestroList;
+    public void setPolizas(List<Poliza> polizas) {
+        this.polizas = polizas;
     }
 
     @XmlTransient
-    public List<Trabajador> getTrabajadorList() {
-        return trabajadorList;
+    public List<Siniestro> getSiniestros() {
+        return siniestros;
     }
 
-    public void setTrabajadorList(List<Trabajador> trabajadorList) {
-        this.trabajadorList = trabajadorList;
+    public void setSiniestros(List<Siniestro> siniestros) {
+        this.siniestros = siniestros;
+    }
+
+    @XmlTransient
+    public List<Trabajador> getTrabajadores() {
+        return trabajadores;
+    }
+
+    public void setTrabajadores(List<Trabajador> trabajadores) {
+        this.trabajadores = trabajadores;
     }
 
     @Override

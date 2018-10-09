@@ -32,7 +32,7 @@ import javax.xml.bind.annotation.XmlTransient;
 @Table(name = "operador")
 @XmlRootElement
 @NamedQueries({
-    @NamedQuery(name = "Operador.findAll", query = "SELECT o FROM Operador o")
+      @NamedQuery(name = "Operador.findAll", query = "SELECT o FROM Operador o")
     , @NamedQuery(name = "Operador.findById", query = "SELECT o FROM Operador o WHERE o.id = :id")
     , @NamedQuery(name = "Operador.findByGerente", query = "SELECT o FROM Operador o WHERE o.gerente = :gerente")})
 public class Operador implements Serializable {
@@ -46,9 +46,9 @@ public class Operador implements Serializable {
     @Column(name = "gerente")
     private Integer gerente;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "gerente", fetch = FetchType.LAZY)
-    private List<Jornada> jornadaList;
+    private List<Jornada> jornadas;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "operador", fetch = FetchType.LAZY)
-    private List<Evento> eventoList;
+    private List<Evento> eventos;
     @JoinColumn(name = "trabajador", referencedColumnName = "id")
     @OneToOne(optional = false, fetch = FetchType.LAZY)
     private Trabajador trabajador;
@@ -77,21 +77,21 @@ public class Operador implements Serializable {
     }
 
     @XmlTransient
-    public List<Jornada> getJornadaList() {
-        return jornadaList;
+    public List<Jornada> getJornadas() {
+        return jornadas;
     }
 
-    public void setJornadaList(List<Jornada> jornadaList) {
-        this.jornadaList = jornadaList;
+    public void setJornadas(List<Jornada> jornadas) {
+        this.jornadas = jornadas;
     }
 
     @XmlTransient
-    public List<Evento> getEventoList() {
-        return eventoList;
+    public List<Evento> getEventos() {
+        return eventos;
     }
 
-    public void setEventoList(List<Evento> eventoList) {
-        this.eventoList = eventoList;
+    public void setEventos(List<Evento> eventos) {
+        this.eventos = eventos;
     }
 
     public Trabajador getTrabajador() {

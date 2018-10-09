@@ -22,8 +22,6 @@ import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
-import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Size;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlTransient;
 
@@ -35,7 +33,7 @@ import javax.xml.bind.annotation.XmlTransient;
 @Table(name = "trabajador")
 @XmlRootElement
 @NamedQueries({
-    @NamedQuery(name = "Trabajador.findAll", query = "SELECT t FROM Trabajador t")
+      @NamedQuery(name = "Trabajador.findAll", query = "SELECT t FROM Trabajador t")
     , @NamedQuery(name = "Trabajador.findById", query = "SELECT t FROM Trabajador t WHERE t.id = :id")
     , @NamedQuery(name = "Trabajador.findByDni", query = "SELECT t FROM Trabajador t WHERE t.dni = :dni")
     , @NamedQuery(name = "Trabajador.findByNombre", query = "SELECT t FROM Trabajador t WHERE t.nombre = :nombre")
@@ -53,37 +51,27 @@ public class Trabajador implements Serializable {
     @Column(name = "id")
     private Integer id;
     @Basic(optional = false)
-    @NotNull
-    @Size(min = 1, max = 9)
-    @Column(name = "dni")
+    @Column(name = "dni", nullable = false, length = 9)
     private String dni;
     @Basic(optional = false)
-    @NotNull
-    @Size(min = 1, max = 50)
-    @Column(name = "nombre")
+    @Column(name = "nombre", nullable = false, length = 50)
     private String nombre;
     @Basic(optional = false)
-    @NotNull
-    @Size(min = 1, max = 50)
-    @Column(name = "apellido1")
+    @Column(name = "apellido1", nullable = false, length = 50)
     private String apellido1;
-    @Size(max = 50)
-    @Column(name = "apellido2")
+    @Column(name = "apellido2", length = 50)
     private String apellido2;
-    @Size(max = 9)
-    @Column(name = "telefono1")
+    @Column(name = "telefono1", length = 9)
     private String telefono1;
-    @Size(max = 9)
-    @Column(name = "telefono2")
+    @Column(name = "telefono2", length = 9)
     private String telefono2;
     // @Pattern(regexp="[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?", message="Invalid email")//if the field contains email address consider using this annotation to enforce field validation
-    @Size(max = 100)
-    @Column(name = "email")
+    @Column(name = "email", length = 100)
     private String email;
     @OneToOne(cascade = CascadeType.ALL, mappedBy = "trabajador", fetch = FetchType.LAZY)
     private Operario operario;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "trabajador", fetch = FetchType.LAZY)
-    private List<Nomina> nominaList;
+    private List<Nomina> nominas;
     @JoinColumn(name = "propiedad", referencedColumnName = "id")
     @ManyToOne(optional = false, fetch = FetchType.LAZY)
     private Propiedad propiedad;
@@ -177,12 +165,12 @@ public class Trabajador implements Serializable {
     }
 
     @XmlTransient
-    public List<Nomina> getNominaList() {
-        return nominaList;
+    public List<Nomina> getNominas() {
+        return nominas;
     }
 
-    public void setNominaList(List<Nomina> nominaList) {
-        this.nominaList = nominaList;
+    public void setNominas(List<Nomina> nominas) {
+        this.nominas = nominas;
     }
 
     public Propiedad getPropiedad() {

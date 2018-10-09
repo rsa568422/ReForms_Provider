@@ -21,7 +21,6 @@ import javax.persistence.NamedQuery;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
-import javax.validation.constraints.NotNull;
 import javax.xml.bind.annotation.XmlRootElement;
 
 /**
@@ -32,7 +31,7 @@ import javax.xml.bind.annotation.XmlRootElement;
 @Table(name = "factura")
 @XmlRootElement
 @NamedQueries({
-    @NamedQuery(name = "Factura.findAll", query = "SELECT f FROM Factura f")
+      @NamedQuery(name = "Factura.findAll", query = "SELECT f FROM Factura f")
     , @NamedQuery(name = "Factura.findById", query = "SELECT f FROM Factura f WHERE f.id = :id")
     , @NamedQuery(name = "Factura.findByNumero", query = "SELECT f FROM Factura f WHERE f.numero = :numero")
     , @NamedQuery(name = "Factura.findByFecha", query = "SELECT f FROM Factura f WHERE f.fecha = :fecha")
@@ -46,9 +45,8 @@ public class Factura implements Serializable {
     @Column(name = "id")
     private Integer id;
     @Basic(optional = false)
-    @NotNull
-    @Column(name = "numero")
-    private int numero;
+    @Column(name = "numero", nullable = false, length = 16)
+    private String numero;
     @Column(name = "fecha")
     @Temporal(TemporalType.DATE)
     private Date fecha;
@@ -66,7 +64,7 @@ public class Factura implements Serializable {
         this.id = id;
     }
 
-    public Factura(Integer id, int numero) {
+    public Factura(Integer id, String numero) {
         this.id = id;
         this.numero = numero;
     }
@@ -79,11 +77,11 @@ public class Factura implements Serializable {
         this.id = id;
     }
 
-    public int getNumero() {
+    public String getNumero() {
         return numero;
     }
 
-    public void setNumero(int numero) {
+    public void setNumero(String numero) {
         this.numero = numero;
     }
 

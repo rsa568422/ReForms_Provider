@@ -20,8 +20,6 @@ import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
-import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Size;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlTransient;
 
@@ -33,7 +31,7 @@ import javax.xml.bind.annotation.XmlTransient;
 @Table(name = "contacto")
 @XmlRootElement
 @NamedQueries({
-    @NamedQuery(name = "Contacto.findAll", query = "SELECT c FROM Contacto c")
+      @NamedQuery(name = "Contacto.findAll", query = "SELECT c FROM Contacto c")
     , @NamedQuery(name = "Contacto.findById", query = "SELECT c FROM Contacto c WHERE c.id = :id")
     , @NamedQuery(name = "Contacto.findByNombre", query = "SELECT c FROM Contacto c WHERE c.nombre = :nombre")
     , @NamedQuery(name = "Contacto.findByApellido1", query = "SELECT c FROM Contacto c WHERE c.apellido1 = :apellido1")
@@ -49,28 +47,21 @@ public class Contacto implements Serializable {
     @Basic(optional = false)
     @Column(name = "id")
     private Integer id;
-    @Size(max = 50)
-    @Column(name = "nombre")
+    @Column(name = "nombre", length = 50)
     private String nombre;
-    @Size(max = 50)
-    @Column(name = "apellido1")
+    @Column(name = "apellido1", length = 50)
     private String apellido1;
-    @Size(max = 50)
-    @Column(name = "apellido2")
+    @Column(name = "apellido2", length = 50)
     private String apellido2;
     @Basic(optional = false)
-    @NotNull
-    @Size(min = 1, max = 9)
-    @Column(name = "telefono1")
+    @Column(name = "telefono1", nullable = false, length = 9)
     private String telefono1;
-    @Size(max = 9)
-    @Column(name = "telefono2")
+    @Column(name = "telefono2", length = 9)
     private String telefono2;
-    @Size(max = 250)
-    @Column(name = "observaciones")
+    @Column(name = "observaciones", length = 250)
     private String observaciones;
     @OneToMany(mappedBy = "contacto", fetch = FetchType.LAZY)
-    private List<Llamada> llamadaList;
+    private List<Llamada> llamadas;
     @JoinColumn(name = "siniestro", referencedColumnName = "id")
     @ManyToOne(optional = false, fetch = FetchType.LAZY)
     private Siniestro siniestro;
@@ -144,12 +135,12 @@ public class Contacto implements Serializable {
     }
 
     @XmlTransient
-    public List<Llamada> getLlamadaList() {
-        return llamadaList;
+    public List<Llamada> getLlamadas() {
+        return llamadas;
     }
 
-    public void setLlamadaList(List<Llamada> llamadaList) {
-        this.llamadaList = llamadaList;
+    public void setLlamadas(List<Llamada> llamadas) {
+        this.llamadas = llamadas;
     }
 
     public Siniestro getSiniestro() {

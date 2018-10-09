@@ -21,7 +21,6 @@ import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
-import javax.validation.constraints.Size;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlTransient;
 
@@ -33,7 +32,7 @@ import javax.xml.bind.annotation.XmlTransient;
 @Table(name = "trabajo")
 @XmlRootElement
 @NamedQueries({
-    @NamedQuery(name = "Trabajo.findAll", query = "SELECT t FROM Trabajo t")
+      @NamedQuery(name = "Trabajo.findAll", query = "SELECT t FROM Trabajo t")
     , @NamedQuery(name = "Trabajo.findById", query = "SELECT t FROM Trabajo t WHERE t.id = :id")
     , @NamedQuery(name = "Trabajo.findByCodigo", query = "SELECT t FROM Trabajo t WHERE t.codigo = :codigo")
     , @NamedQuery(name = "Trabajo.findByDescripcion", query = "SELECT t FROM Trabajo t WHERE t.descripcion = :descripcion")
@@ -52,10 +51,10 @@ public class Trabajo implements Serializable {
     @Basic(optional = false)
     @Column(name = "id")
     private Integer id;
-    @Column(name = "codigo")
-    private Integer codigo;
-    @Size(max = 250)
-    @Column(name = "descripcion")
+    @Basic(optional = false)
+    @Column(name = "codigo", nullable = false, length = 5)
+    private String codigo;
+    @Column(name = "descripcion", length = 250)
     private String descripcion;
     // @Max(value=?)  @Min(value=?)//if you know range of your decimal fields consider using these annotations to enforce field validation
     @Column(name = "cantidadMin")
@@ -79,13 +78,18 @@ public class Trabajo implements Serializable {
     @ManyToOne(optional = false, fetch = FetchType.LAZY)
     private Gremio gremio;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "trabajo", fetch = FetchType.LAZY)
-    private List<Tarea> tareaList;
+    private List<Tarea> tareas;
 
     public Trabajo() {
     }
 
     public Trabajo(Integer id) {
         this.id = id;
+    }
+
+    public Trabajo(Integer id, String codigo) {
+        this.id = id;
+        this.codigo = codigo;
     }
 
     public Integer getId() {
@@ -96,11 +100,11 @@ public class Trabajo implements Serializable {
         this.id = id;
     }
 
-    public Integer getCodigo() {
+    public String getCodigo() {
         return codigo;
     }
 
-    public void setCodigo(Integer codigo) {
+    public void setCodigo(String codigo) {
         this.codigo = codigo;
     }
 
@@ -185,12 +189,12 @@ public class Trabajo implements Serializable {
     }
 
     @XmlTransient
-    public List<Tarea> getTareaList() {
-        return tareaList;
+    public List<Tarea> getTareas() {
+        return tareas;
     }
 
-    public void setTareaList(List<Tarea> tareaList) {
-        this.tareaList = tareaList;
+    public void setTareas(List<Tarea> tareas) {
+        this.tareas = tareas;
     }
 
     @Override

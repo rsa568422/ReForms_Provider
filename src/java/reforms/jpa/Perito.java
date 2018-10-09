@@ -21,8 +21,6 @@ import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
-import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Size;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlTransient;
 
@@ -34,7 +32,7 @@ import javax.xml.bind.annotation.XmlTransient;
 @Table(name = "perito")
 @XmlRootElement
 @NamedQueries({
-    @NamedQuery(name = "Perito.findAll", query = "SELECT p FROM Perito p")
+      @NamedQuery(name = "Perito.findAll", query = "SELECT p FROM Perito p")
     , @NamedQuery(name = "Perito.findById", query = "SELECT p FROM Perito p WHERE p.id = :id")
     , @NamedQuery(name = "Perito.findByNombre", query = "SELECT p FROM Perito p WHERE p.nombre = :nombre")
     , @NamedQuery(name = "Perito.findByApellido1", query = "SELECT p FROM Perito p WHERE p.apellido1 = :apellido1")
@@ -52,43 +50,33 @@ public class Perito implements Serializable {
     @Column(name = "id")
     private Integer id;
     @Basic(optional = false)
-    @NotNull
-    @Size(min = 1, max = 50)
-    @Column(name = "nombre")
+    @Column(name = "nombre", nullable = false, length = 50)
     private String nombre;
     @Basic(optional = false)
-    @NotNull
-    @Size(min = 1, max = 50)
-    @Column(name = "apellido1")
+    @Column(name = "apellido1", nullable = false, length = 50)
     private String apellido1;
-    @Size(max = 50)
-    @Column(name = "apellido2")
+    @Column(name = "apellido2", length = 50)
     private String apellido2;
     @Basic(optional = false)
-    @NotNull
-    @Size(min = 1, max = 9)
-    @Column(name = "telefono1")
+    @Column(name = "telefono1", nullable = false, length = 9)
     private String telefono1;
-    @Size(max = 9)
-    @Column(name = "telefono2")
+    @Column(name = "telefono2", length = 9)
     private String telefono2;
     // @Pattern(regexp="^\\(?(\\d{3})\\)?[- ]?(\\d{3})[- ]?(\\d{4})$", message="Invalid phone/fax format, should be as xxx-xxx-xxxx")//if the field contains phone or fax number consider using this annotation to enforce field validation
-    @Size(max = 9)
-    @Column(name = "fax")
+    @Column(name = "fax", length = 9)
     private String fax;
     // @Pattern(regexp="[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?", message="Invalid email")//if the field contains email address consider using this annotation to enforce field validation
-    @Size(max = 100)
-    @Column(name = "email")
+    @Column(name = "email", length = 100)
     private String email;
     @OneToMany(mappedBy = "perito", fetch = FetchType.LAZY)
-    private List<Llamada> llamadaList;
+    private List<Llamada> llamadas;
     @JoinColumn(name = "aseguradora", referencedColumnName = "id")
     @ManyToOne(optional = false, fetch = FetchType.LAZY)
     private Aseguradora aseguradora;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "perito", fetch = FetchType.LAZY)
-    private List<Reasignacion> reasignacionList;
+    private List<Reasignacion> reasignaciones;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "peritoOriginal", fetch = FetchType.LAZY)
-    private List<Siniestro> siniestroList;
+    private List<Siniestro> siniestros;
 
     public Perito() {
     }
@@ -169,12 +157,12 @@ public class Perito implements Serializable {
     }
 
     @XmlTransient
-    public List<Llamada> getLlamadaList() {
-        return llamadaList;
+    public List<Llamada> getLlamadas() {
+        return llamadas;
     }
 
-    public void setLlamadaList(List<Llamada> llamadaList) {
-        this.llamadaList = llamadaList;
+    public void setLlamadas(List<Llamada> llamadas) {
+        this.llamadas = llamadas;
     }
 
     public Aseguradora getAseguradora() {
@@ -186,21 +174,21 @@ public class Perito implements Serializable {
     }
 
     @XmlTransient
-    public List<Reasignacion> getReasignacionList() {
-        return reasignacionList;
+    public List<Reasignacion> getReasignaciones() {
+        return reasignaciones;
     }
 
-    public void setReasignacionList(List<Reasignacion> reasignacionList) {
-        this.reasignacionList = reasignacionList;
+    public void setReasignaciones(List<Reasignacion> reasignaciones) {
+        this.reasignaciones = reasignaciones;
     }
 
     @XmlTransient
-    public List<Siniestro> getSiniestroList() {
-        return siniestroList;
+    public List<Siniestro> getSiniestros() {
+        return siniestros;
     }
 
-    public void setSiniestroList(List<Siniestro> siniestroList) {
-        this.siniestroList = siniestroList;
+    public void setSiniestros(List<Siniestro> siniestros) {
+        this.siniestros = siniestros;
     }
 
     @Override

@@ -24,8 +24,6 @@ import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
-import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Size;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlTransient;
 
@@ -37,7 +35,7 @@ import javax.xml.bind.annotation.XmlTransient;
 @Table(name = "jornada")
 @XmlRootElement
 @NamedQueries({
-    @NamedQuery(name = "Jornada.findAll", query = "SELECT j FROM Jornada j")
+      @NamedQuery(name = "Jornada.findAll", query = "SELECT j FROM Jornada j")
     , @NamedQuery(name = "Jornada.findById", query = "SELECT j FROM Jornada j WHERE j.id = :id")
     , @NamedQuery(name = "Jornada.findByFecha", query = "SELECT j FROM Jornada j WHERE j.fecha = :fecha")
     , @NamedQuery(name = "Jornada.findByObservaciones", query = "SELECT j FROM Jornada j WHERE j.observaciones = :observaciones")})
@@ -50,18 +48,16 @@ public class Jornada implements Serializable {
     @Column(name = "id")
     private Integer id;
     @Basic(optional = false)
-    @NotNull
-    @Column(name = "fecha")
+    @Column(name = "fecha", nullable = false)
     @Temporal(TemporalType.DATE)
     private Date fecha;
-    @Size(max = 250)
-    @Column(name = "observaciones")
+    @Column(name = "observaciones", length = 250)
     private String observaciones;
     @JoinColumn(name = "gerente", referencedColumnName = "id")
     @ManyToOne(optional = false, fetch = FetchType.LAZY)
     private Operador gerente;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "jornada", fetch = FetchType.LAZY)
-    private List<Grupo> grupoList;
+    private List<Grupo> grupos;
 
     public Jornada() {
     }
@@ -108,12 +104,12 @@ public class Jornada implements Serializable {
     }
 
     @XmlTransient
-    public List<Grupo> getGrupoList() {
-        return grupoList;
+    public List<Grupo> getGrupos() {
+        return grupos;
     }
 
-    public void setGrupoList(List<Grupo> grupoList) {
-        this.grupoList = grupoList;
+    public void setGrupos(List<Grupo> grupos) {
+        this.grupos = grupos;
     }
 
     @Override

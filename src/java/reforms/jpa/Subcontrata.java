@@ -21,8 +21,6 @@ import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
-import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Size;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlTransient;
 
@@ -34,7 +32,7 @@ import javax.xml.bind.annotation.XmlTransient;
 @Table(name = "subcontrata")
 @XmlRootElement
 @NamedQueries({
-    @NamedQuery(name = "Subcontrata.findAll", query = "SELECT s FROM Subcontrata s")
+      @NamedQuery(name = "Subcontrata.findAll", query = "SELECT s FROM Subcontrata s")
     , @NamedQuery(name = "Subcontrata.findById", query = "SELECT s FROM Subcontrata s WHERE s.id = :id")
     , @NamedQuery(name = "Subcontrata.findByNombre", query = "SELECT s FROM Subcontrata s WHERE s.nombre = :nombre")
     , @NamedQuery(name = "Subcontrata.findByTelefono1", query = "SELECT s FROM Subcontrata s WHERE s.telefono1 = :telefono1")
@@ -50,28 +48,22 @@ public class Subcontrata implements Serializable {
     @Column(name = "id")
     private Integer id;
     @Basic(optional = false)
-    @NotNull
-    @Size(min = 1, max = 50)
-    @Column(name = "nombre")
+    @Column(name = "nombre", nullable = false, length = 50)
     private String nombre;
-    @Size(max = 9)
-    @Column(name = "telefono1")
+    @Column(name = "telefono1", length = 9)
     private String telefono1;
-    @Size(max = 9)
-    @Column(name = "telefono2")
+    @Column(name = "telefono2", length = 9)
     private String telefono2;
     // @Pattern(regexp="^\\(?(\\d{3})\\)?[- ]?(\\d{3})[- ]?(\\d{4})$", message="Invalid phone/fax format, should be as xxx-xxx-xxxx")//if the field contains phone or fax number consider using this annotation to enforce field validation
-    @Size(max = 9)
-    @Column(name = "fax")
+    @Column(name = "fax", length = 9)
     private String fax;
     // @Pattern(regexp="[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?", message="Invalid email")//if the field contains email address consider using this annotation to enforce field validation
-    @Size(max = 100)
-    @Column(name = "email")
+    @Column(name = "email", length = 100)
     private String email;
     @OneToMany(mappedBy = "subcontrata", fetch = FetchType.LAZY)
-    private List<Grupo> grupoList;
+    private List<Grupo> grupos;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "subcontrata", fetch = FetchType.LAZY)
-    private List<Recursossubcontrata> recursossubcontrataList;
+    private List<Recursossubcontrata> recursossubcontratas;
     @JoinColumn(name = "recurso", referencedColumnName = "id")
     @OneToOne(optional = false, fetch = FetchType.LAZY)
     private Recurso recurso;
@@ -137,21 +129,21 @@ public class Subcontrata implements Serializable {
     }
 
     @XmlTransient
-    public List<Grupo> getGrupoList() {
-        return grupoList;
+    public List<Grupo> getGrupos() {
+        return grupos;
     }
 
-    public void setGrupoList(List<Grupo> grupoList) {
-        this.grupoList = grupoList;
+    public void setGrupos(List<Grupo> grupos) {
+        this.grupos = grupos;
     }
 
     @XmlTransient
-    public List<Recursossubcontrata> getRecursossubcontrataList() {
-        return recursossubcontrataList;
+    public List<Recursossubcontrata> getRecursossubcontratas() {
+        return recursossubcontratas;
     }
 
-    public void setRecursossubcontrataList(List<Recursossubcontrata> recursossubcontrataList) {
-        this.recursossubcontrataList = recursossubcontrataList;
+    public void setRecursossubcontratas(List<Recursossubcontrata> recursossubcontratas) {
+        this.recursossubcontratas = recursossubcontratas;
     }
 
     public Recurso getRecurso() {

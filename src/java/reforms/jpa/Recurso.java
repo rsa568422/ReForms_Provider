@@ -21,8 +21,6 @@ import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
-import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Size;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlTransient;
 
@@ -34,7 +32,7 @@ import javax.xml.bind.annotation.XmlTransient;
 @Table(name = "recurso")
 @XmlRootElement
 @NamedQueries({
-    @NamedQuery(name = "Recurso.findAll", query = "SELECT r FROM Recurso r")
+      @NamedQuery(name = "Recurso.findAll", query = "SELECT r FROM Recurso r")
     , @NamedQuery(name = "Recurso.findById", query = "SELECT r FROM Recurso r WHERE r.id = :id")
     , @NamedQuery(name = "Recurso.findByTipo", query = "SELECT r FROM Recurso r WHERE r.tipo = :tipo")
     , @NamedQuery(name = "Recurso.findByNombre", query = "SELECT r FROM Recurso r WHERE r.nombre = :nombre")
@@ -53,23 +51,20 @@ public class Recurso implements Serializable {
     @Column(name = "fichero")
     private byte[] fichero;
     @Basic(optional = false)
-    @NotNull
-    @Size(min = 1, max = 250)
-    @Column(name = "nombre")
+    @Column(name = "nombre", nullable = false, length = 250)
     private String nombre;
-    @Size(max = 250)
-    @Column(name = "descripcion")
+    @Column(name = "descripcion",  length = 250)
     private String descripcion;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "recurso", fetch = FetchType.LAZY)
-    private List<Factura> facturaList;
+    private List<Factura> facturas;
     @OneToOne(cascade = CascadeType.ALL, mappedBy = "recurso", fetch = FetchType.LAZY)
     private Adjunto adjunto;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "original", fetch = FetchType.LAZY)
-    private List<Siniestro> siniestroList;
+    private List<Siniestro> siniestros;
     @OneToOne(cascade = CascadeType.ALL, mappedBy = "recurso", fetch = FetchType.LAZY)
     private Material material;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "recurso", fetch = FetchType.LAZY)
-    private List<Recursossubcontrata> recursossubcontrataList;
+    private List<Recursossubcontrata> recursossubcontratas;
     @OneToOne(cascade = CascadeType.ALL, mappedBy = "recurso", fetch = FetchType.LAZY)
     private Subcontrata subcontrata;
 
@@ -126,12 +121,12 @@ public class Recurso implements Serializable {
     }
 
     @XmlTransient
-    public List<Factura> getFacturaList() {
-        return facturaList;
+    public List<Factura> getFacturas() {
+        return facturas;
     }
 
-    public void setFacturaList(List<Factura> facturaList) {
-        this.facturaList = facturaList;
+    public void setFacturas(List<Factura> facturas) {
+        this.facturas = facturas;
     }
 
     public Adjunto getAdjunto() {
@@ -143,12 +138,12 @@ public class Recurso implements Serializable {
     }
 
     @XmlTransient
-    public List<Siniestro> getSiniestroList() {
-        return siniestroList;
+    public List<Siniestro> getSiniestros() {
+        return siniestros;
     }
 
-    public void setSiniestroList(List<Siniestro> siniestroList) {
-        this.siniestroList = siniestroList;
+    public void setSiniestros(List<Siniestro> siniestros) {
+        this.siniestros = siniestros;
     }
 
     public Material getMaterial() {
@@ -160,12 +155,12 @@ public class Recurso implements Serializable {
     }
 
     @XmlTransient
-    public List<Recursossubcontrata> getRecursossubcontrataList() {
-        return recursossubcontrataList;
+    public List<Recursossubcontrata> getRecursossubcontratas() {
+        return recursossubcontratas;
     }
 
-    public void setRecursossubcontrataList(List<Recursossubcontrata> recursossubcontrataList) {
-        this.recursossubcontrataList = recursossubcontrataList;
+    public void setRecursossubcontratas(List<Recursossubcontrata> recursossubcontratas) {
+        this.recursossubcontratas = recursossubcontratas;
     }
 
     public Subcontrata getSubcontrata() {

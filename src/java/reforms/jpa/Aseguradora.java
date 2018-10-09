@@ -19,8 +19,6 @@ import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
-import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Size;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlTransient;
 
@@ -32,7 +30,7 @@ import javax.xml.bind.annotation.XmlTransient;
 @Table(name = "aseguradora")
 @XmlRootElement
 @NamedQueries({
-    @NamedQuery(name = "Aseguradora.findAll", query = "SELECT a FROM Aseguradora a")
+      @NamedQuery(name = "Aseguradora.findAll", query = "SELECT a FROM Aseguradora a")
     , @NamedQuery(name = "Aseguradora.findById", query = "SELECT a FROM Aseguradora a WHERE a.id = :id")
     , @NamedQuery(name = "Aseguradora.findByNombre", query = "SELECT a FROM Aseguradora a WHERE a.nombre = :nombre")
     , @NamedQuery(name = "Aseguradora.findByTelefono1", query = "SELECT a FROM Aseguradora a WHERE a.telefono1 = :telefono1")
@@ -48,34 +46,26 @@ public class Aseguradora implements Serializable {
     @Column(name = "id")
     private Integer id;
     @Basic(optional = false)
-    @NotNull
-    @Size(min = 1, max = 100)
-    @Column(name = "nombre")
+    @Column(name = "nombre", nullable = false, length = 100)
     private String nombre;
     @Basic(optional = false)
-    @NotNull
-    @Size(min = 1, max = 9)
-    @Column(name = "telefono1")
+    @Column(name = "telefono1", nullable = false, length = 9)
     private String telefono1;
-    @Size(max = 9)
-    @Column(name = "telefono2")
+    @Column(name = "telefono2", length = 9)
     private String telefono2;
     // @Pattern(regexp="^\\(?(\\d{3})\\)?[- ]?(\\d{3})[- ]?(\\d{4})$", message="Invalid phone/fax format, should be as xxx-xxx-xxxx")//if the field contains phone or fax number consider using this annotation to enforce field validation
-    @Size(max = 9)
-    @Column(name = "fax")
+    @Column(name = "fax", length = 9)
     private String fax;
     // @Pattern(regexp="[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?", message="Invalid email")//if the field contains email address consider using this annotation to enforce field validation
     @Basic(optional = false)
-    @NotNull
-    @Size(min = 1, max = 100)
-    @Column(name = "email")
+    @Column(name = "email", nullable = false, length = 100)
     private String email;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "aseguradora", fetch = FetchType.LAZY)
-    private List<Perito> peritoList;
+    private List<Perito> peritos;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "aseguradora", fetch = FetchType.LAZY)
-    private List<Trabajo> trabajoList;
+    private List<Trabajo> trabajos;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "aseguradora", fetch = FetchType.LAZY)
-    private List<Cliente> clienteList;
+    private List<Cliente> clientes;
 
     public Aseguradora() {
     }
@@ -140,30 +130,30 @@ public class Aseguradora implements Serializable {
     }
 
     @XmlTransient
-    public List<Perito> getPeritoList() {
-        return peritoList;
+    public List<Perito> getPeritos() {
+        return peritos;
     }
 
-    public void setPeritoList(List<Perito> peritoList) {
-        this.peritoList = peritoList;
-    }
-
-    @XmlTransient
-    public List<Trabajo> getTrabajoList() {
-        return trabajoList;
-    }
-
-    public void setTrabajoList(List<Trabajo> trabajoList) {
-        this.trabajoList = trabajoList;
+    public void setPeritos(List<Perito> peritos) {
+        this.peritos = peritos;
     }
 
     @XmlTransient
-    public List<Cliente> getClienteList() {
-        return clienteList;
+    public List<Trabajo> getTrabajos() {
+        return trabajos;
     }
 
-    public void setClienteList(List<Cliente> clienteList) {
-        this.clienteList = clienteList;
+    public void setTrabajos(List<Trabajo> trabajos) {
+        this.trabajos = trabajos;
+    }
+
+    @XmlTransient
+    public List<Cliente> getClientes() {
+        return clientes;
+    }
+
+    public void setClientes(List<Cliente> clientes) {
+        this.clientes = clientes;
     }
 
     @Override

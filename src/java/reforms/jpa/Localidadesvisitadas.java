@@ -28,7 +28,7 @@ import javax.xml.bind.annotation.XmlRootElement;
 @Table(name = "localidadesvisitadas")
 @XmlRootElement
 @NamedQueries({
-    @NamedQuery(name = "Localidadesvisitadas.findAll", query = "SELECT l FROM Localidadesvisitadas l")
+      @NamedQuery(name = "Localidadesvisitadas.findAll", query = "SELECT l FROM Localidadesvisitadas l")
     , @NamedQuery(name = "Localidadesvisitadas.findById", query = "SELECT l FROM Localidadesvisitadas l WHERE l.id = :id")
     , @NamedQuery(name = "Localidadesvisitadas.findByVeces", query = "SELECT l FROM Localidadesvisitadas l WHERE l.veces = :veces")})
 public class Localidadesvisitadas implements Serializable {

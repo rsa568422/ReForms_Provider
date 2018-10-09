@@ -21,7 +21,6 @@ import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
-import javax.validation.constraints.NotNull;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlTransient;
 
@@ -33,7 +32,7 @@ import javax.xml.bind.annotation.XmlTransient;
 @Table(name = "cita")
 @XmlRootElement
 @NamedQueries({
-    @NamedQuery(name = "Cita.findAll", query = "SELECT c FROM Cita c")
+      @NamedQuery(name = "Cita.findAll", query = "SELECT c FROM Cita c")
     , @NamedQuery(name = "Cita.findById", query = "SELECT c FROM Cita c WHERE c.id = :id")
     , @NamedQuery(name = "Cita.findByHora", query = "SELECT c FROM Cita c WHERE c.hora = :hora")
     , @NamedQuery(name = "Cita.findByMinuto", query = "SELECT c FROM Cita c WHERE c.minuto = :minuto")})
@@ -46,15 +45,13 @@ public class Cita implements Serializable {
     @Column(name = "id")
     private Integer id;
     @Basic(optional = false)
-    @NotNull
-    @Column(name = "hora")
+    @Column(name = "hora", nullable = false)
     private int hora;
     @Basic(optional = false)
-    @NotNull
-    @Column(name = "minuto")
+    @Column(name = "minuto", nullable = false)
     private int minuto;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "cita", fetch = FetchType.LAZY)
-    private List<Tareascita> tareascitaList;
+    private List<Tareascita> tareascitas;
     @JoinColumn(name = "evento", referencedColumnName = "id")
     @ManyToOne(optional = false, fetch = FetchType.LAZY)
     private Evento evento;
@@ -100,12 +97,12 @@ public class Cita implements Serializable {
     }
 
     @XmlTransient
-    public List<Tareascita> getTareascitaList() {
-        return tareascitaList;
+    public List<Tareascita> getTareascitas() {
+        return tareascitas;
     }
 
-    public void setTareascitaList(List<Tareascita> tareascitaList) {
-        this.tareascitaList = tareascitaList;
+    public void setTareascitas(List<Tareascita> tareascitas) {
+        this.tareascitas = tareascitas;
     }
 
     public Evento getEvento() {

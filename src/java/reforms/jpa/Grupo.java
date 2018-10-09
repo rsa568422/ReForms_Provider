@@ -22,7 +22,6 @@ import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
-import javax.validation.constraints.Size;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlTransient;
 
@@ -34,7 +33,7 @@ import javax.xml.bind.annotation.XmlTransient;
 @Table(name = "grupo")
 @XmlRootElement
 @NamedQueries({
-    @NamedQuery(name = "Grupo.findAll", query = "SELECT g FROM Grupo g")
+      @NamedQuery(name = "Grupo.findAll", query = "SELECT g FROM Grupo g")
     , @NamedQuery(name = "Grupo.findById", query = "SELECT g FROM Grupo g WHERE g.id = :id")
     , @NamedQuery(name = "Grupo.findByObservaciones", query = "SELECT g FROM Grupo g WHERE g.observaciones = :observaciones")})
 public class Grupo implements Serializable {
@@ -45,13 +44,12 @@ public class Grupo implements Serializable {
     @Basic(optional = false)
     @Column(name = "id")
     private Integer id;
-    @Size(max = 250)
-    @Column(name = "observaciones")
+    @Column(name = "observaciones", length = 250)
     private String observaciones;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "grupo", fetch = FetchType.LAZY)
-    private List<Integrante> integranteList;
+    private List<Integrante> integrantes;
     @OneToMany(mappedBy = "grupo", fetch = FetchType.LAZY)
-    private List<Llamada> llamadaList;
+    private List<Llamada> llamadas;
     @JoinColumn(name = "jornada", referencedColumnName = "id")
     @ManyToOne(optional = false, fetch = FetchType.LAZY)
     private Jornada jornada;
@@ -61,7 +59,7 @@ public class Grupo implements Serializable {
     @OneToOne(cascade = CascadeType.ALL, mappedBy = "grupo", fetch = FetchType.LAZY)
     private Conductor conductor;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "grupo", fetch = FetchType.LAZY)
-    private List<Cita> citaList;
+    private List<Cita> citas;
 
     public Grupo() {
     }
@@ -87,21 +85,21 @@ public class Grupo implements Serializable {
     }
 
     @XmlTransient
-    public List<Integrante> getIntegranteList() {
-        return integranteList;
+    public List<Integrante> getIntegrantes() {
+        return integrantes;
     }
 
-    public void setIntegranteList(List<Integrante> integranteList) {
-        this.integranteList = integranteList;
+    public void setIntegrantes(List<Integrante> integrantes) {
+        this.integrantes = integrantes;
     }
 
     @XmlTransient
-    public List<Llamada> getLlamadaList() {
-        return llamadaList;
+    public List<Llamada> getLlamadas() {
+        return llamadas;
     }
 
-    public void setLlamadaList(List<Llamada> llamadaList) {
-        this.llamadaList = llamadaList;
+    public void setLlamadas(List<Llamada> llamadas) {
+        this.llamadas = llamadas;
     }
 
     public Jornada getJornada() {
@@ -129,12 +127,12 @@ public class Grupo implements Serializable {
     }
 
     @XmlTransient
-    public List<Cita> getCitaList() {
-        return citaList;
+    public List<Cita> getCitas() {
+        return citas;
     }
 
-    public void setCitaList(List<Cita> citaList) {
-        this.citaList = citaList;
+    public void setCitas(List<Cita> citas) {
+        this.citas = citas;
     }
 
     @Override

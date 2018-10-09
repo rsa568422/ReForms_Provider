@@ -21,7 +21,6 @@ import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
-import javax.validation.constraints.Size;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlTransient;
 
@@ -33,7 +32,7 @@ import javax.xml.bind.annotation.XmlTransient;
 @Table(name = "operario")
 @XmlRootElement
 @NamedQueries({
-    @NamedQuery(name = "Operario.findAll", query = "SELECT o FROM Operario o")
+      @NamedQuery(name = "Operario.findAll", query = "SELECT o FROM Operario o")
     , @NamedQuery(name = "Operario.findById", query = "SELECT o FROM Operario o WHERE o.id = :id")
     , @NamedQuery(name = "Operario.findByCarnet", query = "SELECT o FROM Operario o WHERE o.carnet = :carnet")
     , @NamedQuery(name = "Operario.findByDispositivo", query = "SELECT o FROM Operario o WHERE o.dispositivo = :dispositivo")
@@ -50,30 +49,26 @@ public class Operario implements Serializable {
     private Integer id;
     @Column(name = "carnet")
     private Integer carnet;
-    @Size(max = 100)
-    @Column(name = "dispositivo")
+    @Column(name = "dispositivo", length = 100)
     private String dispositivo;
-    @Size(max = 9)
-    @Column(name = "telefono")
+    @Column(name = "telefono", length = 9)
     private String telefono;
     // @Pattern(regexp="[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?", message="Invalid email")//if the field contains email address consider using this annotation to enforce field validation
-    @Size(max = 100)
-    @Column(name = "email")
+    @Column(name = "email", length = 100)
     private String email;
-    @Size(max = 100)
-    @Column(name = "pass")
+    @Column(name = "pass", length = 100)
     private String pass;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "operario", fetch = FetchType.LAZY)
-    private List<Integrante> integranteList;
+    private List<Integrante> integrantes;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "operario", fetch = FetchType.LAZY)
-    private List<Localidadesvisitadas> localidadesvisitadasList;
+    private List<Localidadesvisitadas> localidadesvisitadas;
     @JoinColumn(name = "trabajador", referencedColumnName = "id")
     @OneToOne(optional = false, fetch = FetchType.LAZY)
     private Trabajador trabajador;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "operario", fetch = FetchType.LAZY)
-    private List<Capacidad> capacidadList;
+    private List<Capacidad> capacidades;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "conductor", fetch = FetchType.LAZY)
-    private List<Conductor> conductorList;
+    private List<Conductor> conductores;
 
     public Operario() {
     }
@@ -131,21 +126,21 @@ public class Operario implements Serializable {
     }
 
     @XmlTransient
-    public List<Integrante> getIntegranteList() {
-        return integranteList;
+    public List<Integrante> getIntegrantes() {
+        return integrantes;
     }
 
-    public void setIntegranteList(List<Integrante> integranteList) {
-        this.integranteList = integranteList;
+    public void setIntegrantes(List<Integrante> integrantes) {
+        this.integrantes = integrantes;
     }
 
     @XmlTransient
-    public List<Localidadesvisitadas> getLocalidadesvisitadasList() {
-        return localidadesvisitadasList;
+    public List<Localidadesvisitadas> getLocalidadesvisitadas() {
+        return localidadesvisitadas;
     }
 
-    public void setLocalidadesvisitadasList(List<Localidadesvisitadas> localidadesvisitadasList) {
-        this.localidadesvisitadasList = localidadesvisitadasList;
+    public void setLocalidadesvisitadas(List<Localidadesvisitadas> localidadesvisitadas) {
+        this.localidadesvisitadas = localidadesvisitadas;
     }
 
     public Trabajador getTrabajador() {
@@ -157,21 +152,21 @@ public class Operario implements Serializable {
     }
 
     @XmlTransient
-    public List<Capacidad> getCapacidadList() {
-        return capacidadList;
+    public List<Capacidad> getCapacidades() {
+        return capacidades;
     }
 
-    public void setCapacidadList(List<Capacidad> capacidadList) {
-        this.capacidadList = capacidadList;
+    public void setCapacidades(List<Capacidad> capacidades) {
+        this.capacidades = capacidades;
     }
 
     @XmlTransient
-    public List<Conductor> getConductorList() {
-        return conductorList;
+    public List<Conductor> getConductores() {
+        return conductores;
     }
 
-    public void setConductorList(List<Conductor> conductorList) {
-        this.conductorList = conductorList;
+    public void setConductores(List<Conductor> conductores) {
+        this.conductores = conductores;
     }
 
     @Override

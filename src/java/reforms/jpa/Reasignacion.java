@@ -21,7 +21,6 @@ import javax.persistence.NamedQuery;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
-import javax.validation.constraints.NotNull;
 import javax.xml.bind.annotation.XmlRootElement;
 
 /**
@@ -32,7 +31,7 @@ import javax.xml.bind.annotation.XmlRootElement;
 @Table(name = "reasignacion")
 @XmlRootElement
 @NamedQueries({
-    @NamedQuery(name = "Reasignacion.findAll", query = "SELECT r FROM Reasignacion r")
+      @NamedQuery(name = "Reasignacion.findAll", query = "SELECT r FROM Reasignacion r")
     , @NamedQuery(name = "Reasignacion.findById", query = "SELECT r FROM Reasignacion r WHERE r.id = :id")
     , @NamedQuery(name = "Reasignacion.findByFecha", query = "SELECT r FROM Reasignacion r WHERE r.fecha = :fecha")})
 public class Reasignacion implements Serializable {
@@ -44,8 +43,7 @@ public class Reasignacion implements Serializable {
     @Column(name = "id")
     private Integer id;
     @Basic(optional = false)
-    @NotNull
-    @Column(name = "fecha")
+    @Column(name = "fecha", nullable = false)
     @Temporal(TemporalType.DATE)
     private Date fecha;
     @JoinColumn(name = "perito", referencedColumnName = "id")

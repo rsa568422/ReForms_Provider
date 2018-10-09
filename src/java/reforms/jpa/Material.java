@@ -18,7 +18,6 @@ import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
-import javax.validation.constraints.Size;
 import javax.xml.bind.annotation.XmlRootElement;
 
 /**
@@ -29,7 +28,7 @@ import javax.xml.bind.annotation.XmlRootElement;
 @Table(name = "material")
 @XmlRootElement
 @NamedQueries({
-    @NamedQuery(name = "Material.findAll", query = "SELECT m FROM Material m")
+      @NamedQuery(name = "Material.findAll", query = "SELECT m FROM Material m")
     , @NamedQuery(name = "Material.findById", query = "SELECT m FROM Material m WHERE m.id = :id")
     , @NamedQuery(name = "Material.findByConcepto", query = "SELECT m FROM Material m WHERE m.concepto = :concepto")})
 public class Material implements Serializable {
@@ -40,8 +39,7 @@ public class Material implements Serializable {
     @Basic(optional = false)
     @Column(name = "id")
     private Integer id;
-    @Size(max = 250)
-    @Column(name = "concepto")
+    @Column(name = "concepto", length = 250)
     private String concepto;
     @JoinColumn(name = "recurso", referencedColumnName = "id")
     @OneToOne(optional = false, fetch = FetchType.LAZY)

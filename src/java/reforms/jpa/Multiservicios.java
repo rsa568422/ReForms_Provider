@@ -19,8 +19,6 @@ import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
-import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Size;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlTransient;
 
@@ -32,7 +30,7 @@ import javax.xml.bind.annotation.XmlTransient;
 @Table(name = "multiservicios")
 @XmlRootElement
 @NamedQueries({
-    @NamedQuery(name = "Multiservicios.findAll", query = "SELECT m FROM Multiservicios m")
+      @NamedQuery(name = "Multiservicios.findAll", query = "SELECT m FROM Multiservicios m")
     , @NamedQuery(name = "Multiservicios.findById", query = "SELECT m FROM Multiservicios m WHERE m.id = :id")
     , @NamedQuery(name = "Multiservicios.findByNombre", query = "SELECT m FROM Multiservicios m WHERE m.nombre = :nombre")
     , @NamedQuery(name = "Multiservicios.findByTelefono1", query = "SELECT m FROM Multiservicios m WHERE m.telefono1 = :telefono1")
@@ -48,26 +46,20 @@ public class Multiservicios implements Serializable {
     @Column(name = "id")
     private Integer id;
     @Basic(optional = false)
-    @NotNull
-    @Size(min = 1, max = 100)
-    @Column(name = "nombre")
+    @Column(name = "nombre", nullable = false, length = 100)
     private String nombre;
-    @Size(max = 9)
-    @Column(name = "telefono1")
+    @Column(name = "telefono1", length = 9)
     private String telefono1;
-    @Size(max = 9)
-    @Column(name = "telefono2")
+    @Column(name = "telefono2", length = 9)
     private String telefono2;
     // @Pattern(regexp="^\\(?(\\d{3})\\)?[- ]?(\\d{3})[- ]?(\\d{4})$", message="Invalid phone/fax format, should be as xxx-xxx-xxxx")//if the field contains phone or fax number consider using this annotation to enforce field validation
-    @Size(max = 9)
-    @Column(name = "fax")
+    @Column(name = "fax", length = 9)
     private String fax;
     // @Pattern(regexp="[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?", message="Invalid email")//if the field contains email address consider using this annotation to enforce field validation
-    @Size(max = 100)
-    @Column(name = "email")
+    @Column(name = "email", length = 100)
     private String email;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "multiservicios", fetch = FetchType.LAZY)
-    private List<Participante> participanteList;
+    private List<Participante> participantes;
 
     public Multiservicios() {
     }
@@ -130,12 +122,12 @@ public class Multiservicios implements Serializable {
     }
 
     @XmlTransient
-    public List<Participante> getParticipanteList() {
-        return participanteList;
+    public List<Participante> getParticipantes() {
+        return participantes;
     }
 
-    public void setParticipanteList(List<Participante> participanteList) {
-        this.participanteList = participanteList;
+    public void setParticipantes(List<Participante> participantes) {
+        this.participantes = participantes;
     }
 
     @Override

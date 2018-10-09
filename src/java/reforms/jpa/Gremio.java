@@ -19,8 +19,6 @@ import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
-import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Size;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlTransient;
 
@@ -32,7 +30,7 @@ import javax.xml.bind.annotation.XmlTransient;
 @Table(name = "gremio")
 @XmlRootElement
 @NamedQueries({
-    @NamedQuery(name = "Gremio.findAll", query = "SELECT g FROM Gremio g")
+      @NamedQuery(name = "Gremio.findAll", query = "SELECT g FROM Gremio g")
     , @NamedQuery(name = "Gremio.findById", query = "SELECT g FROM Gremio g WHERE g.id = :id")
     , @NamedQuery(name = "Gremio.findByNombre", query = "SELECT g FROM Gremio g WHERE g.nombre = :nombre")
     , @NamedQuery(name = "Gremio.findByDescripcion", query = "SELECT g FROM Gremio g WHERE g.descripcion = :descripcion")})
@@ -45,17 +43,14 @@ public class Gremio implements Serializable {
     @Column(name = "id")
     private Integer id;
     @Basic(optional = false)
-    @NotNull
-    @Size(min = 1, max = 20)
-    @Column(name = "nombre")
+    @Column(name = "nombre", nullable = false, length = 20)
     private String nombre;
-    @Size(max = 250)
-    @Column(name = "descripcion")
+    @Column(name = "descripcion", length = 250)
     private String descripcion;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "gremio", fetch = FetchType.LAZY)
-    private List<Trabajo> trabajoList;
+    private List<Trabajo> trabajos;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "gremio", fetch = FetchType.LAZY)
-    private List<Capacidad> capacidadList;
+    private List<Capacidad> capacidades;
 
     public Gremio() {
     }
@@ -94,21 +89,21 @@ public class Gremio implements Serializable {
     }
 
     @XmlTransient
-    public List<Trabajo> getTrabajoList() {
-        return trabajoList;
+    public List<Trabajo> getTrabajos() {
+        return trabajos;
     }
 
-    public void setTrabajoList(List<Trabajo> trabajoList) {
-        this.trabajoList = trabajoList;
+    public void setTrabajos(List<Trabajo> trabajos) {
+        this.trabajos = trabajos;
     }
 
     @XmlTransient
-    public List<Capacidad> getCapacidadList() {
-        return capacidadList;
+    public List<Capacidad> getCapacidades() {
+        return capacidades;
     }
 
-    public void setCapacidadList(List<Capacidad> capacidadList) {
-        this.capacidadList = capacidadList;
+    public void setCapacidades(List<Capacidad> capacidades) {
+        this.capacidades = capacidades;
     }
 
     @Override

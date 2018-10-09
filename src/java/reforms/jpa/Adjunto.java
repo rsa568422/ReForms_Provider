@@ -29,7 +29,7 @@ import javax.xml.bind.annotation.XmlRootElement;
 @Table(name = "adjunto")
 @XmlRootElement
 @NamedQueries({
-    @NamedQuery(name = "Adjunto.findAll", query = "SELECT a FROM Adjunto a")
+      @NamedQuery(name = "Adjunto.findAll", query = "SELECT a FROM Adjunto a")
     , @NamedQuery(name = "Adjunto.findById", query = "SELECT a FROM Adjunto a WHERE a.id = :id")})
 public class Adjunto implements Serializable {
 

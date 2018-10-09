@@ -24,7 +24,6 @@ import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
-import javax.validation.constraints.Size;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlTransient;
 
@@ -36,7 +35,7 @@ import javax.xml.bind.annotation.XmlTransient;
 @Table(name = "evento")
 @XmlRootElement
 @NamedQueries({
-    @NamedQuery(name = "Evento.findAll", query = "SELECT e FROM Evento e")
+      @NamedQuery(name = "Evento.findAll", query = "SELECT e FROM Evento e")
     , @NamedQuery(name = "Evento.findById", query = "SELECT e FROM Evento e WHERE e.id = :id")
     , @NamedQuery(name = "Evento.findByFecha", query = "SELECT e FROM Evento e WHERE e.fecha = :fecha")
     , @NamedQuery(name = "Evento.findByDescripcion", query = "SELECT e FROM Evento e WHERE e.descripcion = :descripcion")})
@@ -51,11 +50,10 @@ public class Evento implements Serializable {
     @Column(name = "fecha")
     @Temporal(TemporalType.DATE)
     private Date fecha;
-    @Size(max = 250)
-    @Column(name = "descripcion")
+    @Column(name = "descripcion", length = 250)
     private String descripcion;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "evento", fetch = FetchType.LAZY)
-    private List<Llamada> llamadaList;
+    private List<Llamada> llamadas;
     @JoinColumn(name = "operador", referencedColumnName = "id")
     @ManyToOne(optional = false, fetch = FetchType.LAZY)
     private Operador operador;
@@ -63,7 +61,7 @@ public class Evento implements Serializable {
     @ManyToOne(optional = false, fetch = FetchType.LAZY)
     private Siniestro siniestro;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "evento", fetch = FetchType.LAZY)
-    private List<Cita> citaList;
+    private List<Cita> citas;
 
     public Evento() {
     }
@@ -97,12 +95,12 @@ public class Evento implements Serializable {
     }
 
     @XmlTransient
-    public List<Llamada> getLlamadaList() {
-        return llamadaList;
+    public List<Llamada> getLlamadas() {
+        return llamadas;
     }
 
-    public void setLlamadaList(List<Llamada> llamadaList) {
-        this.llamadaList = llamadaList;
+    public void setLlamadas(List<Llamada> llamadas) {
+        this.llamadas = llamadas;
     }
 
     public Operador getOperador() {
@@ -122,12 +120,12 @@ public class Evento implements Serializable {
     }
 
     @XmlTransient
-    public List<Cita> getCitaList() {
-        return citaList;
+    public List<Cita> getCitas() {
+        return citas;
     }
 
-    public void setCitaList(List<Cita> citaList) {
-        this.citaList = citaList;
+    public void setCitas(List<Cita> citas) {
+        this.citas = citas;
     }
 
     @Override

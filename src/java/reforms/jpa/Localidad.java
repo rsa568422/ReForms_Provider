@@ -19,8 +19,6 @@ import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
-import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Size;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlTransient;
 
@@ -32,7 +30,7 @@ import javax.xml.bind.annotation.XmlTransient;
 @Table(name = "localidad")
 @XmlRootElement
 @NamedQueries({
-    @NamedQuery(name = "Localidad.findAll", query = "SELECT l FROM Localidad l")
+      @NamedQuery(name = "Localidad.findAll", query = "SELECT l FROM Localidad l")
     , @NamedQuery(name = "Localidad.findById", query = "SELECT l FROM Localidad l WHERE l.id = :id")
     , @NamedQuery(name = "Localidad.findByNombre", query = "SELECT l FROM Localidad l WHERE l.nombre = :nombre")
     , @NamedQuery(name = "Localidad.findByCp", query = "SELECT l FROM Localidad l WHERE l.cp = :cp")})
@@ -45,16 +43,15 @@ public class Localidad implements Serializable {
     @Column(name = "id")
     private Integer id;
     @Basic(optional = false)
-    @NotNull
-    @Size(min = 1, max = 100)
-    @Column(name = "nombre")
+    @Column(name = "nombre", nullable = false, length = 100)
     private String nombre;
-    @Column(name = "cp")
-    private Integer cp;
+    @Basic(optional = false)
+    @Column(name = "cp", nullable = false, length = 5)
+    private String cp;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "localidad", fetch = FetchType.LAZY)
-    private List<Localidadesvisitadas> localidadesvisitadasList;
+    private List<Localidadesvisitadas> localidadesvisitadas;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "localidad", fetch = FetchType.LAZY)
-    private List<Propiedad> propiedadList;
+    private List<Propiedad> propiedades;
 
     public Localidad() {
     }
@@ -63,9 +60,10 @@ public class Localidad implements Serializable {
         this.id = id;
     }
 
-    public Localidad(Integer id, String nombre) {
+    public Localidad(Integer id, String nombre, String cp) {
         this.id = id;
         this.nombre = nombre;
+        this.cp = cp;
     }
 
     public Integer getId() {
@@ -84,30 +82,30 @@ public class Localidad implements Serializable {
         this.nombre = nombre;
     }
 
-    public Integer getCp() {
+    public String getCp() {
         return cp;
     }
 
-    public void setCp(Integer cp) {
+    public void setCp(String cp) {
         this.cp = cp;
     }
 
     @XmlTransient
-    public List<Localidadesvisitadas> getLocalidadesvisitadasList() {
-        return localidadesvisitadasList;
+    public List<Localidadesvisitadas> getLocalidadesvisitadas() {
+        return localidadesvisitadas;
     }
 
-    public void setLocalidadesvisitadasList(List<Localidadesvisitadas> localidadesvisitadasList) {
-        this.localidadesvisitadasList = localidadesvisitadasList;
+    public void setLocalidadesvisitadas(List<Localidadesvisitadas> localidadesvisitadas) {
+        this.localidadesvisitadas = localidadesvisitadas;
     }
 
     @XmlTransient
-    public List<Propiedad> getPropiedadList() {
-        return propiedadList;
+    public List<Propiedad> getPropiedades() {
+        return propiedades;
     }
 
-    public void setPropiedadList(List<Propiedad> propiedadList) {
-        this.propiedadList = propiedadList;
+    public void setPropiedades(List<Propiedad> propiedades) {
+        this.propiedades = propiedades;
     }
 
     @Override

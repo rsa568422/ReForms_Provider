@@ -24,8 +24,6 @@ import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
-import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Size;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlTransient;
 
@@ -37,7 +35,7 @@ import javax.xml.bind.annotation.XmlTransient;
 @Table(name = "siniestro")
 @XmlRootElement
 @NamedQueries({
-    @NamedQuery(name = "Siniestro.findAll", query = "SELECT s FROM Siniestro s")
+      @NamedQuery(name = "Siniestro.findAll", query = "SELECT s FROM Siniestro s")
     , @NamedQuery(name = "Siniestro.findById", query = "SELECT s FROM Siniestro s WHERE s.id = :id")
     , @NamedQuery(name = "Siniestro.findByNumero", query = "SELECT s FROM Siniestro s WHERE s.numero = :numero")
     , @NamedQuery(name = "Siniestro.findByFechaRegistro", query = "SELECT s FROM Siniestro s WHERE s.fechaRegistro = :fechaRegistro")
@@ -52,29 +50,26 @@ public class Siniestro implements Serializable {
     @Column(name = "id")
     private Integer id;
     @Basic(optional = false)
-    @NotNull
-    @Column(name = "numero")
-    private int numero;
+    @Column(name = "numero", nullable = false, length = 16)
+    private String numero;
     @Basic(optional = false)
-    @NotNull
-    @Column(name = "fechaRegistro")
+    @Column(name = "fechaRegistro", nullable = false)
     @Temporal(TemporalType.DATE)
     private Date fechaRegistro;
-    @Size(max = 250)
-    @Column(name = "observaciones")
+    @Column(name = "observaciones", length = 250)
     private String observaciones;
     @Column(name = "albaran")
     private Integer albaran;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "siniestro", fetch = FetchType.LAZY)
-    private List<Tarea> tareaList;
+    private List<Tarea> tareas;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "siniestro", fetch = FetchType.LAZY)
-    private List<Evento> eventoList;
+    private List<Evento> eventos;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "siniestro", fetch = FetchType.LAZY)
-    private List<Adjunto> adjuntoList;
+    private List<Adjunto> adjuntos;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "siniestro", fetch = FetchType.LAZY)
-    private List<Contacto> contactoList;
+    private List<Contacto> contactos;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "siniestro", fetch = FetchType.LAZY)
-    private List<Reasignacion> reasignacionList;
+    private List<Reasignacion> reasignaciones;
     @JoinColumn(name = "afectado", referencedColumnName = "id")
     @ManyToOne(fetch = FetchType.LAZY)
     private Propiedad afectado;
@@ -88,9 +83,9 @@ public class Siniestro implements Serializable {
     @ManyToOne(optional = false, fetch = FetchType.LAZY)
     private Poliza poliza;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "siniestro", fetch = FetchType.LAZY)
-    private List<Participante> participanteList;
+    private List<Participante> participantes;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "siniestro", fetch = FetchType.LAZY)
-    private List<Replanificacion> replanificacionList;
+    private List<Replanificacion> replanificaciones;
 
     public Siniestro() {
     }
@@ -99,7 +94,7 @@ public class Siniestro implements Serializable {
         this.id = id;
     }
 
-    public Siniestro(Integer id, int numero, Date fechaRegistro) {
+    public Siniestro(Integer id, String numero, Date fechaRegistro) {
         this.id = id;
         this.numero = numero;
         this.fechaRegistro = fechaRegistro;
@@ -113,11 +108,11 @@ public class Siniestro implements Serializable {
         this.id = id;
     }
 
-    public int getNumero() {
+    public String getNumero() {
         return numero;
     }
 
-    public void setNumero(int numero) {
+    public void setNumero(String numero) {
         this.numero = numero;
     }
 
@@ -146,48 +141,48 @@ public class Siniestro implements Serializable {
     }
 
     @XmlTransient
-    public List<Tarea> getTareaList() {
-        return tareaList;
+    public List<Tarea> getTareas() {
+        return tareas;
     }
 
-    public void setTareaList(List<Tarea> tareaList) {
-        this.tareaList = tareaList;
-    }
-
-    @XmlTransient
-    public List<Evento> getEventoList() {
-        return eventoList;
-    }
-
-    public void setEventoList(List<Evento> eventoList) {
-        this.eventoList = eventoList;
+    public void setTareas(List<Tarea> tareas) {
+        this.tareas = tareas;
     }
 
     @XmlTransient
-    public List<Adjunto> getAdjuntoList() {
-        return adjuntoList;
+    public List<Evento> getEventos() {
+        return eventos;
     }
 
-    public void setAdjuntoList(List<Adjunto> adjuntoList) {
-        this.adjuntoList = adjuntoList;
-    }
-
-    @XmlTransient
-    public List<Contacto> getContactoList() {
-        return contactoList;
-    }
-
-    public void setContactoList(List<Contacto> contactoList) {
-        this.contactoList = contactoList;
+    public void setEventos(List<Evento> eventos) {
+        this.eventos = eventos;
     }
 
     @XmlTransient
-    public List<Reasignacion> getReasignacionList() {
-        return reasignacionList;
+    public List<Adjunto> getAdjuntos() {
+        return adjuntos;
     }
 
-    public void setReasignacionList(List<Reasignacion> reasignacionList) {
-        this.reasignacionList = reasignacionList;
+    public void setAdjuntos(List<Adjunto> adjuntos) {
+        this.adjuntos = adjuntos;
+    }
+
+    @XmlTransient
+    public List<Contacto> getContactos() {
+        return contactos;
+    }
+
+    public void setContactos(List<Contacto> contactos) {
+        this.contactos = contactos;
+    }
+
+    @XmlTransient
+    public List<Reasignacion> getReasignaciones() {
+        return reasignaciones;
+    }
+
+    public void setReasignaciones(List<Reasignacion> reasignaciones) {
+        this.reasignaciones = reasignaciones;
     }
 
     public Propiedad getAfectado() {
@@ -223,21 +218,21 @@ public class Siniestro implements Serializable {
     }
 
     @XmlTransient
-    public List<Participante> getParticipanteList() {
-        return participanteList;
+    public List<Participante> getParticipantes() {
+        return participantes;
     }
 
-    public void setParticipanteList(List<Participante> participanteList) {
-        this.participanteList = participanteList;
+    public void setParticipantes(List<Participante> participantes) {
+        this.participantes = participantes;
     }
 
     @XmlTransient
-    public List<Replanificacion> getReplanificacionList() {
-        return replanificacionList;
+    public List<Replanificacion> getReplanificaciones() {
+        return replanificaciones;
     }
 
-    public void setReplanificacionList(List<Replanificacion> replanificacionList) {
-        this.replanificacionList = replanificacionList;
+    public void setReplanificaciones(List<Replanificacion> replanificaciones) {
+        this.replanificaciones = replanificaciones;
     }
 
     @Override

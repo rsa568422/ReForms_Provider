@@ -24,7 +24,6 @@ import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
-import javax.validation.constraints.Size;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlTransient;
 
@@ -36,7 +35,7 @@ import javax.xml.bind.annotation.XmlTransient;
 @Table(name = "tarea")
 @XmlRootElement
 @NamedQueries({
-    @NamedQuery(name = "Tarea.findAll", query = "SELECT t FROM Tarea t")
+      @NamedQuery(name = "Tarea.findAll", query = "SELECT t FROM Tarea t")
     , @NamedQuery(name = "Tarea.findById", query = "SELECT t FROM Tarea t WHERE t.id = :id")
     , @NamedQuery(name = "Tarea.findByCantidad", query = "SELECT t FROM Tarea t WHERE t.cantidad = :cantidad")
     , @NamedQuery(name = "Tarea.findByEstado", query = "SELECT t FROM Tarea t WHERE t.estado = :estado")
@@ -54,14 +53,13 @@ public class Tarea implements Serializable {
     private Integer cantidad;
     @Column(name = "estado")
     private Integer estado;
-    @Size(max = 250)
-    @Column(name = "observaciones")
+    @Column(name = "observaciones", length = 250)
     private String observaciones;
     @Column(name = "fechaAmpliacion")
     @Temporal(TemporalType.DATE)
     private Date fechaAmpliacion;
     @OneToMany(mappedBy = "ampliacion", fetch = FetchType.LAZY)
-    private List<Tarea> tareaList;
+    private List<Tarea> tareas;
     @JoinColumn(name = "ampliacion", referencedColumnName = "id")
     @ManyToOne(fetch = FetchType.LAZY)
     private Tarea ampliacion;
@@ -72,7 +70,7 @@ public class Tarea implements Serializable {
     @ManyToOne(optional = false, fetch = FetchType.LAZY)
     private Trabajo trabajo;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "tarea", fetch = FetchType.LAZY)
-    private List<Tareascita> tareascitaList;
+    private List<Tareascita> tareascitas;
 
     public Tarea() {
     }
@@ -122,12 +120,12 @@ public class Tarea implements Serializable {
     }
 
     @XmlTransient
-    public List<Tarea> getTareaList() {
-        return tareaList;
+    public List<Tarea> getTareas() {
+        return tareas;
     }
 
-    public void setTareaList(List<Tarea> tareaList) {
-        this.tareaList = tareaList;
+    public void setTareas(List<Tarea> tareas) {
+        this.tareas = tareas;
     }
 
     public Tarea getAmpliacion() {
@@ -155,12 +153,12 @@ public class Tarea implements Serializable {
     }
 
     @XmlTransient
-    public List<Tareascita> getTareascitaList() {
-        return tareascitaList;
+    public List<Tareascita> getTareascitas() {
+        return tareascitas;
     }
 
-    public void setTareascitaList(List<Tareascita> tareascitaList) {
-        this.tareascitaList = tareascitaList;
+    public void setTareascitas(List<Tareascita> tareascitas) {
+        this.tareascitas = tareascitas;
     }
 
     @Override
