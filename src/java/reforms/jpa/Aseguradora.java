@@ -36,7 +36,8 @@ import javax.xml.bind.annotation.XmlTransient;
     , @NamedQuery(name = "Aseguradora.findByTelefono1", query = "SELECT a FROM Aseguradora a WHERE a.telefono1 = :telefono1")
     , @NamedQuery(name = "Aseguradora.findByTelefono2", query = "SELECT a FROM Aseguradora a WHERE a.telefono2 = :telefono2")
     , @NamedQuery(name = "Aseguradora.findByFax", query = "SELECT a FROM Aseguradora a WHERE a.fax = :fax")
-    , @NamedQuery(name = "Aseguradora.findByEmail", query = "SELECT a FROM Aseguradora a WHERE a.email = :email")})
+    , @NamedQuery(name = "Aseguradora.findByEmail", query = "SELECT a FROM Aseguradora a WHERE a.email = :email")
+    , @NamedQuery(name = "Aseguradora.obtenerAseguradoras", query = "SELECT a FROM Aseguradora a ORDER BY a.nombre")})
 public class Aseguradora implements Serializable {
 
     private static final long serialVersionUID = 1L;

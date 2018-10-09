@@ -39,7 +39,9 @@ import javax.xml.bind.annotation.XmlTransient;
     , @NamedQuery(name = "Propiedad.findByPiso", query = "SELECT p FROM Propiedad p WHERE p.piso = :piso")
     , @NamedQuery(name = "Propiedad.findByObservaciones", query = "SELECT p FROM Propiedad p WHERE p.observaciones = :observaciones")
     , @NamedQuery(name = "Propiedad.findByGeolat", query = "SELECT p FROM Propiedad p WHERE p.geolat = :geolat")
-    , @NamedQuery(name = "Propiedad.findByGeolong", query = "SELECT p FROM Propiedad p WHERE p.geolong = :geolong")})
+    , @NamedQuery(name = "Propiedad.findByGeolong", query = "SELECT p FROM Propiedad p WHERE p.geolong = :geolong")
+    , @NamedQuery(name = "Propiedad.buscarPropiedadPorDireccionCompleta", query = "SELECT p FROM Propiedad p WHERE (p.direccion LIKE :direccion AND p.numero = :numero AND (p.piso IS NULL OR p.piso LIKE :piso) AND p.localidad.cp = :cp) ORDER BY p.localidad.nombre, p.direccion, p.numero, p.piso")
+    , @NamedQuery(name = "Propiedad.buscarPropiedadPorDireccionCompletaAseguradora", query = "SELECT p FROM Propiedad p JOIN p.polizas po WHERE (po.cliente.aseguradora = :aseguradoraId AND p.direccion LIKE :direccion AND p.numero = :numero AND (p.piso IS NULL OR p.piso LIKE :piso) AND p.localidad.cp = :cp) ORDER BY p.localidad.nombre, p.direccion, p.numero, p.piso")})
 public class Propiedad implements Serializable {
 
     private static final long serialVersionUID = 1L;
