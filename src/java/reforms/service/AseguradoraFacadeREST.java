@@ -94,6 +94,7 @@ public class AseguradoraFacadeREST extends AbstractFacade<Aseguradora> {
     @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
     public List<Aseguradora> obtenerAseguradoras() {
         Query q = em.createNamedQuery("Aseguradora.obtenerAseguradoras");
-        return q.getResultList();
+        List<Aseguradora> la = q.getResultList();
+        return la.isEmpty() ? null : la;
     }
 }

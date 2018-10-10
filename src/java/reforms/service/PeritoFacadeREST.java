@@ -9,6 +9,7 @@ import java.util.List;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
+import javax.persistence.Query;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.DELETE;
 import javax.ws.rs.GET;
@@ -25,7 +26,7 @@ import reforms.jpa.Perito;
  * @author Roberto
  */
 @Stateless
-@Path("reforms.jpa.perito")
+@Path("perito")
 public class PeritoFacadeREST extends AbstractFacade<Perito> {
 
     @PersistenceContext(unitName = "ReForms_ProviderPU")
@@ -88,4 +89,13 @@ public class PeritoFacadeREST extends AbstractFacade<Perito> {
         return em;
     }
     
+    @GET
+    @Path("buscarPeritoPorAseguradora/{aseguradoraId}")
+    @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
+    public List<Perito> buscarPeritoPorAseguradora(@PathParam("aseguradoraId") Integer aseguradoraId) {
+        Query q = em.createNamedQuery("Perito.buscarPeritoPorAseguradora");
+        q.setParameter("aseguradoraId", aseguradoraId);
+        List<Perito> lp = q.getResultList();
+        return lp.isEmpty() ? null : lp;
+    }
 }

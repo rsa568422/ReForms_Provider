@@ -9,6 +9,7 @@ import java.util.List;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
+import javax.persistence.Query;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.DELETE;
 import javax.ws.rs.GET;
@@ -25,7 +26,7 @@ import reforms.jpa.Propiedad;
  * @author Roberto
  */
 @Stateless
-@Path("reforms.jpa.propiedad")
+@Path("propiedad")
 public class PropiedadFacadeREST extends AbstractFacade<Propiedad> {
 
     @PersistenceContext(unitName = "ReForms_ProviderPU")
@@ -88,4 +89,30 @@ public class PropiedadFacadeREST extends AbstractFacade<Propiedad> {
         return em;
     }
     
+    @GET
+    @Path("buscarPropiedadPorDireccionCompleta/{cp}/{direccion}/{numero}/{piso:.*}")
+    @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
+    public List<Propiedad> buscarPropiedadPorDireccionCompleta(@PathParam("cp") String cp, @PathParam("direccion") String direccion, @PathParam("numero") Integer numero, @PathParam("piso") String piso) {
+        Query q = em.createNamedQuery("Propiedad.buscarPropiedadPorDireccionCompleta");
+        q.setParameter("cp", cp);
+        q.setParameter("direccion", direccion);
+        q.setParameter("numero", numero);
+        q.setParameter("piso", piso);
+        List<Propiedad> lp = q.getResultList();
+        return lp.isEmpty() ? null : lp;
+    }
+    
+    @GET
+    @Path("buscarPropiedadPorDireccionCompletaA/{aseguradoraId}/{cp}/{direccion}/{numero}/{piso:.*}")
+    @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
+    public List<Propiedad> buscarPropiedadPorDireccionCompletaA(@PathParam("aseguradoraId") Integer aseguradoraId, @PathParam("cp") String cp, @PathParam("direccion") String direccion, @PathParam("numero") Integer numero, @PathParam("piso") String piso) {
+        Query q = em.createNamedQuery("Propiedad.buscarPropiedadPorDireccionCompletaA");
+        q.setParameter("aseguradoraId", aseguradoraId);
+        q.setParameter("cp", cp);
+        q.setParameter("direccion", direccion);
+        q.setParameter("numero", numero);
+        q.setParameter("piso", piso);
+        List<Propiedad> lp = q.getResultList();
+        return lp.isEmpty() ? null : lp;
+    }
 }

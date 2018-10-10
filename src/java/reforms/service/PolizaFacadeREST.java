@@ -9,6 +9,7 @@ import java.util.List;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
+import javax.persistence.Query;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.DELETE;
 import javax.ws.rs.GET;
@@ -25,7 +26,7 @@ import reforms.jpa.Poliza;
  * @author Roberto
  */
 @Stateless
-@Path("reforms.jpa.poliza")
+@Path("poliza")
 public class PolizaFacadeREST extends AbstractFacade<Poliza> {
 
     @PersistenceContext(unitName = "ReForms_ProviderPU")
@@ -88,4 +89,24 @@ public class PolizaFacadeREST extends AbstractFacade<Poliza> {
         return em;
     }
     
+    @GET
+    @Path("buscarPolizaPorNumeroPoliza/{numero}")
+    @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
+    public List<Poliza> buscarPolizaPorNumeroPoliza(@PathParam("numero") String numero) {
+        Query q = em.createNamedQuery("Poliza.buscarPolizaPorNumeroPoliza");
+        q.setParameter("numero", numero);
+        List<Poliza> lp = q.getResultList();
+        return lp.isEmpty() ? null : lp;
+    }
+    
+    @GET
+    @Path("buscarPolizaPorNumeroPolizaA/{aseguradoraId}/{numero}")
+    @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
+    public Poliza buscarPolizaPorNumeroPolizaA(@PathParam("aseguradoraId") Integer aseguradoraId, @PathParam("numero") String numero) {
+        Query q = em.createNamedQuery("Poliza.buscarPolizaPorNumeroPolizaA");
+        q.setParameter("aseguradoraId", aseguradoraId);
+        q.setParameter("numero", numero);
+        List<Poliza> lp = q.getResultList();
+        return lp.isEmpty() ? null : lp.get(0);
+    }
 }

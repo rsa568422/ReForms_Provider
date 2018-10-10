@@ -9,6 +9,7 @@ import java.util.List;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
+import javax.persistence.Query;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.DELETE;
 import javax.ws.rs.GET;
@@ -25,7 +26,7 @@ import reforms.jpa.Localidad;
  * @author Roberto
  */
 @Stateless
-@Path("reforms.jpa.localidad")
+@Path("localidad")
 public class LocalidadFacadeREST extends AbstractFacade<Localidad> {
 
     @PersistenceContext(unitName = "ReForms_ProviderPU")
@@ -88,4 +89,13 @@ public class LocalidadFacadeREST extends AbstractFacade<Localidad> {
         return em;
     }
     
+    @GET
+    @Path("buscarLocalidadPorCodigoPostal/{cp}")
+    @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
+    public Localidad buscarLocalidadPorCodigoPostal(@PathParam("cp") String cp) {
+        Query q = em.createNamedQuery("Localidad.buscarLocalidadPorCodigoPostal");
+        q.setParameter("cp", cp);
+        List<Localidad> ll = q.getResultList();
+        return ll.isEmpty() ? null : ll.get(0);
+    }
 }
