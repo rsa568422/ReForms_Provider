@@ -109,4 +109,11 @@ public class PolizaFacadeREST extends AbstractFacade<Poliza> {
         List<Poliza> lp = q.getResultList();
         return lp.isEmpty() ? null : lp.get(0);
     }
+
+    @POST
+    @Path("registrarPoliza")
+    @Consumes({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
+    public void registrarPoliza(Poliza entity) {
+        super.create(entity);
+    }
 }

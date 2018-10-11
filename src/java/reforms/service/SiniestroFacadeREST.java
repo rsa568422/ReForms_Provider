@@ -191,7 +191,7 @@ public class SiniestroFacadeREST extends AbstractFacade<Siniestro> {
     }
     
     @GET
-    @Path("buscarSiniestroPorDireccionA/{localidadId}/{direccion}/{numero}/{piso:.*}")
+    @Path("buscarSiniestroPorDireccionA/{aseguradoraId}/{localidadId}/{direccion}/{numero}/{piso:.*}")
     @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
     public List<Siniestro> buscarSiniestroPorDireccionA(@PathParam("aseguradoraId") Integer aseguradoraId, @PathParam("localidadId") Integer localidadId, @PathParam("direccion") String direccion, @PathParam("numero") Integer numero, @PathParam("piso") String piso) {
         Query q = em.createNamedQuery("Siniestro.buscarSiniestroPorDireccionA");
@@ -202,5 +202,12 @@ public class SiniestroFacadeREST extends AbstractFacade<Siniestro> {
         q.setParameter("piso", piso);
         List<Siniestro> ls = q.getResultList();
         return ls.isEmpty() ? null : ls;
+    }
+
+    @POST
+    @Path("registrarSiniestro")
+    @Consumes({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
+    public void registrarSiniestro(Siniestro entity) {
+        super.create(entity);
     }
 }
