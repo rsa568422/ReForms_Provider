@@ -25,7 +25,7 @@ import reforms.jpa.Mantenimiento;
  * @author Roberto
  */
 @Stateless
-@Path("reforms.jpa.mantenimiento")
+@Path("mantenimiento")
 public class MantenimientoFacadeREST extends AbstractFacade<Mantenimiento> {
 
     @PersistenceContext(unitName = "ReForms_ProviderPU")

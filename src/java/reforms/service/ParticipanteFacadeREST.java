@@ -25,7 +25,7 @@ import reforms.jpa.Participante;
  * @author Roberto
  */
 @Stateless
-@Path("reforms.jpa.participante")
+@Path("participante")
 public class ParticipanteFacadeREST extends AbstractFacade<Participante> {
 
     @PersistenceContext(unitName = "ReForms_ProviderPU")
@@ -88,4 +88,10 @@ public class ParticipanteFacadeREST extends AbstractFacade<Participante> {
         return em;
     }
     
+    @POST
+    @Path("agregarParticipante")
+    @Consumes({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
+    public void agregarParticipante(Participante entity) {
+        super.create(entity);
+    }
 }

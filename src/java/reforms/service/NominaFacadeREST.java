@@ -25,7 +25,7 @@ import reforms.jpa.Nomina;
  * @author Roberto
  */
 @Stateless
-@Path("reforms.jpa.nomina")
+@Path("nomina")
 public class NominaFacadeREST extends AbstractFacade<Nomina> {
 
     @PersistenceContext(unitName = "ReForms_ProviderPU")

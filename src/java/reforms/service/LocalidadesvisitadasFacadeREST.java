@@ -25,7 +25,7 @@ import reforms.jpa.Localidadesvisitadas;
  * @author Roberto
  */
 @Stateless
-@Path("reforms.jpa.localidadesvisitadas")
+@Path("localidadesvisitadas")
 public class LocalidadesvisitadasFacadeREST extends AbstractFacade<Localidadesvisitadas> {
 
     @PersistenceContext(unitName = "ReForms_ProviderPU")

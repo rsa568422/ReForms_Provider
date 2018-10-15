@@ -25,7 +25,7 @@ import reforms.jpa.Material;
  * @author Roberto
  */
 @Stateless
-@Path("reforms.jpa.material")
+@Path("material")
 public class MaterialFacadeREST extends AbstractFacade<Material> {
 
     @PersistenceContext(unitName = "ReForms_ProviderPU")

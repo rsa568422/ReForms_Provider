@@ -25,7 +25,7 @@ import reforms.jpa.Gremio;
  * @author Roberto
  */
 @Stateless
-@Path("reforms.jpa.gremio")
+@Path("gremio")
 public class GremioFacadeREST extends AbstractFacade<Gremio> {
 
     @PersistenceContext(unitName = "ReForms_ProviderPU")

@@ -25,7 +25,7 @@ import reforms.jpa.Evento;
  * @author Roberto
  */
 @Stateless
-@Path("reforms.jpa.evento")
+@Path("evento")
 public class EventoFacadeREST extends AbstractFacade<Evento> {
 
     @PersistenceContext(unitName = "ReForms_ProviderPU")

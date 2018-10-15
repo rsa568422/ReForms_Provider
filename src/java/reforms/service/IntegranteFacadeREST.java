@@ -25,7 +25,7 @@ import reforms.jpa.Integrante;
  * @author Roberto
  */
 @Stateless
-@Path("reforms.jpa.integrante")
+@Path("integrante")
 public class IntegranteFacadeREST extends AbstractFacade<Integrante> {
 
     @PersistenceContext(unitName = "ReForms_ProviderPU")

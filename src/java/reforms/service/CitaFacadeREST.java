@@ -25,7 +25,7 @@ import reforms.jpa.Cita;
  * @author Roberto
  */
 @Stateless
-@Path("reforms.jpa.cita")
+@Path("cita")
 public class CitaFacadeREST extends AbstractFacade<Cita> {
 
     @PersistenceContext(unitName = "ReForms_ProviderPU")

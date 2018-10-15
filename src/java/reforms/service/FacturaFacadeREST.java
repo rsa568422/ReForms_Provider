@@ -25,7 +25,7 @@ import reforms.jpa.Factura;
  * @author Roberto
  */
 @Stateless
-@Path("reforms.jpa.factura")
+@Path("factura")
 public class FacturaFacadeREST extends AbstractFacade<Factura> {
 
     @PersistenceContext(unitName = "ReForms_ProviderPU")

@@ -25,7 +25,7 @@ import reforms.jpa.Reasignacion;
  * @author Roberto
  */
 @Stateless
-@Path("reforms.jpa.reasignacion")
+@Path("reasignacion")
 public class ReasignacionFacadeREST extends AbstractFacade<Reasignacion> {
 
     @PersistenceContext(unitName = "ReForms_ProviderPU")

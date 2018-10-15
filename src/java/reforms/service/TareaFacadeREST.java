@@ -25,7 +25,7 @@ import reforms.jpa.Tarea;
  * @author Roberto
  */
 @Stateless
-@Path("reforms.jpa.tarea")
+@Path("tarea")
 public class TareaFacadeREST extends AbstractFacade<Tarea> {
 
     @PersistenceContext(unitName = "ReForms_ProviderPU")
@@ -88,4 +88,10 @@ public class TareaFacadeREST extends AbstractFacade<Tarea> {
         return em;
     }
     
+    @POST
+    @Path("agregarTarea")
+    @Consumes({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
+    public void agregarTarea(Tarea entity) {
+        super.create(entity);
+    }
 }

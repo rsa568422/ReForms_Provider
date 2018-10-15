@@ -25,7 +25,7 @@ import reforms.jpa.Replanificacion;
  * @author Roberto
  */
 @Stateless
-@Path("reforms.jpa.replanificacion")
+@Path("replanificacion")
 public class ReplanificacionFacadeREST extends AbstractFacade<Replanificacion> {
 
     @PersistenceContext(unitName = "ReForms_ProviderPU")

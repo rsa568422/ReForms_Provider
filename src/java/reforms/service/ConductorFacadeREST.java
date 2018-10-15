@@ -25,7 +25,7 @@ import reforms.jpa.Conductor;
  * @author Roberto
  */
 @Stateless
-@Path("reforms.jpa.conductor")
+@Path("conductor")
 public class ConductorFacadeREST extends AbstractFacade<Conductor> {
 
     @PersistenceContext(unitName = "ReForms_ProviderPU")

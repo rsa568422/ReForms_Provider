@@ -25,7 +25,7 @@ import reforms.jpa.Vehiculo;
  * @author Roberto
  */
 @Stateless
-@Path("reforms.jpa.vehiculo")
+@Path("vehiculo")
 public class VehiculoFacadeREST extends AbstractFacade<Vehiculo> {
 
     @PersistenceContext(unitName = "ReForms_ProviderPU")

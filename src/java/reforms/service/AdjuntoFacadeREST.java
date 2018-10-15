@@ -25,7 +25,7 @@ import reforms.jpa.Adjunto;
  * @author Roberto
  */
 @Stateless
-@Path("reforms.jpa.adjunto")
+@Path("adjunto")
 public class AdjuntoFacadeREST extends AbstractFacade<Adjunto> {
 
     @PersistenceContext(unitName = "ReForms_ProviderPU")

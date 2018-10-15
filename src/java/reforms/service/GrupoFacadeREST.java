@@ -25,7 +25,7 @@ import reforms.jpa.Grupo;
  * @author Roberto
  */
 @Stateless
-@Path("reforms.jpa.grupo")
+@Path("grupo")
 public class GrupoFacadeREST extends AbstractFacade<Grupo> {
 
     @PersistenceContext(unitName = "ReForms_ProviderPU")

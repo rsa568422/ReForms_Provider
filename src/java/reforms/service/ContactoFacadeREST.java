@@ -25,7 +25,7 @@ import reforms.jpa.Contacto;
  * @author Roberto
  */
 @Stateless
-@Path("reforms.jpa.contacto")
+@Path("contacto")
 public class ContactoFacadeREST extends AbstractFacade<Contacto> {
 
     @PersistenceContext(unitName = "ReForms_ProviderPU")
@@ -87,5 +87,11 @@ public class ContactoFacadeREST extends AbstractFacade<Contacto> {
     protected EntityManager getEntityManager() {
         return em;
     }
-    
+
+    @POST
+    @Path("agregarContacto")
+    @Consumes({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
+    public void agregarContacto(Contacto entity) {
+        super.create(entity);
+    }
 }

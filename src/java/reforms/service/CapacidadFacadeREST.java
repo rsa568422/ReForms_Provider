@@ -25,7 +25,7 @@ import reforms.jpa.Capacidad;
  * @author Roberto
  */
 @Stateless
-@Path("reforms.jpa.capacidad")
+@Path("capacidad")
 public class CapacidadFacadeREST extends AbstractFacade<Capacidad> {
 
     @PersistenceContext(unitName = "ReForms_ProviderPU")

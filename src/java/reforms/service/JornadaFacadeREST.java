@@ -25,7 +25,7 @@ import reforms.jpa.Jornada;
  * @author Roberto
  */
 @Stateless
-@Path("reforms.jpa.jornada")
+@Path("jornada")
 public class JornadaFacadeREST extends AbstractFacade<Jornada> {
 
     @PersistenceContext(unitName = "ReForms_ProviderPU")

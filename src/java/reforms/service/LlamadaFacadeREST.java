@@ -25,7 +25,7 @@ import reforms.jpa.Llamada;
  * @author Roberto
  */
 @Stateless
-@Path("reforms.jpa.llamada")
+@Path("llamada")
 public class LlamadaFacadeREST extends AbstractFacade<Llamada> {
 
     @PersistenceContext(unitName = "ReForms_ProviderPU")

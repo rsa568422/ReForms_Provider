@@ -25,7 +25,7 @@ import reforms.jpa.Subcontrata;
  * @author Roberto
  */
 @Stateless
-@Path("reforms.jpa.subcontrata")
+@Path("subcontrata")
 public class SubcontrataFacadeREST extends AbstractFacade<Subcontrata> {
 
     @PersistenceContext(unitName = "ReForms_ProviderPU")

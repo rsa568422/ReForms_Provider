@@ -25,7 +25,7 @@ import reforms.jpa.Trabajo;
  * @author Roberto
  */
 @Stateless
-@Path("reforms.jpa.trabajo")
+@Path("trabajo")
 public class TrabajoFacadeREST extends AbstractFacade<Trabajo> {
 
     @PersistenceContext(unitName = "ReForms_ProviderPU")

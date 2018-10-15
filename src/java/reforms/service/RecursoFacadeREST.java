@@ -25,7 +25,7 @@ import reforms.jpa.Recurso;
  * @author Roberto
  */
 @Stateless
-@Path("reforms.jpa.recurso")
+@Path("recurso")
 public class RecursoFacadeREST extends AbstractFacade<Recurso> {
 
     @PersistenceContext(unitName = "ReForms_ProviderPU")

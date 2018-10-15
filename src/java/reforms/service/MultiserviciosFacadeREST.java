@@ -25,7 +25,7 @@ import reforms.jpa.Multiservicios;
  * @author Roberto
  */
 @Stateless
-@Path("reforms.jpa.multiservicios")
+@Path("multiservicios")
 public class MultiserviciosFacadeREST extends AbstractFacade<Multiservicios> {
 
     @PersistenceContext(unitName = "ReForms_ProviderPU")

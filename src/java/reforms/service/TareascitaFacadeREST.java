@@ -25,7 +25,7 @@ import reforms.jpa.Tareascita;
  * @author Roberto
  */
 @Stateless
-@Path("reforms.jpa.tareascita")
+@Path("tareascita")
 public class TareascitaFacadeREST extends AbstractFacade<Tareascita> {
 
     @PersistenceContext(unitName = "ReForms_ProviderPU")
