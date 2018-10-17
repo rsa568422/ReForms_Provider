@@ -9,6 +9,7 @@ import java.util.List;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
+import javax.persistence.Query;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.DELETE;
 import javax.ws.rs.GET;
@@ -88,4 +89,12 @@ public class OperadorFacadeREST extends AbstractFacade<Operador> {
         return em;
     }
     
+    @GET
+    @Path("prueba")
+    @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
+    public List<Operador> prueba() {
+        Query q = em.createNamedQuery("Operador.prueba");
+        List<Operador> lo = q.getResultList();
+        return lo.isEmpty() ? null : lo;
+    }
 }
