@@ -102,12 +102,12 @@ public class SiniestroFacadeREST extends AbstractFacade<Siniestro> {
     @GET
     @Path("buscarSiniestroPorNumeroSiniestroA/{aseguradoraId}/{numero}")
     @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
-    public Siniestro buscarSiniestroPorNumeroSiniestroA(@PathParam("aseguradoraId") Integer aseguradoraId, @PathParam("numero") String numero) {
+    public List<Siniestro> buscarSiniestroPorNumeroSiniestroA(@PathParam("aseguradoraId") Integer aseguradoraId, @PathParam("numero") String numero) {
         Query q = em.createNamedQuery("Siniestro.buscarSiniestroPorNumeroSiniestroA");
         q.setParameter("aseguradoraId", aseguradoraId);
         q.setParameter("numero", numero);
         List<Siniestro> ls = q.getResultList();
-        return ls.isEmpty() ? null : ls.get(0);
+        return ls.isEmpty() ? null : ls;
     }
     
     @GET
