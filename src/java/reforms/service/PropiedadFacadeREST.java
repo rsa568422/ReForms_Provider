@@ -115,11 +115,4 @@ public class PropiedadFacadeREST extends AbstractFacade<Propiedad> {
         List<Propiedad> lp = q.getResultList();
         return lp.isEmpty() ? null : lp;
     }
-
-    @POST
-    @Path("registrarPropiedad")
-    @Consumes({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
-    public void registrarPropiedad(Propiedad entity) {
-        super.create(entity);
-    }
 }

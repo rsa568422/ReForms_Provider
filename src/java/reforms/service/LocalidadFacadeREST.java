@@ -98,11 +98,4 @@ public class LocalidadFacadeREST extends AbstractFacade<Localidad> {
         List<Localidad> ll = q.getResultList();
         return ll.isEmpty() ? null : ll.get(0);
     }
-
-    @POST
-    @Path("registrarLocalidad")
-    @Consumes({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
-    public void registrarLocalidad(Localidad entity) {
-        super.create(entity);
-    }
 }

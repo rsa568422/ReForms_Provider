@@ -5,7 +5,10 @@
  */
 package reforms.service;
 
+import java.time.Instant;
+import java.util.Date;
 import java.util.List;
+import javax.ejb.EJB;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
@@ -19,6 +22,11 @@ import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
+import reforms.jpa.Cliente;
+import reforms.jpa.Localidad;
+import reforms.jpa.Poliza;
+import reforms.jpa.Propiedad;
+import reforms.jpa.Recurso;
 import reforms.jpa.Siniestro;
 
 /**
@@ -28,6 +36,21 @@ import reforms.jpa.Siniestro;
 @Stateless
 @Path("siniestro")
 public class SiniestroFacadeREST extends AbstractFacade<Siniestro> {
+
+    @EJB
+    private PolizaFacadeREST polizaFacadeREST;
+
+    @EJB
+    private ClienteFacadeREST clienteFacadeREST;
+
+    @EJB
+    private PropiedadFacadeREST propiedadFacadeREST;
+
+    @EJB
+    private LocalidadFacadeREST localidadFacadeREST;
+
+    @EJB
+    private RecursoFacadeREST recursoFacadeREST;
 
     @PersistenceContext(unitName = "ReForms_ProviderPU")
     private EntityManager em;
@@ -208,6 +231,44 @@ public class SiniestroFacadeREST extends AbstractFacade<Siniestro> {
     @Path("registrarSiniestro")
     @Consumes({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
     public void registrarSiniestro(Siniestro entity) {
+        if (entity.getPoliza().getId() == null) {
+            Poliza p = entity.getPoliza();
+            if (entity.getPoliza().getCliente().getId() == null) {
+                Cliente c = entity.getPoliza().getCliente();
+                clienteFacadeREST.create(c);
+                Query q = em.createNativeQuery("SELECT LAST_INSERT_ID()");
+                Integer id = q.getFirstResult();
+                c.setId(id);
+                p.setCliente(c);
+            }
+            if (entity.getPoliza().getPropiedad().getId() == null) {
+                Propiedad pr = entity.getPoliza().getPropiedad();
+                if (pr.getLocalidad().getId() == null) {
+                    Localidad l = pr.getLocalidad();
+                    localidadFacadeREST.create(l);
+                    Query q = em.createNativeQuery("SELECT LAST_INSERT_ID()");
+                    Integer id = q.getFirstResult();
+                    l.setId(id);
+                    pr.setLocalidad(l);
+                }
+                propiedadFacadeREST.create(pr);
+                Query q = em.createNativeQuery("SELECT LAST_INSERT_ID()");
+                Integer id = q.getFirstResult();
+                pr.setId(id);
+                p.setPropiedad(pr);
+            }
+            polizaFacadeREST.create(p);
+            Query q = em.createNativeQuery("SELECT LAST_INSERT_ID()");
+            Integer id = q.getFirstResult();
+            p.setId(id);
+            entity.setPoliza(p);
+        }
+        Recurso r = entity.getOriginal();
+        recursoFacadeREST.create(r);
+        Query q = em.createNativeQuery("SELECT LAST_INSERT_ID()");
+        Integer id = q.getFirstResult();
+        r.setId(id);
+        entity.setOriginal(r);
         super.create(entity);
     }
 }

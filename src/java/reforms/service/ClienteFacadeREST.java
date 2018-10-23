@@ -161,11 +161,4 @@ public class ClienteFacadeREST extends AbstractFacade<Cliente> {
         List<Cliente> lc = q.getResultList();
         return lc.isEmpty() ? null : lc;
     }
-
-    @POST
-    @Path("registrarCliente")
-    @Consumes({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
-    public void registrarCliente(Cliente entity) {
-        super.create(entity);
-    }
 }
