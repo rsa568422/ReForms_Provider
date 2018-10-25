@@ -36,7 +36,9 @@ import javax.xml.bind.annotation.XmlTransient;
     , @NamedQuery(name = "Poliza.findById", query = "SELECT p FROM Poliza p WHERE p.id = :id")
     , @NamedQuery(name = "Poliza.findByNumero", query = "SELECT p FROM Poliza p WHERE p.numero = :numero")
     , @NamedQuery(name = "Poliza.buscarPolizaPorNumeroPoliza", query = "SELECT p FROM Poliza p WHERE (p.numero = :numero) ORDER BY p.cliente.aseguradora.nombre")
-    , @NamedQuery(name = "Poliza.buscarPolizaPorNumeroPolizaA", query = "SELECT p FROM Poliza p WHERE (p.cliente.aseguradora.id = :aseguradoraId AND p.numero = :numero)")})
+    , @NamedQuery(name = "Poliza.buscarPolizaPorNumeroPolizaA", query = "SELECT p FROM Poliza p WHERE (p.cliente.aseguradora.id = :aseguradoraId AND p.numero = :numero)")
+    , @NamedQuery(name = "Poliza.buscarPolizaPorCliente", query = "SELECT p FROM Poliza p WHERE (p.cliente.id = :clienteId) ORDER BY p.cliente.aseguradora.nombre, p.numero")
+    , @NamedQuery(name = "Poliza.buscarPolizaPorPropiedad", query = "SELECT p FROM Poliza p WHERE (p.propiedad.id = :propiedadId) ORDER BY p.cliente.aseguradora.nombre, p.numero")})
 public class Poliza implements Serializable {
 
     private static final long serialVersionUID = 1L;

@@ -109,4 +109,24 @@ public class PolizaFacadeREST extends AbstractFacade<Poliza> {
         List<Poliza> lp = q.getResultList();
         return lp.isEmpty() ? null : lp.get(0);
     }
+    
+    @GET
+    @Path("buscarPolizaPorCliente/{clienteId}")
+    @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
+    public List<Poliza> buscarPolizaPorCliente(@PathParam("clienteId") Integer clienteId) {
+        Query q = em.createNamedQuery("Poliza.buscarPolizaPorCliente");
+        q.setParameter("clienteId", clienteId);
+        List<Poliza> lp = q.getResultList();
+        return lp.isEmpty() ? null : lp;
+    }
+    
+    @GET
+    @Path("buscarPolizaPorPropiedad/{propiedadId}")
+    @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
+    public List<Poliza> buscarPolizaPorPropiedad(@PathParam("propiedadId") Integer propiedadId) {
+        Query q = em.createNamedQuery("Poliza.buscarPolizaPorPropiedad");
+        q.setParameter("propiedadId", propiedadId);
+        List<Poliza> lp = q.getResultList();
+        return lp.isEmpty() ? null : lp;
+    }
 }

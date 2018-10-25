@@ -92,9 +92,12 @@ public class OperadorFacadeREST extends AbstractFacade<Operador> {
     @GET
     @Path("prueba")
     @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
-    public List<Operador> prueba() {
+    public Operador prueba() {
         Query q = em.createNamedQuery("Operador.prueba");
         List<Operador> lo = q.getResultList();
-        return lo.isEmpty() ? null : lo;
+        Operador o = lo.get(0);
+        String oString = o.getTrabajador().getNombre() + " " + o.getTrabajador().getApellido1();
+        System.err.println(oString);
+        return o;
     }
 }
