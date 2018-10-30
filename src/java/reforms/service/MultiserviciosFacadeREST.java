@@ -9,6 +9,7 @@ import java.util.List;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
+import javax.persistence.Query;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.DELETE;
 import javax.ws.rs.GET;
@@ -88,4 +89,12 @@ public class MultiserviciosFacadeREST extends AbstractFacade<Multiservicios> {
         return em;
     }
     
+    @GET
+    @Path("obtenerMultiservicios")
+    @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
+    public List<Multiservicios> obtenerMultiservicios() {
+        Query q = em.createNamedQuery("Multiservicios.obtenerMultiservicios");
+        List<Multiservicios> lm = q.getResultList();
+        return lm.isEmpty() ? null : lm;
+    }
 }

@@ -9,6 +9,7 @@ import java.util.List;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
+import javax.persistence.Query;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.DELETE;
 import javax.ws.rs.GET;
@@ -93,5 +94,15 @@ public class ParticipanteFacadeREST extends AbstractFacade<Participante> {
     @Consumes({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
     public void agregarParticipante(Participante entity) {
         super.create(entity);
+    }
+    
+    @GET
+    @Path("buscarParticipantePorSiniestro/{idSiniestro}")
+    @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
+    public List<Participante> buscarParticipantePorSiniestro(@PathParam("idSiniestro") Integer idSiniestro) {
+        Query q = em.createNamedQuery("Participante.buscarParticipantePorSiniestro");
+        q.setParameter("idSiniestro", idSiniestro);
+        List<Participante> lp = q.getResultList();
+        return lp.isEmpty() ? null : lp;
     }
 }
