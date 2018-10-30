@@ -9,6 +9,7 @@ import java.util.List;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
+import javax.persistence.Query;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.DELETE;
 import javax.ws.rs.GET;
@@ -88,4 +89,14 @@ public class TrabajoFacadeREST extends AbstractFacade<Trabajo> {
         return em;
     }
     
+    @GET
+    @Path("buscarTrabajoPorAseguradoraGremio/{idAseguradora}/{idGremio}")
+    @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
+    public List<Trabajo> buscarTrabajoPorAseguradoraGremio(@PathParam("idAseguradora") Integer idAseguradora, @PathParam("idGremio") Integer idGremio) {
+        Query q = em.createNamedQuery("Trabajo.buscarTrabajoPorAseguradoraGremio");
+        q.setParameter("idAseguradora", idAseguradora);
+        q.setParameter("idGremio", idGremio);
+        List<Trabajo> lt = q.getResultList();
+        return lt.isEmpty() ? null : lt;
+    }
 }

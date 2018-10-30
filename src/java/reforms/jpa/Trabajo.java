@@ -42,7 +42,8 @@ import javax.xml.bind.annotation.XmlTransient;
     , @NamedQuery(name = "Trabajo.findByPrecioMed", query = "SELECT t FROM Trabajo t WHERE t.precioMed = :precioMed")
     , @NamedQuery(name = "Trabajo.findByPrecioExtra", query = "SELECT t FROM Trabajo t WHERE t.precioExtra = :precioExtra")
     , @NamedQuery(name = "Trabajo.findByMedida", query = "SELECT t FROM Trabajo t WHERE t.medida = :medida")
-    , @NamedQuery(name = "Trabajo.findByDificultad", query = "SELECT t FROM Trabajo t WHERE t.dificultad = :dificultad")})
+    , @NamedQuery(name = "Trabajo.findByDificultad", query = "SELECT t FROM Trabajo t WHERE t.dificultad = :dificultad")
+    , @NamedQuery(name = "Trabajo.buscarTrabajoPorAseguradoraGremio", query = "SELECT t FROM Trabajo t WHERE (t.aseguradora.id = :idAseguradora AND t.gremio.id = :idGremio) ORDER BY t.codigo")})
 public class Trabajo implements Serializable {
 
     private static final long serialVersionUID = 1L;

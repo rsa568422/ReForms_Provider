@@ -9,6 +9,7 @@ import java.util.List;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
+import javax.persistence.Query;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.DELETE;
 import javax.ws.rs.GET;
@@ -88,4 +89,12 @@ public class GremioFacadeREST extends AbstractFacade<Gremio> {
         return em;
     }
     
+    @GET
+    @Path("obtenerGremios")
+    @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
+    public List<Gremio> obtenerGremios() {
+        Query q = em.createNamedQuery("Gremio.obtenerGremios");
+        List<Gremio> lg = q.getResultList();
+        return lg.isEmpty() ? null : lg;
+    }
 }

@@ -9,6 +9,7 @@ import java.util.List;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
+import javax.persistence.Query;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.DELETE;
 import javax.ws.rs.GET;
@@ -93,5 +94,15 @@ public class TareaFacadeREST extends AbstractFacade<Tarea> {
     @Consumes({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
     public void agregarTarea(Tarea entity) {
         super.create(entity);
+    }
+    
+    @GET
+    @Path("buscarTareaPorSiniestro/{idSiniestro}")
+    @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
+    public List<Tarea> buscarTareaPorSiniestro(@PathParam("idSiniestro") Integer idSiniestro) {
+        Query q = em.createNamedQuery("Tarea.buscarTareaPorSiniestro");
+        q.setParameter("idSiniestro", idSiniestro);
+        List<Tarea> lt = q.getResultList();
+        return lt.isEmpty() ? null : lt;
     }
 }
