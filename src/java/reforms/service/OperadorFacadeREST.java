@@ -20,6 +20,7 @@ import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 import reforms.jpa.Operador;
+import reforms.jpa.Trabajador;
 
 /**
  *
@@ -95,9 +96,17 @@ public class OperadorFacadeREST extends AbstractFacade<Operador> {
     public Operador prueba() {
         Query q = em.createNamedQuery("Operador.prueba");
         List<Operador> lo = q.getResultList();
-        Operador o = lo.get(0);
-        String oString = o.getTrabajador().getNombre() + " " + o.getTrabajador().getApellido1();
-        System.err.println(oString);
+        Operador o;
+        if (lo == null || lo.isEmpty()) {
+            o = null;
+        } else {
+            o = lo.get(0);
+            o.setEventos(null);
+            o.setJornadas(null);
+            o.getTrabajador().setOperario(null);
+            o.getTrabajador().setOperador(null);
+            o.getTrabajador().setNominas(null);
+        }
         return o;
     }
 }
