@@ -20,7 +20,6 @@ import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 import reforms.jpa.Operador;
-import reforms.jpa.Trabajador;
 
 /**
  *
@@ -93,20 +92,16 @@ public class OperadorFacadeREST extends AbstractFacade<Operador> {
     @GET
     @Path("prueba")
     @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
-    public Operador prueba() {
+    public List<Operador> prueba() {
         Query q = em.createNamedQuery("Operador.prueba");
         List<Operador> lo = q.getResultList();
-        Operador o;
-        if (lo == null || lo.isEmpty()) {
-            o = null;
-        } else {
-            o = lo.get(0);
+        for (Operador o : lo) {
             o.setEventos(null);
             o.setJornadas(null);
             o.getTrabajador().setOperario(null);
             o.getTrabajador().setOperador(null);
             o.getTrabajador().setNominas(null);
         }
-        return o;
+        return lo;
     }
 }

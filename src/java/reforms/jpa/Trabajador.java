@@ -68,6 +68,8 @@ public class Trabajador implements Serializable {
     // @Pattern(regexp="[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?", message="Invalid email")//if the field contains email address consider using this annotation to enforce field validation
     @Column(name = "email", length = 100)
     private String email;
+    @Column(name = "password", length = 130)
+    private String password;
     @OneToOne(cascade = CascadeType.ALL, mappedBy = "trabajador", fetch = FetchType.LAZY)
     private Operario operario;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "trabajador", fetch = FetchType.LAZY)
@@ -154,6 +156,14 @@ public class Trabajador implements Serializable {
 
     public void setEmail(String email) {
         this.email = email;
+    }
+
+    public String getPassword() {
+        return password;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
     }
 
     public Operario getOperario() {
