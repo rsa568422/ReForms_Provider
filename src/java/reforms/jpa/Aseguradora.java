@@ -15,6 +15,7 @@ import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.Lob;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
@@ -61,6 +62,9 @@ public class Aseguradora implements Serializable {
     @Basic(optional = false)
     @Column(name = "email", nullable = false, length = 100)
     private String email;
+    @Lob
+    @Column(name = "logo")
+    private byte[] logo;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "aseguradora", fetch = FetchType.LAZY)
     private List<Perito> peritos;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "aseguradora", fetch = FetchType.LAZY)
@@ -128,6 +132,14 @@ public class Aseguradora implements Serializable {
 
     public void setEmail(String email) {
         this.email = email;
+    }
+
+    public byte[] getLogo() {
+        return logo;
+    }
+
+    public void setLogo(byte[] logo) {
+        this.logo = logo;
     }
 
     @XmlTransient
