@@ -59,6 +59,8 @@ public class Tarea implements Serializable {
     @Column(name = "fechaAmpliacion")
     @Temporal(TemporalType.DATE)
     private Date fechaAmpliacion;
+    @Column(name = "importe")
+    private Float importe;
     @OneToMany(mappedBy = "ampliacion", fetch = FetchType.LAZY)
     private List<Tarea> tareas;
     @JoinColumn(name = "ampliacion", referencedColumnName = "id")
@@ -118,6 +120,14 @@ public class Tarea implements Serializable {
 
     public void setFechaAmpliacion(Date fechaAmpliacion) {
         this.fechaAmpliacion = fechaAmpliacion;
+    }
+
+    public Float getImporte() {
+        return importe;
+    }
+
+    public void setImporte(Float importe) {
+        this.importe = importe;
     }
 
     @XmlTransient
