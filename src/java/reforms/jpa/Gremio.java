@@ -33,7 +33,6 @@ import javax.xml.bind.annotation.XmlTransient;
       @NamedQuery(name = "Gremio.findAll", query = "SELECT g FROM Gremio g")
     , @NamedQuery(name = "Gremio.findById", query = "SELECT g FROM Gremio g WHERE g.id = :id")
     , @NamedQuery(name = "Gremio.findByNombre", query = "SELECT g FROM Gremio g WHERE g.nombre = :nombre")
-    , @NamedQuery(name = "Gremio.findByDescripcion", query = "SELECT g FROM Gremio g WHERE g.descripcion = :descripcion")
     , @NamedQuery(name = "Gremio.obtenerGremios", query = "SELECT g FROM Gremio g ORDER BY g.nombre")})
 public class Gremio implements Serializable {
 
@@ -46,8 +45,6 @@ public class Gremio implements Serializable {
     @Basic(optional = false)
     @Column(name = "nombre", nullable = false, length = 20)
     private String nombre;
-    @Column(name = "descripcion", length = 250)
-    private String descripcion;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "gremio", fetch = FetchType.LAZY)
     private List<Trabajo> trabajos;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "gremio", fetch = FetchType.LAZY)
@@ -79,14 +76,6 @@ public class Gremio implements Serializable {
 
     public void setNombre(String nombre) {
         this.nombre = nombre;
-    }
-
-    public String getDescripcion() {
-        return descripcion;
-    }
-
-    public void setDescripcion(String descripcion) {
-        this.descripcion = descripcion;
     }
 
     @XmlTransient

@@ -97,4 +97,11 @@ public class GremioFacadeREST extends AbstractFacade<Gremio> {
         List<Gremio> lg = q.getResultList();
         return lg.isEmpty() ? null : lg;
     }
+    
+    @POST
+    @Path("registrarGremio")
+    @Consumes({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
+    public void registrarGremio(Gremio entity) {
+        super.create(entity);
+    }
 }

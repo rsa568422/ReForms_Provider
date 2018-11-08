@@ -98,4 +98,11 @@ public class PeritoFacadeREST extends AbstractFacade<Perito> {
         List<Perito> lp = q.getResultList();
         return lp.isEmpty() ? null : lp;
     }
+    
+    @POST
+    @Path("agregarPerito")
+    @Consumes({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
+    public void agregarPerito(Perito entity) {
+        super.create(entity);
+    }
 }
