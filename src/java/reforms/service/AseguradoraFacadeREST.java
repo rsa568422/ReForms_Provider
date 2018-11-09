@@ -97,4 +97,11 @@ public class AseguradoraFacadeREST extends AbstractFacade<Aseguradora> {
         List<Aseguradora> la = q.getResultList();
         return la.isEmpty() ? null : la;
     }
+    
+    @POST
+    @Path("registrarAseguradora")
+    @Consumes({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
+    public void registrarAseguradora(Aseguradora entity) {
+        super.create(entity);
+    }
 }
