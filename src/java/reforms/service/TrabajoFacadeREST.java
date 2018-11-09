@@ -99,4 +99,11 @@ public class TrabajoFacadeREST extends AbstractFacade<Trabajo> {
         List<Trabajo> lt = q.getResultList();
         return lt.isEmpty() ? null : lt;
     }
+    
+    @POST
+    @Path("agregarTrabajo")
+    @Consumes({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
+    public void agregarTrabajo(Trabajo entity) {
+        super.create(entity);
+    }
 }
