@@ -36,7 +36,8 @@ import javax.xml.bind.annotation.XmlRootElement;
     , @NamedQuery(name = "Mantenimiento.findByTipo", query = "SELECT m FROM Mantenimiento m WHERE m.tipo = :tipo")
     , @NamedQuery(name = "Mantenimiento.findByFecha", query = "SELECT m FROM Mantenimiento m WHERE m.fecha = :fecha")
     , @NamedQuery(name = "Mantenimiento.findByCoste", query = "SELECT m FROM Mantenimiento m WHERE m.coste = :coste")
-    , @NamedQuery(name = "Mantenimiento.findByDescripcion", query = "SELECT m FROM Mantenimiento m WHERE m.descripcion = :descripcion")})
+    , @NamedQuery(name = "Mantenimiento.findByDescripcion", query = "SELECT m FROM Mantenimiento m WHERE m.descripcion = :descripcion")
+    , @NamedQuery(name = "Mantenimiento.buscarMantenimientoPorVehiculo", query = "SELECT m FROM Mantenimiento m WHERE m.vehiculo.id = :vehiculoId ORDER BY m.fecha, m.tipo")})
 public class Mantenimiento implements Serializable {
 
     private static final long serialVersionUID = 1L;
@@ -47,7 +48,7 @@ public class Mantenimiento implements Serializable {
     private Integer id;
     @Column(name = "tipo")
     private Integer tipo;
-    @Column(name = "fecha")
+    @Column(name = "fecha", nullable = false)
     @Temporal(TemporalType.DATE)
     private Date fecha;
     // @Max(value=?)  @Min(value=?)//if you know range of your decimal fields consider using these annotations to enforce field validation

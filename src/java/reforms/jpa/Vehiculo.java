@@ -41,7 +41,8 @@ import javax.xml.bind.annotation.XmlTransient;
     , @NamedQuery(name = "Vehiculo.findByMatriculacion", query = "SELECT v FROM Vehiculo v WHERE v.matriculacion = :matriculacion")
     , @NamedQuery(name = "Vehiculo.findByAdquisicion", query = "SELECT v FROM Vehiculo v WHERE v.adquisicion = :adquisicion")
     , @NamedQuery(name = "Vehiculo.findByKm", query = "SELECT v FROM Vehiculo v WHERE v.km = :km")
-    , @NamedQuery(name = "Vehiculo.findByObservaciones", query = "SELECT v FROM Vehiculo v WHERE v.observaciones = :observaciones")})
+    , @NamedQuery(name = "Vehiculo.findByObservaciones", query = "SELECT v FROM Vehiculo v WHERE v.observaciones = :observaciones")
+    , @NamedQuery(name = "Vehiculo.obtenerVehiculos", query = "SELECT v FROM Vehiculo v ORDER BY v.marca, v.modelo, v.matricula")})
 public class Vehiculo implements Serializable {
 
     private static final long serialVersionUID = 1L;
@@ -51,7 +52,7 @@ public class Vehiculo implements Serializable {
     @Column(name = "id")
     private Integer id;
     @Basic(optional = false)
-    @Column(name = "matricula", nullable = false, length = 10)
+    @Column(name = "matricula", nullable = false, length = 11)
     private String matricula;
     @Column(name = "marca", length = 10)
     private String marca;
@@ -190,5 +191,4 @@ public class Vehiculo implements Serializable {
     public String toString() {
         return "reforms.jpa.Vehiculo[ id=" + id + " ]";
     }
-    
 }

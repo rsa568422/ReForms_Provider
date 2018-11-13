@@ -9,6 +9,7 @@ import java.util.List;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
+import javax.persistence.Query;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.DELETE;
 import javax.ws.rs.GET;
@@ -88,4 +89,26 @@ public class VehiculoFacadeREST extends AbstractFacade<Vehiculo> {
         return em;
     }
     
+    @GET
+    @Path("obtenerVehiculos")
+    @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
+    public List<Vehiculo> obtenerVehiculos() {
+        Query q = em.createNamedQuery("Vehiculo.obtenerVehiculos");
+        List<Vehiculo> lv = q.getResultList();
+        return lv.isEmpty() ? null : lv;
+    }
+    
+    @POST
+    @Path("registrarVehiculo")
+    @Consumes({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
+    public void registrarVehiculo(Vehiculo entity) {
+        super.create(entity);
+    }
+
+    @PUT
+    @Path("actualizarVehiculo/{id}")
+    @Consumes({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
+    public void actualizarVehiculo(@PathParam("id") Integer id, Vehiculo entity) {
+        super.edit(entity);
+    }
 }
