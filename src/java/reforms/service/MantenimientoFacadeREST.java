@@ -89,6 +89,20 @@ public class MantenimientoFacadeREST extends AbstractFacade<Mantenimiento> {
         return em;
     }
     
+    @POST
+    @Path("agregarMantenimiento")
+    @Consumes({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
+    public void agregarMantenimiento(Mantenimiento entity) {
+        super.create(entity);
+    }
+
+    @PUT
+    @Path("actualizarMantenimiento/{id}")
+    @Consumes({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
+    public void actualizarMantenimiento(@PathParam("id") Integer id, Mantenimiento entity) {
+        super.edit(entity);
+    }
+    
     @GET
     @Path("buscarMantenimientoPorVehiculo/{vehiculoId}")
     @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})

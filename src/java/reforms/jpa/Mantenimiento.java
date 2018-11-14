@@ -37,7 +37,7 @@ import javax.xml.bind.annotation.XmlRootElement;
     , @NamedQuery(name = "Mantenimiento.findByFecha", query = "SELECT m FROM Mantenimiento m WHERE m.fecha = :fecha")
     , @NamedQuery(name = "Mantenimiento.findByCoste", query = "SELECT m FROM Mantenimiento m WHERE m.coste = :coste")
     , @NamedQuery(name = "Mantenimiento.findByDescripcion", query = "SELECT m FROM Mantenimiento m WHERE m.descripcion = :descripcion")
-    , @NamedQuery(name = "Mantenimiento.buscarMantenimientoPorVehiculo", query = "SELECT m FROM Mantenimiento m WHERE m.vehiculo.id = :vehiculoId ORDER BY m.fecha, m.tipo")})
+    , @NamedQuery(name = "Mantenimiento.buscarMantenimientoPorVehiculo", query = "SELECT m FROM Mantenimiento m WHERE m.vehiculo.id = :vehiculoId ORDER BY m.fecha DESC, m.tipo")})
 public class Mantenimiento implements Serializable {
 
     private static final long serialVersionUID = 1L;
