@@ -9,6 +9,7 @@ import java.util.List;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
+import javax.persistence.Query;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.DELETE;
 import javax.ws.rs.GET;
@@ -88,4 +89,51 @@ public class TrabajadorFacadeREST extends AbstractFacade<Trabajador> {
         return em;
     }
     
+    @GET
+    @Path("obtenerTrabajadores")
+    @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
+    public List<Trabajador> obtenerTrabajadores() {
+        Query q = em.createNamedQuery("Trabajador.obtenerTrabajadores");
+        List<Trabajador> lt = q.getResultList();
+        for (Trabajador t : lt) {
+            t.setOperario(null);
+            t.setOperador(null);
+            t.setNominas(null);
+            t.setEmail(null);
+            t.setPassword(null);
+        }
+        return lt.isEmpty() ? null : lt;
+    }
+    
+    @GET
+    @Path("obtenerOperadores")
+    @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
+    public List<Trabajador> obtenerOperadores() {
+        Query q = em.createNamedQuery("Trabajador.obtenerOperadores");
+        List<Trabajador> lt = q.getResultList();
+        for (Trabajador t : lt) {
+            t.setOperario(null);
+            t.setOperador(null);
+            t.setNominas(null);
+            t.setEmail(null);
+            t.setPassword(null);
+        }
+        return lt.isEmpty() ? null : lt;
+    }
+    
+    @GET
+    @Path("obtenerOperarios")
+    @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
+    public List<Trabajador> obtenerOperarios() {
+        Query q = em.createNamedQuery("Trabajador.obtenerOperarios");
+        List<Trabajador> lt = q.getResultList();
+        for (Trabajador t : lt) {
+            t.setOperario(null);
+            t.setOperador(null);
+            t.setNominas(null);
+            t.setEmail(null);
+            t.setPassword(null);
+        }
+        return lt.isEmpty() ? null : lt;
+    }
 }

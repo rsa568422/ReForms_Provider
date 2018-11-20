@@ -104,4 +104,22 @@ public class OperadorFacadeREST extends AbstractFacade<Operador> {
         }
         return lo;
     }
+    
+    @GET
+    @Path("buscarOperadorPorTrabajador/{trabajadorId}")
+    @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
+    public Operador buscarOperadorPorTrabajador(@PathParam("trabajadorId") Integer trabajadorId) {
+        Query q = em.createNamedQuery("Operador.buscarOperadorPorTrabajador");
+        q.setParameter("trabajadorId", trabajadorId);
+        List<Operador> lo = q.getResultList();
+        Operador o = lo.size() > 0 ? lo.get(0) : null;
+        if (o != null) {
+            o.setEventos(null);
+            o.setJornadas(null);
+            o.getTrabajador().setOperario(null);
+            o.getTrabajador().setOperador(null);
+            o.getTrabajador().setNominas(null);
+        }
+        return o;
+    }
 }
