@@ -20,6 +20,7 @@ import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 import reforms.jpa.Operario;
+import reforms.jpa.Trabajador;
 
 /**
  *
@@ -98,13 +99,13 @@ public class OperarioFacadeREST extends AbstractFacade<Operario> {
         List<Operario> lo = q.getResultList();
         Operario o = lo.size() > 0 ? lo.get(0) : null;
         if (o != null) {
+            Trabajador t = new Trabajador();
+            t.setId(o.getTrabajador().getId());
+            o.setTrabajador(t);
             o.setCapacidades(null);
             o.setConductores(null);
             o.setIntegrantes(null);
             o.setLocalidadesvisitadas(null);
-            o.getTrabajador().setOperario(null);
-            o.getTrabajador().setOperador(null);
-            o.getTrabajador().setNominas(null);
         }
         return o;
     }

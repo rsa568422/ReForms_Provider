@@ -9,6 +9,7 @@ import java.util.List;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
+import javax.persistence.Query;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.DELETE;
 import javax.ws.rs.GET;
@@ -19,6 +20,7 @@ import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 import reforms.jpa.Nomina;
+import reforms.jpa.Trabajador;
 
 /**
  *
@@ -88,4 +90,18 @@ public class NominaFacadeREST extends AbstractFacade<Nomina> {
         return em;
     }
     
+    @GET
+    @Path("buscarNominaPorTrabajador/{trabajadorId}")
+    @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
+    public List<Nomina> buscarNominaPorTrabajador(@PathParam("trabajadorId") Integer trabajadorId) {
+        Query q = em.createNamedQuery("Nomina.buscarNominaPorTrabajador");
+        q.setParameter("trabajadorId", trabajadorId);
+        List<Nomina> ln = q.getResultList();
+        for (Nomina n : ln) {
+            Trabajador t = new Trabajador();
+            t.setId(n.getTrabajador().getId());
+            n.setTrabajador(t);
+        }
+        return ln.size() > 0 ? ln : null;
+    }
 }

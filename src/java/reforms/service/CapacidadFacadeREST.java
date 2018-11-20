@@ -9,6 +9,7 @@ import java.util.List;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
+import javax.persistence.Query;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.DELETE;
 import javax.ws.rs.GET;
@@ -19,6 +20,7 @@ import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 import reforms.jpa.Capacidad;
+import reforms.jpa.Operario;
 
 /**
  *
@@ -88,4 +90,18 @@ public class CapacidadFacadeREST extends AbstractFacade<Capacidad> {
         return em;
     }
     
+    @GET
+    @Path("buscarCapacidadPorOperario/{operarioId}")
+    @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
+    public List<Capacidad> buscarCapacidadPorOperario(@PathParam("operarioId") Integer operarioId) {
+        Query q = em.createNamedQuery("Capacidad.buscarCapacidadPorOperario");
+        q.setParameter("operarioId", operarioId);
+        List<Capacidad> lc = q.getResultList();
+        for (Capacidad c : lc) {
+            Operario o = new Operario();
+            o.setId(c.getOperario().getId());
+            c.setOperario(o);
+        }
+        return lc.isEmpty() ? null : lc;
+    }
 }

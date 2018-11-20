@@ -30,7 +30,8 @@ import javax.xml.bind.annotation.XmlRootElement;
 @NamedQueries({
       @NamedQuery(name = "Capacidad.findAll", query = "SELECT c FROM Capacidad c")
     , @NamedQuery(name = "Capacidad.findById", query = "SELECT c FROM Capacidad c WHERE c.id = :id")
-    , @NamedQuery(name = "Capacidad.findByDificultad", query = "SELECT c FROM Capacidad c WHERE c.dificultad = :dificultad")})
+    , @NamedQuery(name = "Capacidad.findByDificultad", query = "SELECT c FROM Capacidad c WHERE c.dificultad = :dificultad")
+    , @NamedQuery(name = "Capacidad.buscarCapacidadPorOperario", query = "SELECT c FROM Capacidad c WHERE c.operario.id = :operarioId ORDER BY c.gremio.nombre, c.dificultad DESC")})
 public class Capacidad implements Serializable {
 
     private static final long serialVersionUID = 1L;
