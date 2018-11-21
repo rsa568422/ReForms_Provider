@@ -44,7 +44,8 @@ import javax.xml.bind.annotation.XmlTransient;
     , @NamedQuery(name = "Trabajador.findByEmail", query = "SELECT t FROM Trabajador t WHERE t.email = :email")
     , @NamedQuery(name = "Trabajador.obtenerTrabajadores", query = "SELECT t FROM Trabajador t ORDER BY t.nombre, t.apellido1, t.apellido2")
     , @NamedQuery(name = "Trabajador.obtenerOperadores", query = "SELECT t FROM Operador o LEFT JOIN o.trabajador t ORDER BY t.nombre, t.apellido1, t.apellido2")
-    , @NamedQuery(name = "Trabajador.obtenerOperarios", query = "SELECT t FROM Operario o LEFT JOIN o.trabajador t ORDER BY t.nombre, t.apellido1, t.apellido2")})
+    , @NamedQuery(name = "Trabajador.obtenerOperarios", query = "SELECT t FROM Operario o LEFT JOIN o.trabajador t ORDER BY t.nombre, t.apellido1, t.apellido2")
+    , @NamedQuery(name = "Trabajador.buscarTrabajadorPorDni", query = "SELECT t FROM Trabajador t WHERE t.dni = :dni")})
 public class Trabajador implements Serializable {
 
     private static final long serialVersionUID = 1L;

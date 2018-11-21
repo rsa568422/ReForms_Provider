@@ -136,4 +136,18 @@ public class TrabajadorFacadeREST extends AbstractFacade<Trabajador> {
         }
         return lt.isEmpty() ? null : lt;
     }
+    
+    @GET
+    @Path("comprobarDni/{dni}")
+    @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
+    public Trabajador comprobarDni(@PathParam("dni") String dni) {
+        Query q = em.createNamedQuery("Trabajador.buscarTrabajadorPorDni");
+        q.setParameter("dni", dni);
+        List<Trabajador> lt = q.getResultList();
+        Trabajador t = new Trabajador();
+        if (lt.size() > 0) {
+            t = null;
+        }
+        return t;
+    }
 }
