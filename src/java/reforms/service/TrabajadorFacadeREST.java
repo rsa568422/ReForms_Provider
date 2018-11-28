@@ -6,6 +6,7 @@
 package reforms.service;
 
 import java.util.List;
+import javax.ejb.EJB;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
@@ -19,6 +20,8 @@ import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
+import reforms.jpa.Localidad;
+import reforms.jpa.Propiedad;
 import reforms.jpa.Trabajador;
 
 /**
@@ -28,6 +31,12 @@ import reforms.jpa.Trabajador;
 @Stateless
 @Path("trabajador")
 public class TrabajadorFacadeREST extends AbstractFacade<Trabajador> {
+
+    @EJB
+    private PropiedadFacadeREST propiedadFacadeREST;
+
+    @EJB
+    private LocalidadFacadeREST localidadFacadeREST;
 
     @PersistenceContext(unitName = "ReForms_ProviderPU")
     private EntityManager em;
@@ -149,5 +158,32 @@ public class TrabajadorFacadeREST extends AbstractFacade<Trabajador> {
             t = null;
         }
         return t;
+    }
+    
+    @POST
+    @Path("registrarTrabajador")
+    @Consumes({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
+    public void registrarTrabajador(Trabajador entity) {
+        if (entity.getPropiedad().getId() == null) {
+            Propiedad p = entity.getPropiedad();
+            System.err.println(p.getLocalidad().getNombre());
+            if (p.getLocalidad().getId() == null) {
+                Localidad l = localidadFacadeREST.buscarLocalidadPorCodigoPostal(p.getLocalidad().getCp());
+                if (l == null) {
+                    l = p.getLocalidad();
+                    localidadFacadeREST.create(l);
+                    Query q = em.createNativeQuery("SELECT LAST_INSERT_ID()");
+                    Integer id = q.getFirstResult();
+                    l.setId(id);
+                }
+                p.setLocalidad(l);
+            }
+            propiedadFacadeREST.create(p);
+            Query q = em.createNativeQuery("SELECT LAST_INSERT_ID()");
+            Integer id = q.getFirstResult();
+            p.setId(id);
+            entity.setPropiedad(p);
+        }
+        super.create(entity);
     }
 }
