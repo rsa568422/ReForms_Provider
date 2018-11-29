@@ -104,4 +104,11 @@ public class CapacidadFacadeREST extends AbstractFacade<Capacidad> {
         }
         return lc.isEmpty() ? null : lc;
     }
+    
+    @POST
+    @Path("agregarCapacidad")
+    @Consumes({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
+    public void agregarCapacidad(Capacidad entity) {
+        super.create(entity);
+    }
 }

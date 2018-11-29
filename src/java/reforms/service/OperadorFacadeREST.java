@@ -6,6 +6,7 @@
 package reforms.service;
 
 import java.util.List;
+import javax.ejb.EJB;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
@@ -29,6 +30,9 @@ import reforms.jpa.Trabajador;
 @Stateless
 @Path("operador")
 public class OperadorFacadeREST extends AbstractFacade<Operador> {
+
+    @EJB
+    private TrabajadorFacadeREST trabajadorFacadeREST;
 
     @PersistenceContext(unitName = "ReForms_ProviderPU")
     private EntityManager em;
@@ -122,5 +126,22 @@ public class OperadorFacadeREST extends AbstractFacade<Operador> {
             o.setJornadas(null);
         }
         return o;
+    }
+
+    @PUT
+    @Path("agregarGerente/{id}")
+    @Consumes({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
+    public void agregarGerente(@PathParam("id") Integer id, Operador entity) {
+        Operador o = find(id);
+        o.setGerente(1);
+        super.edit(o);
+    }
+    
+    @POST
+    @Path("agregarOperador")
+    @Consumes({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
+    public void agregarOperador(Operador entity) {
+        entity.setTrabajador(trabajadorFacadeREST.find(entity.getTrabajador().getId()));
+        super.create(entity);
     }
 }
