@@ -111,4 +111,11 @@ public class CapacidadFacadeREST extends AbstractFacade<Capacidad> {
     public void agregarCapacidad(Capacidad entity) {
         super.create(entity);
     }
+
+    @PUT
+    @Path("actualizarCapacidad/{id}")
+    @Consumes({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
+    public void actualizarCapacidad(@PathParam("id") Integer id, Capacidad entity) {
+        super.edit(entity);
+    }
 }

@@ -109,6 +109,13 @@ public class VehiculoFacadeREST extends AbstractFacade<Vehiculo> {
     @Path("actualizarVehiculo/{id}")
     @Consumes({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
     public void actualizarVehiculo(@PathParam("id") Integer id, Vehiculo entity) {
-        super.edit(entity);
+        Vehiculo v = find(id);
+        v.setMarca(entity.getMarca());
+        v.setModelo(entity.getModelo());
+        v.setAdquisicion(entity.getAdquisicion());
+        v.setMatriculacion(entity.getMatriculacion());
+        v.setKm(entity.getKm());
+        v.setObservaciones(entity.getObservaciones());
+        super.edit(v);
     }
 }

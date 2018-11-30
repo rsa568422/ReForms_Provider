@@ -121,4 +121,17 @@ public class OperarioFacadeREST extends AbstractFacade<Operario> {
         entity.setTrabajador(trabajadorFacadeREST.find(entity.getTrabajador().getId()));
         super.create(entity);
     }
+
+    @PUT
+    @Path("actualizarOperario/{id}")
+    @Consumes({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
+    public void actualizarOperario(@PathParam("id") Integer id, Operario entity) {
+        Operario o = find(id);
+        o.setDispositivo(entity.getDispositivo());
+        o.setTelefono(entity.getTelefono());
+        o.setEmail(entity.getEmail());
+        o.setPass(entity.getPass());
+        o.setCarnet(entity.getCarnet());
+        super.edit(o);
+    }
 }

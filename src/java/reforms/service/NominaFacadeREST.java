@@ -104,4 +104,11 @@ public class NominaFacadeREST extends AbstractFacade<Nomina> {
         }
         return ln.size() > 0 ? ln : null;
     }
+    
+    @POST
+    @Path("agregarNomina")
+    @Consumes({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
+    public void agregarNomina(Nomina entity) {
+        super.create(entity);
+    }
 }
