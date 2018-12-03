@@ -186,4 +186,17 @@ public class TrabajadorFacadeREST extends AbstractFacade<Trabajador> {
         }
         super.create(entity);
     }
+
+    @PUT
+    @Path("actualizarTrabajador/{id}")
+    @Consumes({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
+    public void actualizarTrabajador(@PathParam("id") Integer id, Trabajador entity) {
+        Trabajador t = find(id);
+        t.setNombre(entity.getNombre());
+        t.setApellido1(entity.getApellido1());
+        t.setApellido2(entity.getApellido2());
+        t.setTelefono1(entity.getTelefono1());
+        t.setTelefono2(entity.getTelefono2());
+        super.edit(t);
+    }
 }

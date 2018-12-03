@@ -111,4 +111,11 @@ public class NominaFacadeREST extends AbstractFacade<Nomina> {
     public void agregarNomina(Nomina entity) {
         super.create(entity);
     }
+
+    @PUT
+    @Path("actualizarNomina/{id}")
+    @Consumes({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
+    public void actualizarNomina(@PathParam("id") Integer id, Nomina entity) {
+        super.edit(entity);
+    }
 }
