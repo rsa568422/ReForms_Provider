@@ -50,7 +50,10 @@ import javax.xml.bind.annotation.XmlTransient;
     , @NamedQuery(name = "Siniestro.buscarSiniestroPorNombre", query = "SELECT s FROM Siniestro s LEFT JOIN s.contactos c WHERE ((s.poliza.cliente.nombre LIKE :nombre AND s.poliza.cliente.apellido1 LIKE :apellido1 AND (s.poliza.cliente.apellido2 IS NULL OR s.poliza.cliente.apellido2 LIKE :apellido2)) OR (c.nombre LIKE :nombre AND c.apellido1 LIKE :apellido1 AND (c.apellido2 IS NULL OR c.apellido2 LIKE :apellido2))) ORDER BY s.fechaRegistro")
     , @NamedQuery(name = "Siniestro.buscarSiniestroPorNombreA", query = "SELECT s FROM Siniestro s LEFT JOIN s.contactos c WHERE (s.poliza.cliente.aseguradora.id = :aseguradoraId AND ((s.poliza.cliente.nombre LIKE :nombre AND s.poliza.cliente.apellido1 LIKE :apellido1 AND (s.poliza.cliente.apellido2 IS NULL OR s.poliza.cliente.apellido2 LIKE :apellido2)) OR (c.nombre LIKE :nombre AND c.apellido1 LIKE :apellido1 AND (c.apellido2 IS NULL OR c.apellido2 LIKE :apellido2)))) ORDER BY s.fechaRegistro")
     , @NamedQuery(name = "Siniestro.buscarSiniestroPorDireccion", query = "SELECT s FROM Siniestro s LEFT JOIN s.afectado p WHERE ((s.poliza.propiedad.direccion LIKE :direccion AND s.poliza.propiedad.numero = :numero AND (s.poliza.propiedad.piso IS NULL OR s.poliza.propiedad.piso LIKE :piso) AND s.poliza.propiedad.localidad.id = :localidadId) OR (p.direccion LIKE :direccion AND p.numero = :numero AND (p.piso IS NULL OR p.piso LIKE :piso) AND p.localidad.id = :localidadId)) ORDER BY s.fechaRegistro")
-    , @NamedQuery(name = "Siniestro.buscarSiniestroPorDireccionA", query = "SELECT s FROM Siniestro s LEFT JOIN s.afectado p WHERE (s.poliza.cliente.aseguradora.id = :aseguradoraId AND ((s.poliza.propiedad.direccion LIKE :direccion AND s.poliza.propiedad.numero = :numero AND (s.poliza.propiedad.piso IS NULL OR s.poliza.propiedad.piso LIKE :piso) AND s.poliza.propiedad.localidad.id = :localidadId) OR (p.direccion LIKE :direccion AND p.numero = :numero AND (p.piso IS NULL OR p.piso LIKE :piso) AND p.localidad.id = :localidadId))) ORDER BY s.fechaRegistro")})
+    , @NamedQuery(name = "Siniestro.buscarSiniestroPorDireccionA", query = "SELECT s FROM Siniestro s LEFT JOIN s.afectado p WHERE (s.poliza.cliente.aseguradora.id = :aseguradoraId AND ((s.poliza.propiedad.direccion LIKE :direccion AND s.poliza.propiedad.numero = :numero AND (s.poliza.propiedad.piso IS NULL OR s.poliza.propiedad.piso LIKE :piso) AND s.poliza.propiedad.localidad.id = :localidadId) OR (p.direccion LIKE :direccion AND p.numero = :numero AND (p.piso IS NULL OR p.piso LIKE :piso) AND p.localidad.id = :localidadId))) ORDER BY s.fechaRegistro")
+    , @NamedQuery(name = "Siniestro.contarSiniestrosAbiertos", query = "SELECT COUNT (DISTINCT s.id) FROM Siniestro s LEFT JOIN s.tareas t WHERE ((:aseguradoraId is NULL OR :aseguradoraId = s.poliza.cliente.aseguradora.id) AND (t.estado IS NULL OR t.estado < 2)) ORDER BY s.fechaRegistro, s.numero")
+    , @NamedQuery(name = "Siniestro.obtenerSiniestrosAbiertos", query = "SELECT DISTINCT s FROM Siniestro s LEFT JOIN s.tareas t WHERE ((:aseguradoraId is NULL OR :aseguradoraId = s.poliza.cliente.aseguradora.id) AND (t.estado IS NULL OR t.estado < 2)) ORDER BY s.fechaRegistro, s.numero")
+    , @NamedQuery(name = "Siniestro.obtenerSiniestrosCerrados", query = "SELECT DISTINCT s FROM Siniestro s JOIN s.tareas t WHERE(:aseguradoraId is NULL OR :aseguradoraId = s.poliza.cliente.aseguradora.id) GROUP BY t.siniestro HAVING (MIN(t.estado) > 1) ORDER BY s.fechaRegistro, s.numero")})
 public class Siniestro implements Serializable {
 
     private static final long serialVersionUID = 1L;
@@ -66,6 +69,8 @@ public class Siniestro implements Serializable {
     @Column(name = "fechaRegistro", nullable = false)
     @Temporal(TemporalType.DATE)
     private Date fechaRegistro;
+    @Column(name = "estado")
+    private Integer estado;
     @Column(name = "observaciones", length = 250)
     private String observaciones;
     @Column(name = "albaran")
@@ -132,6 +137,14 @@ public class Siniestro implements Serializable {
 
     public void setFechaRegistro(Date fechaRegistro) {
         this.fechaRegistro = fechaRegistro;
+    }
+
+    public Integer getEstado() {
+        return estado;
+    }
+
+    public void setEstado(Integer estado) {
+        this.estado = estado;
     }
 
     public String getObservaciones() {

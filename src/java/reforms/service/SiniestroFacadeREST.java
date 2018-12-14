@@ -269,4 +269,37 @@ public class SiniestroFacadeREST extends AbstractFacade<Siniestro> {
         entity.setOriginal(r);
         super.create(entity);
     }
+    
+    @GET
+    @Path("contarSiniestrosAbiertos/{aseguradoraId:.*}")
+    @Produces(MediaType.TEXT_PLAIN)
+    public String contarSiniestrosAbiertos(@PathParam("aseguradoraId") Integer aseguradoraId) {
+        Query q = em.createNamedQuery("Siniestro.contarSiniestrosAbiertos");
+        q.setParameter("aseguradoraId", aseguradoraId);
+        return String.valueOf(q.getSingleResult());
+    }
+    
+    @GET
+    @Path("obtenerSiniestrosAbiertos/{i}/{aseguradoraId:.*}")
+    @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
+    public List<Siniestro> obtenerSiniestrosAbiertos(@PathParam("i") Integer i, @PathParam("aseguradoraId") Integer aseguradoraId) {
+        Query q = em.createNamedQuery("Siniestro.obtenerSiniestrosAbiertos");
+        q.setParameter("aseguradoraId", aseguradoraId);
+        q.setFirstResult(10 * i);
+        q.setMaxResults(10);
+        List<Siniestro> ls = q.getResultList();
+        return ls.isEmpty() ? null : ls;
+    }
+    
+    @GET
+    @Path("obtenerSiniestrosCerrados/{i}/{aseguradoraId:.*}")
+    @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
+    public List<Siniestro> obtenerSiniestrosCerrados(@PathParam("i") Integer i, @PathParam("aseguradoraId") Integer aseguradoraId) {
+        Query q = em.createNamedQuery("Siniestro.obtenerSiniestrosCerrados");
+        q.setParameter("aseguradoraId", aseguradoraId);
+        q.setFirstResult(i);
+        q.setMaxResults(10);
+        List<Siniestro> ls = q.getResultList();
+        return ls.isEmpty() ? null : ls;
+    }
 }
