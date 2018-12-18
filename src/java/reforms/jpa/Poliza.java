@@ -32,9 +32,11 @@ import javax.xml.bind.annotation.XmlTransient;
 @Table(name = "poliza")
 @XmlRootElement
 @NamedQueries({
+    // Consultas por defecto
       @NamedQuery(name = "Poliza.findAll", query = "SELECT p FROM Poliza p")
     , @NamedQuery(name = "Poliza.findById", query = "SELECT p FROM Poliza p WHERE p.id = :id")
     , @NamedQuery(name = "Poliza.findByNumero", query = "SELECT p FROM Poliza p WHERE p.numero = :numero")
+    // Consultas diseñadas
     , @NamedQuery(name = "Poliza.buscarPolizaPorNumeroPoliza", query = "SELECT p FROM Poliza p WHERE (p.numero = :numero) ORDER BY p.cliente.aseguradora.nombre")
     , @NamedQuery(name = "Poliza.buscarPolizaPorNumeroPolizaA", query = "SELECT p FROM Poliza p WHERE (p.cliente.aseguradora.id = :aseguradoraId AND p.numero = :numero)")
     , @NamedQuery(name = "Poliza.buscarPolizaPorCliente", query = "SELECT p FROM Poliza p WHERE (p.cliente.id = :clienteId) ORDER BY p.cliente.aseguradora.nombre, p.numero")

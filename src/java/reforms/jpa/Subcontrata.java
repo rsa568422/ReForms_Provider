@@ -32,6 +32,7 @@ import javax.xml.bind.annotation.XmlTransient;
 @Table(name = "subcontrata")
 @XmlRootElement
 @NamedQueries({
+    // Consultas por defecto
       @NamedQuery(name = "Subcontrata.findAll", query = "SELECT s FROM Subcontrata s")
     , @NamedQuery(name = "Subcontrata.findById", query = "SELECT s FROM Subcontrata s WHERE s.id = :id")
     , @NamedQuery(name = "Subcontrata.findByNombre", query = "SELECT s FROM Subcontrata s WHERE s.nombre = :nombre")

@@ -31,11 +31,13 @@ import javax.xml.bind.annotation.XmlRootElement;
 @Table(name = "nomina")
 @XmlRootElement
 @NamedQueries({
+    // Consultas por defecto
       @NamedQuery(name = "Nomina.findAll", query = "SELECT n FROM Nomina n")
     , @NamedQuery(name = "Nomina.findById", query = "SELECT n FROM Nomina n WHERE n.id = :id")
     , @NamedQuery(name = "Nomina.findByFecha", query = "SELECT n FROM Nomina n WHERE n.fecha = :fecha")
     , @NamedQuery(name = "Nomina.findByImporte", query = "SELECT n FROM Nomina n WHERE n.importe = :importe")
     , @NamedQuery(name = "Nomina.findByEstado", query = "SELECT n FROM Nomina n WHERE n.estado = :estado")
+    // Consultas diseñadas
     , @NamedQuery(name = "Nomina.buscarNominaPorTrabajador", query = "SELECT n FROM Nomina n WHERE n.trabajador.id = :trabajadorId ORDER BY n.fecha DESC")})
 public class Nomina implements Serializable {
 

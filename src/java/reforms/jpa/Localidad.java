@@ -30,10 +30,12 @@ import javax.xml.bind.annotation.XmlTransient;
 @Table(name = "localidad")
 @XmlRootElement
 @NamedQueries({
+    // Consultas por defecto
       @NamedQuery(name = "Localidad.findAll", query = "SELECT l FROM Localidad l")
     , @NamedQuery(name = "Localidad.findById", query = "SELECT l FROM Localidad l WHERE l.id = :id")
     , @NamedQuery(name = "Localidad.findByNombre", query = "SELECT l FROM Localidad l WHERE l.nombre = :nombre")
     , @NamedQuery(name = "Localidad.findByCp", query = "SELECT l FROM Localidad l WHERE l.cp = :cp")
+    // Consultas diseñadas
     , @NamedQuery(name = "Localidad.buscarLocalidadPorCodigoPostal", query = "SELECT l FROM Localidad l WHERE (l.cp = :cp) ORDER BY l.nombre")})
 public class Localidad implements Serializable {
 

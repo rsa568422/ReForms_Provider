@@ -33,6 +33,7 @@ import javax.xml.bind.annotation.XmlTransient;
 @Table(name = "trabajador")
 @XmlRootElement
 @NamedQueries({
+    // Consultas por defecto
       @NamedQuery(name = "Trabajador.findAll", query = "SELECT t FROM Trabajador t")
     , @NamedQuery(name = "Trabajador.findById", query = "SELECT t FROM Trabajador t WHERE t.id = :id")
     , @NamedQuery(name = "Trabajador.findByDni", query = "SELECT t FROM Trabajador t WHERE t.dni = :dni")
@@ -42,6 +43,7 @@ import javax.xml.bind.annotation.XmlTransient;
     , @NamedQuery(name = "Trabajador.findByTelefono1", query = "SELECT t FROM Trabajador t WHERE t.telefono1 = :telefono1")
     , @NamedQuery(name = "Trabajador.findByTelefono2", query = "SELECT t FROM Trabajador t WHERE t.telefono2 = :telefono2")
     , @NamedQuery(name = "Trabajador.findByEmail", query = "SELECT t FROM Trabajador t WHERE t.email = :email")
+    // Consultas diseñadas
     , @NamedQuery(name = "Trabajador.obtenerTrabajadores", query = "SELECT t FROM Trabajador t ORDER BY t.nombre, t.apellido1, t.apellido2")
     , @NamedQuery(name = "Trabajador.obtenerOperadores", query = "SELECT t FROM Operador o LEFT JOIN o.trabajador t ORDER BY t.nombre, t.apellido1, t.apellido2")
     , @NamedQuery(name = "Trabajador.obtenerOperarios", query = "SELECT t FROM Operario o LEFT JOIN o.trabajador t ORDER BY t.nombre, t.apellido1, t.apellido2")

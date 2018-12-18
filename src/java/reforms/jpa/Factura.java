@@ -31,6 +31,7 @@ import javax.xml.bind.annotation.XmlRootElement;
 @Table(name = "factura")
 @XmlRootElement
 @NamedQueries({
+    // Consultas por defecto
       @NamedQuery(name = "Factura.findAll", query = "SELECT f FROM Factura f")
     , @NamedQuery(name = "Factura.findById", query = "SELECT f FROM Factura f WHERE f.id = :id")
     , @NamedQuery(name = "Factura.findByNumero", query = "SELECT f FROM Factura f WHERE f.numero = :numero")

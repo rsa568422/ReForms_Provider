@@ -32,11 +32,13 @@ import javax.xml.bind.annotation.XmlTransient;
 @Table(name = "operador")
 @XmlRootElement
 @NamedQueries({
+    // Consultas por defecto
       @NamedQuery(name = "Operador.findAll", query = "SELECT o FROM Operador o")
     , @NamedQuery(name = "Operador.findById", query = "SELECT o FROM Operador o WHERE o.id = :id")
     , @NamedQuery(name = "Operador.findByGerente", query = "SELECT o FROM Operador o WHERE o.gerente = :gerente")
+    // Consultas diseñadas
     , @NamedQuery(name = "Operador.buscarOperadorPorTrabajador", query = "SELECT o FROM Operador o WHERE o.trabajador.id = :trabajadorId")
-        
+    // --------------------------- PARA BORRAR ---------------------------------
     , @NamedQuery(name = "Operador.prueba", query = "SELECT o FROM Operador o ORDER BY o.trabajador.nombre, o.trabajador.apellido1, o.trabajador.apellido2")})
 public class Operador implements Serializable {
 

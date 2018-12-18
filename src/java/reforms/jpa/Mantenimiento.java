@@ -31,12 +31,14 @@ import javax.xml.bind.annotation.XmlRootElement;
 @Table(name = "mantenimiento")
 @XmlRootElement
 @NamedQueries({
+    // Consultas por defecto
       @NamedQuery(name = "Mantenimiento.findAll", query = "SELECT m FROM Mantenimiento m")
     , @NamedQuery(name = "Mantenimiento.findById", query = "SELECT m FROM Mantenimiento m WHERE m.id = :id")
     , @NamedQuery(name = "Mantenimiento.findByTipo", query = "SELECT m FROM Mantenimiento m WHERE m.tipo = :tipo")
     , @NamedQuery(name = "Mantenimiento.findByFecha", query = "SELECT m FROM Mantenimiento m WHERE m.fecha = :fecha")
     , @NamedQuery(name = "Mantenimiento.findByCoste", query = "SELECT m FROM Mantenimiento m WHERE m.coste = :coste")
     , @NamedQuery(name = "Mantenimiento.findByDescripcion", query = "SELECT m FROM Mantenimiento m WHERE m.descripcion = :descripcion")
+    // Consultas diseñadas
     , @NamedQuery(name = "Mantenimiento.buscarMantenimientoPorVehiculo", query = "SELECT m FROM Mantenimiento m WHERE m.vehiculo.id = :vehiculoId ORDER BY m.fecha DESC, m.tipo")})
 public class Mantenimiento implements Serializable {
 

@@ -35,6 +35,7 @@ import javax.xml.bind.annotation.XmlTransient;
 @Table(name = "jornada")
 @XmlRootElement
 @NamedQueries({
+    // Consultas por defecto
       @NamedQuery(name = "Jornada.findAll", query = "SELECT j FROM Jornada j")
     , @NamedQuery(name = "Jornada.findById", query = "SELECT j FROM Jornada j WHERE j.id = :id")
     , @NamedQuery(name = "Jornada.findByFecha", query = "SELECT j FROM Jornada j WHERE j.fecha = :fecha")

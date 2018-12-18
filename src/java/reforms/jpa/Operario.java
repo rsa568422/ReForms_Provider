@@ -32,6 +32,7 @@ import javax.xml.bind.annotation.XmlTransient;
 @Table(name = "operario")
 @XmlRootElement
 @NamedQueries({
+    // Consultas por defecto
       @NamedQuery(name = "Operario.findAll", query = "SELECT o FROM Operario o")
     , @NamedQuery(name = "Operario.findById", query = "SELECT o FROM Operario o WHERE o.id = :id")
     , @NamedQuery(name = "Operario.findByCarnet", query = "SELECT o FROM Operario o WHERE o.carnet = :carnet")
@@ -39,6 +40,7 @@ import javax.xml.bind.annotation.XmlTransient;
     , @NamedQuery(name = "Operario.findByTelefono", query = "SELECT o FROM Operario o WHERE o.telefono = :telefono")
     , @NamedQuery(name = "Operario.findByEmail", query = "SELECT o FROM Operario o WHERE o.email = :email")
     , @NamedQuery(name = "Operario.findByPass", query = "SELECT o FROM Operario o WHERE o.pass = :pass")
+    // Consultas diseñadas
     , @NamedQuery(name = "Operario.buscarOperarioPorTrabajador", query = "SELECT o FROM Operario o WHERE o.trabajador.id = :trabajadorId")})
 public class Operario implements Serializable {
 

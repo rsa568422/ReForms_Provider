@@ -30,6 +30,7 @@ import javax.xml.bind.annotation.XmlTransient;
 @Table(name = "multiservicios")
 @XmlRootElement
 @NamedQueries({
+    // Consultas por defecto
       @NamedQuery(name = "Multiservicios.findAll", query = "SELECT m FROM Multiservicios m")
     , @NamedQuery(name = "Multiservicios.findById", query = "SELECT m FROM Multiservicios m WHERE m.id = :id")
     , @NamedQuery(name = "Multiservicios.findByNombre", query = "SELECT m FROM Multiservicios m WHERE m.nombre = :nombre")
@@ -37,6 +38,7 @@ import javax.xml.bind.annotation.XmlTransient;
     , @NamedQuery(name = "Multiservicios.findByTelefono2", query = "SELECT m FROM Multiservicios m WHERE m.telefono2 = :telefono2")
     , @NamedQuery(name = "Multiservicios.findByFax", query = "SELECT m FROM Multiservicios m WHERE m.fax = :fax")
     , @NamedQuery(name = "Multiservicios.findByEmail", query = "SELECT m FROM Multiservicios m WHERE m.email = :email")
+    // Consultas diseñadas
     , @NamedQuery(name = "Multiservicios.obtenerMultiservicios", query = "SELECT m FROM Multiservicios m ORDER BY m.nombre")})
 public class Multiservicios implements Serializable {
 

@@ -32,6 +32,7 @@ import javax.xml.bind.annotation.XmlTransient;
 @Table(name = "propiedad")
 @XmlRootElement
 @NamedQueries({
+    // Consultas por defecto
       @NamedQuery(name = "Propiedad.findAll", query = "SELECT p FROM Propiedad p")
     , @NamedQuery(name = "Propiedad.findById", query = "SELECT p FROM Propiedad p WHERE p.id = :id")
     , @NamedQuery(name = "Propiedad.findByDireccion", query = "SELECT p FROM Propiedad p WHERE p.direccion = :direccion")
@@ -40,6 +41,7 @@ import javax.xml.bind.annotation.XmlTransient;
     , @NamedQuery(name = "Propiedad.findByObservaciones", query = "SELECT p FROM Propiedad p WHERE p.observaciones = :observaciones")
     , @NamedQuery(name = "Propiedad.findByGeolat", query = "SELECT p FROM Propiedad p WHERE p.geolat = :geolat")
     , @NamedQuery(name = "Propiedad.findByGeolong", query = "SELECT p FROM Propiedad p WHERE p.geolong = :geolong")
+    // Consultas diseñadas
     , @NamedQuery(name = "Propiedad.buscarPropiedadPorDireccionCompleta", query = "SELECT p FROM Propiedad p WHERE (p.direccion LIKE :direccion AND p.numero = :numero AND (p.piso IS NULL OR p.piso LIKE :piso) AND p.localidad.cp = :cp) ORDER BY p.localidad.nombre, p.direccion, p.numero, p.piso")
     , @NamedQuery(name = "Propiedad.buscarPropiedadPorDireccionCompletaA", query = "SELECT p FROM Propiedad p JOIN p.polizas po WHERE (po.cliente.aseguradora.id = :aseguradoraId AND p.direccion LIKE :direccion AND p.numero = :numero AND (p.piso IS NULL OR p.piso LIKE :piso) AND p.localidad.cp = :cp) ORDER BY p.localidad.nombre, p.direccion, p.numero, p.piso")})
 public class Propiedad implements Serializable {

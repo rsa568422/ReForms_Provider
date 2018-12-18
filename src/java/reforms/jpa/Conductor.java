@@ -29,6 +29,7 @@ import javax.xml.bind.annotation.XmlRootElement;
 @Table(name = "conductor")
 @XmlRootElement
 @NamedQueries({
+    // Consultas por defecto
       @NamedQuery(name = "Conductor.findAll", query = "SELECT c FROM Conductor c")
     , @NamedQuery(name = "Conductor.findById", query = "SELECT c FROM Conductor c WHERE c.id = :id")})
 public class Conductor implements Serializable {

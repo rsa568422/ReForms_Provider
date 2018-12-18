@@ -28,6 +28,7 @@ import javax.xml.bind.annotation.XmlRootElement;
 @Table(name = "recursossubcontrata")
 @XmlRootElement
 @NamedQueries({
+    // Consultas por defecto
       @NamedQuery(name = "Recursossubcontrata.findAll", query = "SELECT r FROM Recursossubcontrata r")
     , @NamedQuery(name = "Recursossubcontrata.findById", query = "SELECT r FROM Recursossubcontrata r WHERE r.id = :id")})
 public class Recursossubcontrata implements Serializable {

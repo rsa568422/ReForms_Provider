@@ -31,6 +31,7 @@ import javax.xml.bind.annotation.XmlRootElement;
 @Table(name = "replanificacion")
 @XmlRootElement
 @NamedQueries({
+    // Consultas por defecto
       @NamedQuery(name = "Replanificacion.findAll", query = "SELECT r FROM Replanificacion r")
     , @NamedQuery(name = "Replanificacion.findById", query = "SELECT r FROM Replanificacion r WHERE r.id = :id")
     , @NamedQuery(name = "Replanificacion.findByFecha", query = "SELECT r FROM Replanificacion r WHERE r.fecha = :fecha")})

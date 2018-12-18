@@ -28,8 +28,10 @@ import javax.xml.bind.annotation.XmlRootElement;
 @Table(name = "participante")
 @XmlRootElement
 @NamedQueries({
+    // Consultas por defecto
       @NamedQuery(name = "Participante.findAll", query = "SELECT p FROM Participante p")
     , @NamedQuery(name = "Participante.findById", query = "SELECT p FROM Participante p WHERE p.id = :id")
+    // Consultas diseñadas
     , @NamedQuery(name = "Participante.buscarParticipantePorSiniestro", query = "SELECT p FROM Participante p WHERE p.siniestro.id = :idSiniestro ORDER BY p.multiservicios.nombre")})
 public class Participante implements Serializable {
 

@@ -33,6 +33,7 @@ import javax.xml.bind.annotation.XmlTransient;
 @Table(name = "vehiculo")
 @XmlRootElement
 @NamedQueries({
+    // Consultas por defecto
       @NamedQuery(name = "Vehiculo.findAll", query = "SELECT v FROM Vehiculo v")
     , @NamedQuery(name = "Vehiculo.findById", query = "SELECT v FROM Vehiculo v WHERE v.id = :id")
     , @NamedQuery(name = "Vehiculo.findByMatricula", query = "SELECT v FROM Vehiculo v WHERE v.matricula = :matricula")
@@ -42,6 +43,7 @@ import javax.xml.bind.annotation.XmlTransient;
     , @NamedQuery(name = "Vehiculo.findByAdquisicion", query = "SELECT v FROM Vehiculo v WHERE v.adquisicion = :adquisicion")
     , @NamedQuery(name = "Vehiculo.findByKm", query = "SELECT v FROM Vehiculo v WHERE v.km = :km")
     , @NamedQuery(name = "Vehiculo.findByObservaciones", query = "SELECT v FROM Vehiculo v WHERE v.observaciones = :observaciones")
+    // Consultas diseñadas
     , @NamedQuery(name = "Vehiculo.obtenerVehiculos", query = "SELECT v FROM Vehiculo v ORDER BY v.marca, v.modelo, v.matricula")})
 public class Vehiculo implements Serializable {
 

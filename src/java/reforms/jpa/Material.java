@@ -28,6 +28,7 @@ import javax.xml.bind.annotation.XmlRootElement;
 @Table(name = "material")
 @XmlRootElement
 @NamedQueries({
+    // Consultas por defecto
       @NamedQuery(name = "Material.findAll", query = "SELECT m FROM Material m")
     , @NamedQuery(name = "Material.findById", query = "SELECT m FROM Material m WHERE m.id = :id")
     , @NamedQuery(name = "Material.findByConcepto", query = "SELECT m FROM Material m WHERE m.concepto = :concepto")})

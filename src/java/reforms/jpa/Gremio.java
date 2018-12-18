@@ -30,9 +30,11 @@ import javax.xml.bind.annotation.XmlTransient;
 @Table(name = "gremio")
 @XmlRootElement
 @NamedQueries({
+    // Consultas por defecto
       @NamedQuery(name = "Gremio.findAll", query = "SELECT g FROM Gremio g")
     , @NamedQuery(name = "Gremio.findById", query = "SELECT g FROM Gremio g WHERE g.id = :id")
     , @NamedQuery(name = "Gremio.findByNombre", query = "SELECT g FROM Gremio g WHERE g.nombre = :nombre")
+    // Consultas diseñadas
     , @NamedQuery(name = "Gremio.obtenerGremios", query = "SELECT g FROM Gremio g ORDER BY g.nombre")})
 public class Gremio implements Serializable {
 

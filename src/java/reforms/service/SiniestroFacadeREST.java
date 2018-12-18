@@ -5,6 +5,7 @@
  */
 package reforms.service;
 
+import java.util.ArrayList;
 import java.util.List;
 import javax.ejb.EJB;
 import javax.ejb.Stateless;
@@ -109,121 +110,6 @@ public class SiniestroFacadeREST extends AbstractFacade<Siniestro> {
     protected EntityManager getEntityManager() {
         return em;
     }
-    
-    @GET
-    @Path("buscarSiniestroPorNumeroSiniestro/{numero}")
-    @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
-    public List<Siniestro> buscarSiniestroPorNumeroSiniestro(@PathParam("numero") String numero) {
-        Query q = em.createNamedQuery("Siniestro.buscarSiniestroPorNumeroSiniestro");
-        q.setParameter("numero", numero);
-        List<Siniestro> ls = q.getResultList();
-        return ls.isEmpty() ? null : ls;
-    }
-    
-    @GET
-    @Path("buscarSiniestroPorNumeroSiniestroA/{aseguradoraId}/{numero}")
-    @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
-    public List<Siniestro> buscarSiniestroPorNumeroSiniestroA(@PathParam("aseguradoraId") Integer aseguradoraId, @PathParam("numero") String numero) {
-        Query q = em.createNamedQuery("Siniestro.buscarSiniestroPorNumeroSiniestroA");
-        q.setParameter("aseguradoraId", aseguradoraId);
-        q.setParameter("numero", numero);
-        List<Siniestro> ls = q.getResultList();
-        return ls.isEmpty() ? null : ls;
-    }
-    
-    @GET
-    @Path("buscarSiniestroPorNumeroPoliza/{numero}")
-    @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
-    public List<Siniestro> buscarSiniestroPorNumeroPoliza(@PathParam("numero") String numero) {
-        Query q = em.createNamedQuery("Siniestro.buscarSiniestroPorNumeroPoliza");
-        q.setParameter("numero", numero);
-        List<Siniestro> ls = q.getResultList();
-        return ls.isEmpty() ? null : ls;
-    }
-    
-    @GET
-    @Path("buscarSiniestroPorNumeroPolizaA/{aseguradoraId}/{numero}")
-    @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
-    public List<Siniestro> buscarSiniestroPorNumeroPolizaA(@PathParam("aseguradoraId") Integer aseguradoraId, @PathParam("numero") String numero) {
-        Query q = em.createNamedQuery("Siniestro.buscarSiniestroPorNumeroPolizaA");
-        q.setParameter("aseguradoraId", aseguradoraId);
-        q.setParameter("numero", numero);
-        List<Siniestro> ls = q.getResultList();
-        return ls.isEmpty() ? null : ls;
-    }
-    
-    @GET
-    @Path("buscarSiniestroPorTelefono/{telefono}")
-    @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
-    public List<Siniestro> buscarSiniestroPorTelefono(@PathParam("telefono") String telefono) {
-        Query q = em.createNamedQuery("Siniestro.buscarSiniestroPorTelefono");
-        q.setParameter("telefono", telefono);
-        List<Siniestro> ls = q.getResultList();
-        return ls.isEmpty() ? null : ls;
-    }
-    
-    @GET
-    @Path("buscarSiniestroPorTelefonoA/{aseguradoraId}/{telefono}")
-    @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
-    public List<Siniestro> buscarSiniestroPorTelefonoA(@PathParam("aseguradoraId") Integer aseguradoraId, @PathParam("telefono") String telefono) {
-        Query q = em.createNamedQuery("Siniestro.buscarSiniestroPorTelefonoA");
-        q.setParameter("aseguradoraId", aseguradoraId);
-        q.setParameter("telefono", telefono);
-        List<Siniestro> ls = q.getResultList();
-        return ls.isEmpty() ? null : ls;
-    }
-    
-    @GET
-    @Path("buscarSiniestroPorNombre/{nombre}/{apellido1}/{apellido2:.*}")
-    @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
-    public List<Siniestro> buscarSiniestroPorNombre(@PathParam("nombre") String nombre, @PathParam("apellido1") String apellido1, @PathParam("apellido2") String apellido2) {
-        Query q = em.createNamedQuery("Siniestro.buscarSiniestroPorNombre");
-        q.setParameter("nombre", nombre);
-        q.setParameter("apellido1", apellido1);
-        q.setParameter("apellido2", apellido2);
-        List<Siniestro> ls = q.getResultList();
-        return ls.isEmpty() ? null : ls;
-    }
-    
-    @GET
-    @Path("buscarSiniestroPorNombreA/{aseguradoraId}/{nombre}/{apellido1}/{apellido2:.*}")
-    @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
-    public List<Siniestro> buscarSiniestroPorNombreA(@PathParam("aseguradoraId") Integer aseguradoraId, @PathParam("nombre") String nombre, @PathParam("apellido1") String apellido1, @PathParam("apellido2") String apellido2) {
-        Query q = em.createNamedQuery("Siniestro.buscarSiniestroPorNombreA");
-        q.setParameter("aseguradoraId", aseguradoraId);
-        q.setParameter("nombre", nombre);
-        q.setParameter("apellido1", apellido1);
-        q.setParameter("apellido2", apellido2);
-        List<Siniestro> ls = q.getResultList();
-        return ls.isEmpty() ? null : ls;
-    }
-    
-    @GET
-    @Path("buscarSiniestroPorDireccion/{localidadId}/{direccion}/{numero}/{piso:.*}")
-    @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
-    public List<Siniestro> buscarSiniestroPorDireccion(@PathParam("localidadId") Integer localidadId, @PathParam("direccion") String direccion, @PathParam("numero") Integer numero, @PathParam("piso") String piso) {
-        Query q = em.createNamedQuery("Siniestro.buscarSiniestroPorDireccion");
-        q.setParameter("localidadId", localidadId);
-        q.setParameter("direccion", direccion);
-        q.setParameter("numero", numero);
-        q.setParameter("piso", piso);
-        List<Siniestro> ls = q.getResultList();
-        return ls.isEmpty() ? null : ls;
-    }
-    
-    @GET
-    @Path("buscarSiniestroPorDireccionA/{aseguradoraId}/{localidadId}/{direccion}/{numero}/{piso:.*}")
-    @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
-    public List<Siniestro> buscarSiniestroPorDireccionA(@PathParam("aseguradoraId") Integer aseguradoraId, @PathParam("localidadId") Integer localidadId, @PathParam("direccion") String direccion, @PathParam("numero") Integer numero, @PathParam("piso") String piso) {
-        Query q = em.createNamedQuery("Siniestro.buscarSiniestroPorDireccionA");
-        q.setParameter("aseguradoraId", aseguradoraId);
-        q.setParameter("localidadId", localidadId);
-        q.setParameter("direccion", direccion);
-        q.setParameter("numero", numero);
-        q.setParameter("piso", piso);
-        List<Siniestro> ls = q.getResultList();
-        return ls.isEmpty() ? null : ls;
-    }
 
     @POST
     @Path("registrarSiniestro")
@@ -271,33 +157,362 @@ public class SiniestroFacadeREST extends AbstractFacade<Siniestro> {
     }
     
     @GET
-    @Path("contarSiniestrosAbiertos/{aseguradoraId:.*}")
+    @Path("contarSiniestros/{aseguradoraId:.*}/{estado:.*}/{subestados:.*}")
     @Produces(MediaType.TEXT_PLAIN)
-    public String contarSiniestrosAbiertos(@PathParam("aseguradoraId") Integer aseguradoraId) {
-        Query q = em.createNamedQuery("Siniestro.contarSiniestrosAbiertos");
+    public String contarSiniestros(@PathParam("aseguradoraId") Integer aseguradoraId, @PathParam("estado") Integer estado, @PathParam("subestados") String subestados) {
+        Query q;
+        List<Integer> listaSubestados = new ArrayList<>();
+        if (estado == null) {
+            q = em.createNamedQuery("Siniestro.contarSiniestros");
+        } else if (estado == 0) {
+            q = em.createNamedQuery("Siniestro.contarSiniestrosAbiertos");
+            for (int i = 0; i < 4; i++) {
+                if (subestados.charAt(i) == '1') {
+                    listaSubestados.add(i);
+                }
+            }
+            if (listaSubestados.isEmpty()) {
+                listaSubestados.add(-1);
+            }
+            q.setParameter("subestados", listaSubestados);
+        } else {
+            q = em.createNamedQuery("Siniestro.contarSiniestrosNoAbiertos");
+            q.setParameter("estado", estado);
+        }
         q.setParameter("aseguradoraId", aseguradoraId);
         return String.valueOf(q.getSingleResult());
     }
     
     @GET
-    @Path("obtenerSiniestrosAbiertos/{i}/{aseguradoraId:.*}")
+    @Path("obtenerSiniestros/{pagina}/{aseguradoraId:.*}/{estado:.*}/{subestados:.*}")
     @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
-    public List<Siniestro> obtenerSiniestrosAbiertos(@PathParam("i") Integer i, @PathParam("aseguradoraId") Integer aseguradoraId) {
-        Query q = em.createNamedQuery("Siniestro.obtenerSiniestrosAbiertos");
+    public List<Siniestro> obtenerSiniestros(@PathParam("pagina") Integer pagina, @PathParam("aseguradoraId") Integer aseguradoraId, @PathParam("estado") Integer estado, @PathParam("subestados") String subestados) {
+        Query q;
+        List<Integer> listaSubestados = new ArrayList<>();
+        if (estado == null) {
+            q = em.createNamedQuery("Siniestro.obtenerSiniestros");
+        } else if (estado == 0) {
+            q = em.createNamedQuery("Siniestro.obtenerSiniestrosAbiertos");
+            for (int i = 0; i < 4; i++) {
+                if (subestados.charAt(i) == '1') {
+                    listaSubestados.add(i);
+                }
+            }
+            if (listaSubestados.isEmpty()) {
+                listaSubestados.add(-1);
+            }
+            q.setParameter("subestados", listaSubestados);
+        } else {
+            q = em.createNamedQuery("Siniestro.obtenerSiniestrosNoAbiertos");
+            q.setParameter("estado", estado);
+        }
         q.setParameter("aseguradoraId", aseguradoraId);
-        q.setFirstResult(10 * i);
+        q.setFirstResult(10 * pagina);
         q.setMaxResults(10);
         List<Siniestro> ls = q.getResultList();
         return ls.isEmpty() ? null : ls;
     }
     
     @GET
-    @Path("obtenerSiniestrosCerrados/{i}/{aseguradoraId:.*}")
-    @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
-    public List<Siniestro> obtenerSiniestrosCerrados(@PathParam("i") Integer i, @PathParam("aseguradoraId") Integer aseguradoraId) {
-        Query q = em.createNamedQuery("Siniestro.obtenerSiniestrosCerrados");
+    @Path("contarSiniestroPorNumeroSiniestro/{aseguradoraId:.*}/{estado:.*}/{subestados:.*}/{numero}")
+    @Produces(MediaType.TEXT_PLAIN)
+    public String contarSiniestroPorNumeroSiniestro(@PathParam("aseguradoraId") Integer aseguradoraId, @PathParam("estado") Integer estado, @PathParam("subestados") String subestados, @PathParam("numero") String numero) {
+        Query q;
+        List<Integer> listaSubestados = new ArrayList<>();
+        if (estado == null) {
+            q = em.createNamedQuery("Siniestro.contarSiniestroPorNumeroSiniestro");
+        } else if (estado == 0) {
+            q = em.createNamedQuery("Siniestro.contarSiniestroPorNumeroSiniestroAbiertos");
+            for (int i = 0; i < 4; i++) {
+                if (subestados.charAt(i) == '1') {
+                    listaSubestados.add(i);
+                }
+            }
+            if (listaSubestados.isEmpty()) {
+                listaSubestados.add(-1);
+            }
+            q.setParameter("subestados", listaSubestados);
+        } else {
+            q = em.createNamedQuery("Siniestro.contarSiniestroPorNumeroSiniestroNoAbiertos");
+            q.setParameter("estado", estado);
+        }
         q.setParameter("aseguradoraId", aseguradoraId);
-        q.setFirstResult(i);
+        q.setParameter("numero", numero);
+        return String.valueOf(q.getSingleResult());
+    }
+    
+    @GET
+    @Path("buscarSiniestroPorNumeroSiniestro/{pagina}/{aseguradoraId:.*}/{estado:.*}/{subestados:.*}/{numero}")
+    @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
+    public List<Siniestro> buscarSiniestroPorNumeroSiniestro(@PathParam("pagina") Integer pagina, @PathParam("aseguradoraId") Integer aseguradoraId, @PathParam("estado") Integer estado, @PathParam("subestados") String subestados, @PathParam("numero") String numero) {
+        Query q;
+        List<Integer> listaSubestados = new ArrayList<>();
+        if (estado == null) {
+            q = em.createNamedQuery("Siniestro.buscarSiniestroPorNumeroSiniestro");
+        } else if (estado == 0) {
+            q = em.createNamedQuery("Siniestro.buscarSiniestroPorNumeroSiniestroAbiertos");
+            for (int i = 0; i < 4; i++) {
+                if (subestados.charAt(i) == '1') {
+                    listaSubestados.add(i);
+                }
+            }
+            if (listaSubestados.isEmpty()) {
+                listaSubestados.add(-1);
+            }
+            q.setParameter("subestados", listaSubestados);
+        } else {
+            q = em.createNamedQuery("Siniestro.buscarSiniestroPorNumeroSiniestroNoAbiertos");
+            q.setParameter("estado", estado);
+        }
+        q.setParameter("aseguradoraId", aseguradoraId);
+        q.setParameter("numero", numero);
+        q.setFirstResult(10 * pagina);
+        q.setMaxResults(10);
+        List<Siniestro> ls = q.getResultList();
+        return ls.isEmpty() ? null : ls;
+    }
+    
+    @GET
+    @Path("contarSiniestroPorNumeroPoliza/{aseguradoraId:.*}/{estado:.*}/{subestados:.*}/{numero}")
+    @Produces(MediaType.TEXT_PLAIN)
+    public String contarSiniestroPorNumeroPoliza(@PathParam("aseguradoraId") Integer aseguradoraId, @PathParam("estado") Integer estado, @PathParam("subestados") String subestados, @PathParam("numero") String numero) {
+        Query q;
+        List<Integer> listaSubestados = new ArrayList<>();
+        if (estado == null) {
+            q = em.createNamedQuery("Siniestro.contarSiniestroPorNumeroPoliza");
+        } else if (estado == 0) {
+            q = em.createNamedQuery("Siniestro.contarSiniestroPorNumeroPolizaAbiertos");
+            for (int i = 0; i < 4; i++) {
+                if (subestados.charAt(i) == '1') {
+                    listaSubestados.add(i);
+                }
+            }
+            if (listaSubestados.isEmpty()) {
+                listaSubestados.add(-1);
+            }
+            q.setParameter("subestados", listaSubestados);
+        } else {
+            q = em.createNamedQuery("Siniestro.contarSiniestroPorNumeroPolizaNoAbiertos");
+            q.setParameter("estado", estado);
+        }
+        q.setParameter("aseguradoraId", aseguradoraId);
+        q.setParameter("numero", numero);
+        return String.valueOf(q.getSingleResult());
+    }
+    
+    @GET
+    @Path("buscarSiniestroPorNumeroPoliza/{pagina}/{aseguradoraId:.*}/{estado:.*}/{subestados:.*}/{numero}")
+    @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
+    public List<Siniestro> buscarSiniestroPorNumeroPoliza(@PathParam("pagina") Integer pagina, @PathParam("aseguradoraId") Integer aseguradoraId, @PathParam("estado") Integer estado, @PathParam("subestados") String subestados, @PathParam("numero") String numero) {
+        Query q;
+        List<Integer> listaSubestados = new ArrayList<>();
+        if (estado == null) {
+            q = em.createNamedQuery("Siniestro.buscarSiniestroPorNumeroPoliza");
+        } else if (estado == 0) {
+            q = em.createNamedQuery("Siniestro.buscarSiniestroPorNumeroPolizaAbiertos");
+            for (int i = 0; i < 4; i++) {
+                if (subestados.charAt(i) == '1') {
+                    listaSubestados.add(i);
+                }
+            }
+            if (listaSubestados.isEmpty()) {
+                listaSubestados.add(-1);
+            }
+            q.setParameter("subestados", listaSubestados);
+        } else {
+            q = em.createNamedQuery("Siniestro.buscarSiniestroPorNumeroPolizaNoAbiertos");
+            q.setParameter("estado", estado);
+        }
+        q.setParameter("aseguradoraId", aseguradoraId);
+        q.setParameter("numero", numero);
+        q.setFirstResult(10 * pagina);
+        q.setMaxResults(10);
+        List<Siniestro> ls = q.getResultList();
+        return ls.isEmpty() ? null : ls;
+    }
+    
+    @GET
+    @Path("contarSiniestroPorNombre/{aseguradoraId:.*}/{estado:.*}/{subestados:.*}/{nombre}/{apellido1}/{apellido2:.*}")
+    @Produces(MediaType.TEXT_PLAIN)
+    public String contarSiniestroPorNombre(@PathParam("aseguradoraId") Integer aseguradoraId, @PathParam("estado") Integer estado, @PathParam("subestados") String subestados, @PathParam("nombre") String nombre, @PathParam("apellido1") String apellido1, @PathParam("apellido2") String apellido2) {
+        Query q;
+        List<Integer> listaSubestados = new ArrayList<>();
+        if (estado == null) {
+            q = em.createNamedQuery("Siniestro.contarSiniestroPorNombre");
+        } else if (estado == 0) {
+            q = em.createNamedQuery("Siniestro.contarSiniestroPorNombreAbiertos");
+            for (int i = 0; i < 4; i++) {
+                if (subestados.charAt(i) == '1') {
+                    listaSubestados.add(i);
+                }
+            }
+            if (listaSubestados.isEmpty()) {
+                listaSubestados.add(-1);
+            }
+            q.setParameter("subestados", listaSubestados);
+        } else {
+            q = em.createNamedQuery("Siniestro.contarSiniestroPorNombreNoAbiertos");
+            q.setParameter("estado", estado);
+        }
+        q.setParameter("aseguradoraId", aseguradoraId);
+        q.setParameter("nombre", nombre);
+        q.setParameter("apellido1", apellido1);
+        q.setParameter("apellido2", apellido2);
+        return String.valueOf(q.getSingleResult());
+    }
+    
+    @GET
+    @Path("buscarSiniestroPorNombre/{pagina}/{aseguradoraId:.*}/{estado:.*}/{subestados:.*}/{nombre}/{apellido1}/{apellido2:.*}")
+    @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
+    public List<Siniestro> buscarSiniestroPorNombre(@PathParam("pagina") Integer pagina, @PathParam("aseguradoraId") Integer aseguradoraId, @PathParam("estado") Integer estado, @PathParam("subestados") String subestados, @PathParam("nombre") String nombre, @PathParam("apellido1") String apellido1, @PathParam("apellido2") String apellido2) {
+        Query q;
+        List<Integer> listaSubestados = new ArrayList<>();
+        if (estado == null) {
+            q = em.createNamedQuery("Siniestro.buscarSiniestroPorNombre");
+        } else if (estado == 0) {
+            q = em.createNamedQuery("Siniestro.buscarSiniestroPorNombreAbiertos");
+            for (int i = 0; i < 4; i++) {
+                if (subestados.charAt(i) == '1') {
+                    listaSubestados.add(i);
+                }
+            }
+            if (listaSubestados.isEmpty()) {
+                listaSubestados.add(-1);
+            }
+            q.setParameter("subestados", listaSubestados);
+        } else {
+            q = em.createNamedQuery("Siniestro.buscarSiniestroPorNombreNoAbiertos");
+            q.setParameter("estado", estado);
+        }
+        q.setParameter("aseguradoraId", aseguradoraId);
+        q.setParameter("nombre", nombre);
+        q.setParameter("apellido1", apellido1);
+        q.setParameter("apellido2", apellido2);
+        q.setFirstResult(10 * pagina);
+        q.setMaxResults(10);
+        List<Siniestro> ls = q.getResultList();
+        return ls.isEmpty() ? null : ls;
+    }
+    
+    @GET
+    @Path("contarSiniestroPorTelefono/{aseguradoraId:.*}/{estado:.*}/{subestados:.*}/{telefono}")
+    @Produces(MediaType.TEXT_PLAIN)
+    public String contarSiniestroPorTelefono(@PathParam("aseguradoraId") Integer aseguradoraId, @PathParam("estado") Integer estado, @PathParam("subestados") String subestados, @PathParam("telefono") String telefono) {
+        Query q;
+        List<Integer> listaSubestados = new ArrayList<>();
+        if (estado == null) {
+            q = em.createNamedQuery("Siniestro.contarSiniestroPorTelefono");
+        } else if (estado == 0) {
+            q = em.createNamedQuery("Siniestro.contarSiniestroPorTelefonoAbiertos");
+            for (int i = 0; i < 4; i++) {
+                if (subestados.charAt(i) == '1') {
+                    listaSubestados.add(i);
+                }
+            }
+            if (listaSubestados.isEmpty()) {
+                listaSubestados.add(-1);
+            }
+            q.setParameter("subestados", listaSubestados);
+        } else {
+            q = em.createNamedQuery("Siniestro.contarSiniestroPorTelefonoNoAbiertos");
+            q.setParameter("estado", estado);
+        }
+        q.setParameter("aseguradoraId", aseguradoraId);
+        q.setParameter("telefono", telefono);
+        return String.valueOf(q.getSingleResult());
+    }
+    
+    @GET
+    @Path("buscarSiniestroPorTelefono/{pagina}/{aseguradoraId:.*}/{estado:.*}/{subestados:.*}/{telefono}")
+    @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
+    public List<Siniestro> buscarSiniestroPorTelefono(@PathParam("pagina") Integer pagina, @PathParam("aseguradoraId") Integer aseguradoraId, @PathParam("estado") Integer estado, @PathParam("subestados") String subestados, @PathParam("telefono") String telefono) {
+        Query q;
+        List<Integer> listaSubestados = new ArrayList<>();
+        if (estado == null) {
+            q = em.createNamedQuery("Siniestro.buscarSiniestroPorTelefono");
+        } else if (estado == 0) {
+            q = em.createNamedQuery("Siniestro.buscarSiniestroPorTelefonoAbiertos");
+            for (int i = 0; i < 4; i++) {
+                if (subestados.charAt(i) == '1') {
+                    listaSubestados.add(i);
+                }
+            }
+            if (listaSubestados.isEmpty()) {
+                listaSubestados.add(-1);
+            }
+            q.setParameter("subestados", listaSubestados);
+        } else {
+            q = em.createNamedQuery("Siniestro.buscarSiniestroPorTelefonoNoAbiertos");
+            q.setParameter("estado", estado);
+        }
+        q.setParameter("aseguradoraId", aseguradoraId);
+        q.setParameter("telefono", telefono);
+        q.setFirstResult(10 * pagina);
+        q.setMaxResults(10);
+        List<Siniestro> ls = q.getResultList();
+        return ls.isEmpty() ? null : ls;
+    }
+    
+    @GET
+    @Path("contarSiniestroPorDireccion/{aseguradoraId:.*}/{estado:.*}/{subestados:.*}/{cp}/{direccion}/{numero}/{piso:.*}")
+    @Produces(MediaType.TEXT_PLAIN)
+    public String contarSiniestroPorDireccion(@PathParam("aseguradoraId") Integer aseguradoraId, @PathParam("estado") Integer estado, @PathParam("subestados") String subestados, @PathParam("cp") String cp, @PathParam("direccion") String direccion, @PathParam("numero") Integer numero, @PathParam("piso") String piso) {
+        Query q;
+        List<Integer> listaSubestados = new ArrayList<>();
+        if (estado == null) {
+            q = em.createNamedQuery("Siniestro.contarSiniestroPorDireccion");
+        } else if (estado == 0) {
+            q = em.createNamedQuery("Siniestro.contarSiniestroPorDireccionAbiertos");
+            for (int i = 0; i < 4; i++) {
+                if (subestados.charAt(i) == '1') {
+                    listaSubestados.add(i);
+                }
+            }
+            if (listaSubestados.isEmpty()) {
+                listaSubestados.add(-1);
+            }
+            q.setParameter("subestados", listaSubestados);
+        } else {
+            q = em.createNamedQuery("Siniestro.contarSiniestroPorDireccionNoAbiertos");
+            q.setParameter("estado", estado);
+        }
+        q.setParameter("aseguradoraId", aseguradoraId);
+        q.setParameter("cp", cp);
+        q.setParameter("direccion", direccion);
+        q.setParameter("numero", numero);
+        q.setParameter("piso", piso);
+        return String.valueOf(q.getSingleResult());
+    }
+    
+    @GET
+    @Path("buscarSiniestroPorDireccion/{pagina}/{aseguradoraId:.*}/{estado:.*}/{subestados:.*}/{cp}/{direccion}/{numero}/{piso:.*}")
+    @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
+    public List<Siniestro> buscarSiniestroPorDireccion(@PathParam("pagina") Integer pagina, @PathParam("aseguradoraId") Integer aseguradoraId, @PathParam("estado") Integer estado, @PathParam("subestados") String subestados, @PathParam("cp") String cp, @PathParam("direccion") String direccion, @PathParam("numero") Integer numero, @PathParam("piso") String piso) {
+        Query q;
+        List<Integer> listaSubestados = new ArrayList<>();
+        if (estado == null) {
+            q = em.createNamedQuery("Siniestro.buscarSiniestroPorDireccion");
+        } else if (estado == 0) {
+            q = em.createNamedQuery("Siniestro.buscarSiniestroPorDireccionAbiertos");
+            for (int i = 0; i < 4; i++) {
+                if (subestados.charAt(i) == '1') {
+                    listaSubestados.add(i);
+                }
+            }
+            if (listaSubestados.isEmpty()) {
+                listaSubestados.add(-1);
+            }
+            q.setParameter("subestados", listaSubestados);
+        } else {
+            q = em.createNamedQuery("Siniestro.buscarSiniestroPorDireccionNoAbiertos");
+            q.setParameter("estado", estado);
+        }
+        q.setParameter("aseguradoraId", aseguradoraId);
+        q.setParameter("cp", cp);
+        q.setParameter("direccion", direccion);
+        q.setParameter("numero", numero);
+        q.setParameter("piso", piso);
+        q.setFirstResult(10 * pagina);
         q.setMaxResults(10);
         List<Siniestro> ls = q.getResultList();
         return ls.isEmpty() ? null : ls;

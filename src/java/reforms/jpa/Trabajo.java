@@ -32,6 +32,7 @@ import javax.xml.bind.annotation.XmlTransient;
 @Table(name = "trabajo")
 @XmlRootElement
 @NamedQueries({
+    // Consultas por defecto
       @NamedQuery(name = "Trabajo.findAll", query = "SELECT t FROM Trabajo t")
     , @NamedQuery(name = "Trabajo.findById", query = "SELECT t FROM Trabajo t WHERE t.id = :id")
     , @NamedQuery(name = "Trabajo.findByCodigo", query = "SELECT t FROM Trabajo t WHERE t.codigo = :codigo")
@@ -43,6 +44,7 @@ import javax.xml.bind.annotation.XmlTransient;
     , @NamedQuery(name = "Trabajo.findByPrecioExtra", query = "SELECT t FROM Trabajo t WHERE t.precioExtra = :precioExtra")
     , @NamedQuery(name = "Trabajo.findByMedida", query = "SELECT t FROM Trabajo t WHERE t.medida = :medida")
     , @NamedQuery(name = "Trabajo.findByDificultad", query = "SELECT t FROM Trabajo t WHERE t.dificultad = :dificultad")
+    // Consultas diseñadas
     , @NamedQuery(name = "Trabajo.buscarTrabajoPorAseguradoraGremio", query = "SELECT t FROM Trabajo t WHERE (t.aseguradora.id = :idAseguradora AND t.gremio.id = :idGremio) ORDER BY t.codigo")})
 public class Trabajo implements Serializable {
 

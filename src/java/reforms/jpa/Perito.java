@@ -32,6 +32,7 @@ import javax.xml.bind.annotation.XmlTransient;
 @Table(name = "perito")
 @XmlRootElement
 @NamedQueries({
+    // Consultas por defecto
       @NamedQuery(name = "Perito.findAll", query = "SELECT p FROM Perito p")
     , @NamedQuery(name = "Perito.findById", query = "SELECT p FROM Perito p WHERE p.id = :id")
     , @NamedQuery(name = "Perito.findByNombre", query = "SELECT p FROM Perito p WHERE p.nombre = :nombre")
@@ -41,6 +42,7 @@ import javax.xml.bind.annotation.XmlTransient;
     , @NamedQuery(name = "Perito.findByTelefono2", query = "SELECT p FROM Perito p WHERE p.telefono2 = :telefono2")
     , @NamedQuery(name = "Perito.findByFax", query = "SELECT p FROM Perito p WHERE p.fax = :fax")
     , @NamedQuery(name = "Perito.findByEmail", query = "SELECT p FROM Perito p WHERE p.email = :email")
+    // Consultas diseñadas
     , @NamedQuery(name = "Perito.buscarPeritoPorAseguradora", query = "SELECT p FROM Perito p WHERE (p.aseguradora.id = :aseguradoraId) ORDER BY p.nombre, p.apellido1, p.apellido2")})
 public class Perito implements Serializable {
 

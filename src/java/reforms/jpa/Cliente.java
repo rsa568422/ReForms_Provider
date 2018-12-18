@@ -32,6 +32,7 @@ import javax.xml.bind.annotation.XmlTransient;
 @Table(name = "cliente")
 @XmlRootElement
 @NamedQueries({
+    // Consultas por defecto
       @NamedQuery(name = "Cliente.findAll", query = "SELECT c FROM Cliente c")
     , @NamedQuery(name = "Cliente.findById", query = "SELECT c FROM Cliente c WHERE c.id = :id")
     , @NamedQuery(name = "Cliente.findByNombre", query = "SELECT c FROM Cliente c WHERE c.nombre = :nombre")
@@ -41,6 +42,7 @@ import javax.xml.bind.annotation.XmlTransient;
     , @NamedQuery(name = "Cliente.findByTelefono2", query = "SELECT c FROM Cliente c WHERE c.telefono2 = :telefono2")
     , @NamedQuery(name = "Cliente.findByTipo", query = "SELECT c FROM Cliente c WHERE c.tipo = :tipo")
     , @NamedQuery(name = "Cliente.findByObservaciones", query = "SELECT c FROM Cliente c WHERE c.observaciones = :observaciones")
+    // Consultas diseñadas
     , @NamedQuery(name = "Cliente.buscarClientePorTelefono", query = "SELECT c FROM Cliente c WHERE (c.telefono1 = :telefono OR c.telefono2 = :telefono) ORDER BY c.nombre, c.apellido1, c.apellido2")
     , @NamedQuery(name = "Cliente.buscarClientePorTelefonoA", query = "SELECT c FROM Cliente c WHERE (c.aseguradora.id = :aseguradoraId AND (c.telefono1 = :telefono OR c.telefono2 = :telefono)) ORDER BY c.nombre, c.apellido1, c.apellido2")
     , @NamedQuery(name = "Cliente.buscarClientePorNombreCompleto", query = "SELECT c FROM Cliente c WHERE (c.nombre LIKE :nombre AND c.apellido1 LIKE :apellido1 AND (c.apellido2 IS NULL OR c.apellido2 LIKE :apellido2)) ORDER BY c.nombre, c.apellido1, c.apellido2")

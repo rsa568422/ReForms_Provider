@@ -28,6 +28,7 @@ import javax.xml.bind.annotation.XmlRootElement;
 @Table(name = "integrante")
 @XmlRootElement
 @NamedQueries({
+    // Consultas por defecto
       @NamedQuery(name = "Integrante.findAll", query = "SELECT i FROM Integrante i")
     , @NamedQuery(name = "Integrante.findById", query = "SELECT i FROM Integrante i WHERE i.id = :id")})
 public class Integrante implements Serializable {

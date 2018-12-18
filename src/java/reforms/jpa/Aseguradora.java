@@ -31,6 +31,7 @@ import javax.xml.bind.annotation.XmlTransient;
 @Table(name = "aseguradora")
 @XmlRootElement
 @NamedQueries({
+    // Consultas por defecto
       @NamedQuery(name = "Aseguradora.findAll", query = "SELECT a FROM Aseguradora a")
     , @NamedQuery(name = "Aseguradora.findById", query = "SELECT a FROM Aseguradora a WHERE a.id = :id")
     , @NamedQuery(name = "Aseguradora.findByNombre", query = "SELECT a FROM Aseguradora a WHERE a.nombre = :nombre")
@@ -38,6 +39,7 @@ import javax.xml.bind.annotation.XmlTransient;
     , @NamedQuery(name = "Aseguradora.findByTelefono2", query = "SELECT a FROM Aseguradora a WHERE a.telefono2 = :telefono2")
     , @NamedQuery(name = "Aseguradora.findByFax", query = "SELECT a FROM Aseguradora a WHERE a.fax = :fax")
     , @NamedQuery(name = "Aseguradora.findByEmail", query = "SELECT a FROM Aseguradora a WHERE a.email = :email")
+    // Consultas diseñadas
     , @NamedQuery(name = "Aseguradora.obtenerAseguradoras", query = "SELECT a FROM Aseguradora a ORDER BY a.nombre")})
 public class Aseguradora implements Serializable {
 
