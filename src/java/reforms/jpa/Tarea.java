@@ -43,7 +43,7 @@ import javax.xml.bind.annotation.XmlTransient;
     , @NamedQuery(name = "Tarea.findByObservaciones", query = "SELECT t FROM Tarea t WHERE t.observaciones = :observaciones")
     , @NamedQuery(name = "Tarea.findByFechaAmpliacion", query = "SELECT t FROM Tarea t WHERE t.fechaAmpliacion = :fechaAmpliacion")
     // Consultas diseñadas
-    , @NamedQuery(name = "Tarea.buscarTareaPorSiniestro", query = "SELECT t FROM Tarea t WHERE t.siniestro.id = :idSiniestro ORDER BY t.trabajo.gremio.nombre, t.trabajo.codigo")})
+    , @NamedQuery(name = "Tarea.buscarTareaPorSiniestro", query = "SELECT t FROM Tarea t WHERE t.siniestro.id = :idSiniestro ORDER BY t.estado, t.trabajo.gremio.nombre, t.trabajo.codigo")})
 public class Tarea implements Serializable {
 
     private static final long serialVersionUID = 1L;

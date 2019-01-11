@@ -5,10 +5,13 @@
  */
 package reforms.service;
 
+import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
+import javax.persistence.Query;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.DELETE;
 import javax.ws.rs.GET;
@@ -88,4 +91,48 @@ public class JornadaFacadeREST extends AbstractFacade<Jornada> {
         return em;
     }
     
+    @GET
+    @Path("infoMes/{a}/{m}")
+    @Produces(MediaType.TEXT_PLAIN)
+    public String infoMes(@PathParam("a") Integer a, @PathParam("m") Integer m) {
+        String salida = "0/0";
+        if ((m > 0) && (m < 13)) {
+            Calendar fecha = Calendar.getInstance();
+            fecha.set(a, m - 1 , 1);
+            int inicio = fecha.get(Calendar.DAY_OF_WEEK) == 1 ? 6 : fecha.get(Calendar.DAY_OF_WEEK) - 2;
+            salida = String.valueOf(inicio) + "/" + String.valueOf(fecha.getActualMaximum(Calendar.DAY_OF_MONTH));
+        }
+        return salida;
+    }
+    
+    @GET
+    @Path("contarJornadaPorMes/{a}/{m}")
+    @Produces(MediaType.TEXT_PLAIN)
+    public String contarJornadaPorMes(@PathParam("a") Integer a, @PathParam("m") Integer m) {
+        Query q;
+        q = em.createNamedQuery("Jornada.contarJornadaPorMes");
+        Calendar inicio = Calendar.getInstance(),
+                 fin = Calendar.getInstance();
+        inicio.set(a, m - 1 , 1);
+        fin.set(a, m - 1 , inicio.getActualMaximum(Calendar.DAY_OF_MONTH));
+        q.setParameter("inicio", new Date(inicio.getTimeInMillis()));
+        q.setParameter("fin", new Date(fin.getTimeInMillis()));
+        return String.valueOf(q.getSingleResult());
+    }
+    
+    @GET
+    @Path("buscarJornadaPorMes/{a}/{m}")
+    @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
+    public List<Jornada> buscarJornadaPorMes(@PathParam("pagina") Integer pagina, @PathParam("a") Integer a, @PathParam("m") Integer m) {
+        Query q;
+        q = em.createNamedQuery("Jornada.buscarJornadaPorMes");
+        Calendar inicio = Calendar.getInstance(),
+                 fin = Calendar.getInstance();
+        inicio.set(a, m - 1 , 1);
+        fin.set(a, m - 1 , inicio.getActualMaximum(Calendar.DAY_OF_MONTH));
+        q.setParameter("inicio", new Date(inicio.getTimeInMillis()));
+        q.setParameter("fin", new Date(fin.getTimeInMillis()));
+        List<Jornada> lj = q.getResultList();
+        return lj.isEmpty() ? null : lj;
+    }
 }

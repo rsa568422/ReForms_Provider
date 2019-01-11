@@ -39,7 +39,10 @@ import javax.xml.bind.annotation.XmlTransient;
       @NamedQuery(name = "Jornada.findAll", query = "SELECT j FROM Jornada j")
     , @NamedQuery(name = "Jornada.findById", query = "SELECT j FROM Jornada j WHERE j.id = :id")
     , @NamedQuery(name = "Jornada.findByFecha", query = "SELECT j FROM Jornada j WHERE j.fecha = :fecha")
-    , @NamedQuery(name = "Jornada.findByObservaciones", query = "SELECT j FROM Jornada j WHERE j.observaciones = :observaciones")})
+    , @NamedQuery(name = "Jornada.findByObservaciones", query = "SELECT j FROM Jornada j WHERE j.observaciones = :observaciones")
+    // Consultas diseñadas
+    , @NamedQuery(name = "Jornada.contarJornadaPorMes", query = "SELECT COUNT(j.id) FROM Jornada j WHERE (j.fecha BETWEEN :inicio AND :fin)")
+    , @NamedQuery(name = "Jornada.buscarJornadaPorMes", query = "SELECT j FROM Jornada j WHERE (j.fecha BETWEEN :inicio AND :fin) ORDER BY j.fecha ASC")})
 public class Jornada implements Serializable {
 
     private static final long serialVersionUID = 1L;
