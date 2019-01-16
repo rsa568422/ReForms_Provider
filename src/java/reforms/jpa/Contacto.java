@@ -39,7 +39,9 @@ import javax.xml.bind.annotation.XmlTransient;
     , @NamedQuery(name = "Contacto.findByApellido2", query = "SELECT c FROM Contacto c WHERE c.apellido2 = :apellido2")
     , @NamedQuery(name = "Contacto.findByTelefono1", query = "SELECT c FROM Contacto c WHERE c.telefono1 = :telefono1")
     , @NamedQuery(name = "Contacto.findByTelefono2", query = "SELECT c FROM Contacto c WHERE c.telefono2 = :telefono2")
-    , @NamedQuery(name = "Contacto.findByObservaciones", query = "SELECT c FROM Contacto c WHERE c.observaciones = :observaciones")})
+    , @NamedQuery(name = "Contacto.findByObservaciones", query = "SELECT c FROM Contacto c WHERE c.observaciones = :observaciones")
+    // Consultas diseñadas
+    , @NamedQuery(name = "Contacto.obtenerContactos", query = "SELECT c FROM Contacto c WHERE c.siniestro.id = :siniestroId ORDER BY c.nombre, c.apellido1, c.apellido2")})
 public class Contacto implements Serializable {
 
     private static final long serialVersionUID = 1L;

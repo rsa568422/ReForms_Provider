@@ -5,10 +5,12 @@
  */
 package reforms.service;
 
+import java.util.ArrayList;
 import java.util.List;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
+import javax.persistence.Query;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.DELETE;
 import javax.ws.rs.GET;
@@ -93,5 +95,48 @@ public class ContactoFacadeREST extends AbstractFacade<Contacto> {
     @Consumes({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
     public void agregarContacto(Contacto entity) {
         super.create(entity);
+    }
+
+    @PUT
+    @Path("actualizarContacto/{id}")
+    @Consumes({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
+    public void actualizarContacto(@PathParam("id") Integer id, Contacto entity) {
+        Contacto t = find(id);
+        t.setNombre(entity.getNombre());
+        t.setApellido1(entity.getApellido1());
+        t.setApellido2(entity.getApellido2());
+        t.setTelefono1(entity.getTelefono1());
+        t.setTelefono2(entity.getTelefono2());
+        t.setObservaciones(entity.getObservaciones());
+        super.edit(t);
+    }
+    
+    @GET
+    @Path("obtenerContactos/{siniestroId}")
+    @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
+    public List<Contacto> obtenerContactos(@PathParam("siniestroId") Integer siniestroId) {
+        Query q;
+        q = em.createNamedQuery("Contacto.obtenerContactos");
+        q.setParameter("siniestroId", siniestroId);
+        List<Contacto> lc = q.getResultList(),
+                       res = new ArrayList<>();
+        for (Contacto c : lc) {
+            Contacto aux = new Contacto();
+            aux.setId(c.getId());
+            aux.setNombre(c.getNombre());
+            aux.setApellido1(c.getApellido1());
+            aux.setApellido2(c.getApellido2());
+            aux.setTelefono1(c.getTelefono1());
+            aux.setTelefono2(c.getTelefono2());
+            aux.setObservaciones(c.getObservaciones());
+            res.add(aux);
+        }
+        return res;
+    }
+    
+    @DELETE
+    @Path("borrarContacto/{id}")
+    public void borrarContacto(@PathParam("id") Integer id) {
+        super.remove(super.find(id));
     }
 }

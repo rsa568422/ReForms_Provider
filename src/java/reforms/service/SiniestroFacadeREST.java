@@ -480,7 +480,7 @@ public class SiniestroFacadeREST extends AbstractFacade<Siniestro> {
         q.setParameter("cp", cp);
         q.setParameter("direccion", direccion);
         q.setParameter("numero", numero);
-        q.setParameter("piso", piso);
+        q.setParameter("piso", "".equals(piso) ? null : piso);
         return String.valueOf(q.getSingleResult());
     }
     
@@ -511,7 +511,7 @@ public class SiniestroFacadeREST extends AbstractFacade<Siniestro> {
         q.setParameter("cp", cp);
         q.setParameter("direccion", direccion);
         q.setParameter("numero", numero);
-        q.setParameter("piso", piso);
+        q.setParameter("piso", "".equals(piso) ? null : piso);
         q.setFirstResult(10 * pagina);
         q.setMaxResults(10);
         List<Siniestro> ls = q.getResultList();

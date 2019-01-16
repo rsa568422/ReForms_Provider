@@ -105,4 +105,15 @@ public class PeritoFacadeREST extends AbstractFacade<Perito> {
     public void agregarPerito(Perito entity) {
         super.create(entity);
     }
+    
+    @GET
+    @Path("buscarPeritoReasignadoPorSiniestro/{siniestroId}")
+    @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
+    public Perito buscarPeritoReasignadoPorSiniestro(@PathParam("siniestroId") Integer siniestroId) {
+        Query q = em.createNamedQuery("Perito.buscarPeritoReasignadoPorSiniestro");
+        q.setParameter("siniestroId", siniestroId);
+        q.setMaxResults(1);
+        List<Perito> lp = q.getResultList();
+        return lp.isEmpty() ? null : lp.get(0);
+    }
 }
