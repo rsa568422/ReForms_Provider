@@ -34,7 +34,9 @@ import javax.xml.bind.annotation.XmlRootElement;
     // Consultas por defecto
       @NamedQuery(name = "Replanificacion.findAll", query = "SELECT r FROM Replanificacion r")
     , @NamedQuery(name = "Replanificacion.findById", query = "SELECT r FROM Replanificacion r WHERE r.id = :id")
-    , @NamedQuery(name = "Replanificacion.findByFecha", query = "SELECT r FROM Replanificacion r WHERE r.fecha = :fecha")})
+    , @NamedQuery(name = "Replanificacion.findByFecha", query = "SELECT r FROM Replanificacion r WHERE r.fecha = :fecha")
+    // Consultas diseñadas
+    , @NamedQuery(name = "Replanificacion.obtenerReplanificaciones", query = "SELECT r FROM Replanificacion r WHERE r.siniestro.id = :siniestroId ORDER BY r.fecha DESC")})
 public class Replanificacion implements Serializable {
 
     private static final long serialVersionUID = 1L;

@@ -34,7 +34,9 @@ import javax.xml.bind.annotation.XmlRootElement;
     // Consultas por defecto
       @NamedQuery(name = "Reasignacion.findAll", query = "SELECT r FROM Reasignacion r")
     , @NamedQuery(name = "Reasignacion.findById", query = "SELECT r FROM Reasignacion r WHERE r.id = :id")
-    , @NamedQuery(name = "Reasignacion.findByFecha", query = "SELECT r FROM Reasignacion r WHERE r.fecha = :fecha")})
+    , @NamedQuery(name = "Reasignacion.findByFecha", query = "SELECT r FROM Reasignacion r WHERE r.fecha = :fecha")
+    // Consultas diseñadas
+    , @NamedQuery(name = "Reasignacion.obtenerReasignaciones", query = "SELECT r FROM Reasignacion r WHERE r.siniestro.id = :siniestroId ORDER BY r.fecha DESC")})
 public class Reasignacion implements Serializable {
 
     private static final long serialVersionUID = 1L;

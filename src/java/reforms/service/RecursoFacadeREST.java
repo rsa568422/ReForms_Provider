@@ -5,10 +5,12 @@
  */
 package reforms.service;
 
+import java.util.ArrayList;
 import java.util.List;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
+import javax.persistence.Query;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.DELETE;
 import javax.ws.rs.GET;
@@ -88,4 +90,23 @@ public class RecursoFacadeREST extends AbstractFacade<Recurso> {
         return em;
     }
     
+    @GET
+    @Path("obtenerRecursos/{siniestroId}")
+    @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
+    public List<Recurso> obtenerRecursos(@PathParam("siniestroId") Integer siniestroId) {
+        Query q = em.createNamedQuery("Recurso.obtenerRecursos");
+        q.setParameter("siniestroId", siniestroId);
+        List<Recurso> lr = q.getResultList(),
+                      res = new ArrayList<>();
+        for (Recurso r : lr) {
+            Recurso aux = new Recurso();
+            aux.setId(r.getId());
+            aux.setTipo(r.getTipo());
+            aux.setNombre(r.getNombre());
+            aux.setDescripcion(r.getDescripcion());
+            aux.setFichero(r.getFichero());
+            res.add(aux);
+        }
+        return res;
+    }
 }

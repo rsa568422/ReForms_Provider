@@ -5,6 +5,7 @@
  */
 package reforms.service;
 
+import java.util.ArrayList;
 import java.util.List;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
@@ -90,11 +91,23 @@ public class MultiserviciosFacadeREST extends AbstractFacade<Multiservicios> {
     }
     
     @GET
-    @Path("obtenerMultiservicios")
+    @Path("obtenerMultiserviciosDisponibles/{idSiniestro}")
     @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
-    public List<Multiservicios> obtenerMultiservicios() {
-        Query q = em.createNamedQuery("Multiservicios.obtenerMultiservicios");
-        List<Multiservicios> lm = q.getResultList();
-        return lm.isEmpty() ? null : lm;
+    public List<Multiservicios> obtenerMultiserviciosDisponibles(@PathParam("idSiniestro") Integer idSiniestro) {
+        Query q = em.createNamedQuery("Multiservicios.obtenerMultiserviciosDisponibles");
+        q.setParameter("idSiniestro", idSiniestro);
+        List<Multiservicios> lm = q.getResultList(),
+                             res = new ArrayList<>();
+        for (Multiservicios m : lm) {
+            Multiservicios aux = new Multiservicios();
+            aux.setId(m.getId());
+            aux.setNombre(m.getNombre());
+            aux.setEmail(m.getEmail());
+            aux.setTelefono1(m.getTelefono1());
+            aux.setTelefono2(m.getTelefono2());
+            aux.setFax(m.getFax());
+            res.add(aux);
+        }
+        return res;
     }
 }

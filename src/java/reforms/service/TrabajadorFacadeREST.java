@@ -166,7 +166,6 @@ public class TrabajadorFacadeREST extends AbstractFacade<Trabajador> {
     public void registrarTrabajador(Trabajador entity) {
         if (entity.getPropiedad().getId() == null) {
             Propiedad p = entity.getPropiedad();
-            System.err.println(p.getLocalidad().getNombre());
             if (p.getLocalidad().getId() == null) {
                 Localidad l = localidadFacadeREST.buscarLocalidadPorCodigoPostal(p.getLocalidad().getCp());
                 if (l == null) {

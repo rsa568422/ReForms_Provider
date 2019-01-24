@@ -43,8 +43,7 @@ import javax.xml.bind.annotation.XmlTransient;
     , @NamedQuery(name = "Perito.findByFax", query = "SELECT p FROM Perito p WHERE p.fax = :fax")
     , @NamedQuery(name = "Perito.findByEmail", query = "SELECT p FROM Perito p WHERE p.email = :email")
     // Consultas diseñadas
-    , @NamedQuery(name = "Perito.buscarPeritoPorAseguradora", query = "SELECT p FROM Perito p WHERE (p.aseguradora.id = :aseguradoraId) ORDER BY p.nombre, p.apellido1, p.apellido2")
-    , @NamedQuery(name = "Perito.buscarPeritoReasignadoPorSiniestro", query = "SELECT p FROM Perito p JOIN p.reasignaciones r WHERE (r.siniestro.id = :siniestroId) ORDER BY r.fecha DESC")})
+    , @NamedQuery(name = "Perito.buscarPeritoPorAseguradora", query = "SELECT p FROM Perito p WHERE (p.aseguradora.id = :aseguradoraId) ORDER BY p.nombre, p.apellido1, p.apellido2")})
 public class Perito implements Serializable {
 
     private static final long serialVersionUID = 1L;

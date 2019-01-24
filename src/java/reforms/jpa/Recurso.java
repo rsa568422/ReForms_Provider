@@ -37,7 +37,9 @@ import javax.xml.bind.annotation.XmlTransient;
     , @NamedQuery(name = "Recurso.findById", query = "SELECT r FROM Recurso r WHERE r.id = :id")
     , @NamedQuery(name = "Recurso.findByTipo", query = "SELECT r FROM Recurso r WHERE r.tipo = :tipo")
     , @NamedQuery(name = "Recurso.findByNombre", query = "SELECT r FROM Recurso r WHERE r.nombre = :nombre")
-    , @NamedQuery(name = "Recurso.findByDescripcion", query = "SELECT r FROM Recurso r WHERE r.descripcion = :descripcion")})
+    , @NamedQuery(name = "Recurso.findByDescripcion", query = "SELECT r FROM Recurso r WHERE r.descripcion = :descripcion")
+    // Consultas diseñadas
+    , @NamedQuery(name = "Recurso.obtenerRecursos", query = "SELECT r FROM Recurso r JOIN r.adjunto.siniestro s WHERE s.id = :siniestroId")})
 public class Recurso implements Serializable {
 
     private static final long serialVersionUID = 1L;

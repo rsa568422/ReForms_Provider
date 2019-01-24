@@ -39,7 +39,7 @@ import javax.xml.bind.annotation.XmlTransient;
     , @NamedQuery(name = "Multiservicios.findByFax", query = "SELECT m FROM Multiservicios m WHERE m.fax = :fax")
     , @NamedQuery(name = "Multiservicios.findByEmail", query = "SELECT m FROM Multiservicios m WHERE m.email = :email")
     // Consultas diseñadas
-    , @NamedQuery(name = "Multiservicios.obtenerMultiservicios", query = "SELECT m FROM Multiservicios m ORDER BY m.nombre")})
+    , @NamedQuery(name = "Multiservicios.obtenerMultiserviciosDisponibles", query = "SELECT m FROM Multiservicios m WHERE (m NOT IN (SELECT m2 FROM Multiservicios m2 JOIN m2.participantes p WHERE (p.siniestro.id = :idSiniestro))) ORDER BY m.nombre")})
 public class Multiservicios implements Serializable {
 
     private static final long serialVersionUID = 1L;
