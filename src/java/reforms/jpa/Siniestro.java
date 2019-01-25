@@ -94,6 +94,9 @@ public class Siniestro implements Serializable {
     @Column(name = "fechaRegistro", nullable = false)
     @Temporal(TemporalType.DATE)
     private Date fechaRegistro;
+    @Column(name = "fechaCierre")
+    @Temporal(TemporalType.DATE)
+    private Date fechaCierre;
     @Column(name = "estado")
     private Integer estado;
     @Column(name = "observaciones", length = 250)
@@ -162,6 +165,14 @@ public class Siniestro implements Serializable {
 
     public void setFechaRegistro(Date fechaRegistro) {
         this.fechaRegistro = fechaRegistro;
+    }
+
+    public Date getFechaCierre() {
+        return fechaCierre;
+    }
+
+    public void setFechaCierre(Date fechaCierre) {
+        this.fechaCierre = fechaCierre;
     }
 
     public Integer getEstado() {
