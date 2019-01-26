@@ -109,4 +109,13 @@ public class RecursoFacadeREST extends AbstractFacade<Recurso> {
         }
         return res;
     }
+
+    @PUT
+    @Path("actualizarRecurso/{id}")
+    @Consumes({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
+    public void actualizarRecurso(@PathParam("id") Integer id, Recurso entity) {
+        Recurso r = find(id);
+        r.setDescripcion(entity.getDescripcion());
+        super.edit(r);
+    }
 }

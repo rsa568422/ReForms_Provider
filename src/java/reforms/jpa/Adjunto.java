@@ -31,7 +31,9 @@ import javax.xml.bind.annotation.XmlRootElement;
 @NamedQueries({
     // Consultas por defecto
       @NamedQuery(name = "Adjunto.findAll", query = "SELECT a FROM Adjunto a")
-    , @NamedQuery(name = "Adjunto.findById", query = "SELECT a FROM Adjunto a WHERE a.id = :id")})
+    , @NamedQuery(name = "Adjunto.findById", query = "SELECT a FROM Adjunto a WHERE a.id = :id")
+    // Consultas diseñadas
+    , @NamedQuery(name = "Adjunto.buscarAdjuntoPorRecurso", query = "SELECT a FROM Adjunto a WHERE a.recurso.id = :idRecurso")})
 public class Adjunto implements Serializable {
 
     private static final long serialVersionUID = 1L;
