@@ -5,6 +5,7 @@
  */
 package reforms.service;
 
+import java.util.ArrayList;
 import java.util.List;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
@@ -19,7 +20,10 @@ import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
+import reforms.jpa.Aseguradora;
+import reforms.jpa.Siniestro;
 import reforms.jpa.Tarea;
+import reforms.jpa.Trabajo;
 
 /**
  *
@@ -89,20 +93,56 @@ public class TareaFacadeREST extends AbstractFacade<Tarea> {
         return em;
     }
     
-    @POST
-    @Path("agregarTarea")
-    @Consumes({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
-    public void agregarTarea(Tarea entity) {
-        super.create(entity);
-    }
-    
     @GET
-    @Path("buscarTareaPorSiniestro/{idSiniestro}")
+    @Path("obtenerTareas/{idSiniestro}")
     @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
-    public List<Tarea> buscarTareaPorSiniestro(@PathParam("idSiniestro") Integer idSiniestro) {
-        Query q = em.createNamedQuery("Tarea.buscarTareaPorSiniestro");
+    public List<Tarea> obtenerTareas(@PathParam("idSiniestro") Integer idSiniestro) {
+        Query q = em.createNamedQuery("Tarea.obtenerTareas");
         q.setParameter("idSiniestro", idSiniestro);
-        List<Tarea> lt = q.getResultList();
-        return lt.isEmpty() ? null : lt;
+        List<Tarea> lt = q.getResultList(),
+                    res = new ArrayList<>();
+        for (Tarea t : lt) {
+            Tarea aux = new Tarea();
+            aux.setId(t.getId());
+            Siniestro s = new Siniestro();
+            s.setId(t.getSiniestro().getId());
+            aux.setSiniestro(s);
+            aux.setEstado(t.getEstado());
+            aux.setObservaciones(t.getObservaciones());
+            Trabajo taux = new Trabajo();
+            Aseguradora aaux = new Aseguradora();
+            aaux.setId(t.getTrabajo().getAseguradora().getId());
+            taux.setAseguradora(aaux);
+            taux.setCantidadMed(t.getTrabajo().getCantidadMed());
+            taux.setCantidadMin(t.getTrabajo().getCantidadMin());
+            taux.setPrecioMed(t.getTrabajo().getPrecioMed());
+            taux.setPrecioMin(t.getTrabajo().getPrecioMin());
+            taux.setPrecioExtra(t.getTrabajo().getPrecioExtra());
+            taux.setCodigo(t.getTrabajo().getCodigo());
+            taux.setDescripcion(t.getTrabajo().getDescripcion());
+            taux.setDificultad(t.getTrabajo().getDificultad());
+            taux.setGremio(t.getTrabajo().getGremio());
+            taux.setMedida(t.getTrabajo().getMedida());
+            aux.setTrabajo(taux);
+            Integer c = t.getCantidad();
+            aux.setCantidad(c);
+            if (t.getImporte() == null || t.getImporte().equals(new Float(0.0))) {
+                if (c <= taux.getCantidadMin()) {
+                    aux.setImporte(taux.getPrecioMin());
+                } else if (c <= taux.getCantidadMed()) {
+                    Float caux = c - taux.getCantidadMin();
+                    aux.setImporte(taux.getPrecioMin() + (caux * taux.getPrecioMed()));
+                } else {
+                    Float caux1 = taux.getCantidadMed() - taux.getCantidadMin(),
+                          caux2 = c - taux.getCantidadMed();
+                    aux.setImporte(taux.getPrecioMin() + (caux1 * taux.getPrecioMed()) + (caux2 * taux.getPrecioExtra()));
+                }
+            } else {
+                aux.setImporte(t.getImporte());
+            }
+            aux.setFechaAmpliacion(t.getFechaAmpliacion());
+            res.add(aux);
+        }
+        return res;
     }
 }

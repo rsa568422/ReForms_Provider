@@ -5,6 +5,7 @@
  */
 package reforms.service;
 
+import java.util.ArrayList;
 import java.util.List;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
@@ -19,6 +20,8 @@ import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
+import reforms.jpa.Aseguradora;
+import reforms.jpa.Gremio;
 import reforms.jpa.Trabajo;
 
 /**
@@ -90,14 +93,35 @@ public class TrabajoFacadeREST extends AbstractFacade<Trabajo> {
     }
     
     @GET
-    @Path("buscarTrabajoPorAseguradoraGremio/{idAseguradora}/{idGremio}")
+    @Path("obtenerTrabajosPorGremio/{idAseguradora}/{idGremio}")
     @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
-    public List<Trabajo> buscarTrabajoPorAseguradoraGremio(@PathParam("idAseguradora") Integer idAseguradora, @PathParam("idGremio") Integer idGremio) {
-        Query q = em.createNamedQuery("Trabajo.buscarTrabajoPorAseguradoraGremio");
+    public List<Trabajo> obtenerTrabajosPorGremio(@PathParam("idAseguradora") Integer idAseguradora, @PathParam("idGremio") Integer idGremio) {
+        Query q = em.createNamedQuery("Trabajo.obtenerTrabajosPorGremio");
         q.setParameter("idAseguradora", idAseguradora);
         q.setParameter("idGremio", idGremio);
-        List<Trabajo> lt = q.getResultList();
-        return lt.isEmpty() ? null : lt;
+        List<Trabajo> lt = q.getResultList(),
+                      res = new ArrayList<>();
+        for (Trabajo t : lt) {
+            Trabajo aux = new Trabajo();
+            aux.setId(t.getId());
+            aux.setCodigo(t.getCodigo());
+            aux.setCantidadMed(t.getCantidadMed());
+            aux.setPrecioMed(t.getPrecioMed());
+            aux.setCantidadMin(t.getCantidadMin());
+            aux.setPrecioMin(t.getPrecioMin());
+            aux.setPrecioExtra(t.getPrecioExtra());
+            aux.setDificultad(t.getDificultad());
+            aux.setDescripcion(t.getDescripcion());
+            aux.setMedida(t.getMedida());
+            Aseguradora aaux = new Aseguradora();
+            aaux.setId(t.getAseguradora().getId());
+            aux.setAseguradora(aaux);
+            Gremio gaux = new Gremio();
+            gaux.setId(t.getGremio().getId());
+            aux.setGremio(gaux);
+            res.add(aux);
+        }
+        return res;
     }
     
     @POST

@@ -5,6 +5,7 @@
  */
 package reforms.service;
 
+import java.util.ArrayList;
 import java.util.List;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
@@ -19,7 +20,9 @@ import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
+import reforms.jpa.Aseguradora;
 import reforms.jpa.Gremio;
+import reforms.jpa.Trabajo;
 
 /**
  *
@@ -94,8 +97,17 @@ public class GremioFacadeREST extends AbstractFacade<Gremio> {
     @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
     public List<Gremio> obtenerGremios() {
         Query q = em.createNamedQuery("Gremio.obtenerGremios");
-        List<Gremio> lg = q.getResultList();
-        return lg.isEmpty() ? null : lg;
+        List<Gremio> lg = q.getResultList(),
+                     res = new ArrayList<>();
+        for (Gremio g : lg) {
+            Gremio aux = new Gremio();
+            aux.setId(g.getId());
+            aux.setNombre(g.getNombre());
+            aux.setCapacidades(null);
+            aux.setTrabajos(null);
+            res.add(aux);
+        }
+        return res;
     }
     
     @POST
