@@ -6,6 +6,7 @@
 package reforms.service;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import javax.ejb.EJB;
 import javax.ejb.Stateless;
@@ -27,6 +28,7 @@ import reforms.jpa.Poliza;
 import reforms.jpa.Propiedad;
 import reforms.jpa.Recurso;
 import reforms.jpa.Siniestro;
+import reforms.jpa.Tarea;
 
 /**
  *
@@ -50,6 +52,9 @@ public class SiniestroFacadeREST extends AbstractFacade<Siniestro> {
 
     @EJB
     private RecursoFacadeREST recursoFacadeREST;
+
+    @EJB
+    private TareaFacadeREST tareaFacadeREST;
 
     @PersistenceContext(unitName = "ReForms_ProviderPU")
     private EntityManager em;
@@ -516,5 +521,117 @@ public class SiniestroFacadeREST extends AbstractFacade<Siniestro> {
         q.setMaxResults(10);
         List<Siniestro> ls = q.getResultList();
         return ls.isEmpty() ? null : ls;
+    }
+
+    @GET
+    @Path("consultarEstado/{idSiniestro}")
+    @Produces(MediaType.TEXT_PLAIN)
+    public String consultarEstado(@PathParam("idSiniestro") Integer idSiniestro) {
+        Siniestro s = find(idSiniestro);
+        return s != null ? s.getEstado().toString() : null;
+    }
+    
+    public Integer calcularEstado(Integer idSiniestro) {
+        Siniestro s = find(idSiniestro);
+        Query qmin = em.createNamedQuery("Siniestro.estadoMinimo"),
+              qmax = em.createNamedQuery("Siniestro.estadoMaximo");
+        qmin.setParameter("idSiniestro", idSiniestro);
+        qmax.setParameter("idSiniestro", idSiniestro);
+        qmin.setFirstResult(0);
+        qmax.setFirstResult(0);
+        qmin.setMaxResults(1);
+        qmax.setMaxResults(1);
+        Integer min = qmin.getResultList().isEmpty() ? null : (Integer) qmin.getResultList().get(0),
+                max = qmax.getResultList().isEmpty() ? null : (Integer) qmax.getResultList().get(0),
+                res;
+        if (s != null && min != null && max != null) {
+            if (s.getEstado() < 4) {
+                if (max.equals(0)) {
+                    res = 0;
+                } else if (min < 2) {
+                    res = 1;
+                } else if (max.equals(2)) {
+                    res = 2;
+                } else {
+                    res = 3;
+                }
+            } else {
+                if (min.equals(3) && s.getEstado() <= 5) {
+                    res = s.getEstado();
+                } else if (min.equals(2) && !s.getEstado().equals(5)) {
+                    res = s.getEstado();
+                } else {
+                    res = -1;
+                }
+            }
+        } else if (s != null) {
+            res = 0;
+        } else {
+            res = null;
+        }
+        return res;
+    }
+    
+    @PUT
+    @Path("cerrarSiniestro/{idSiniestro}")
+    @Consumes({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
+    public void cerrarSiniestro(@PathParam("idSiniestro") Integer idSiniestro, Siniestro entity) {
+        Siniestro s = find(idSiniestro);
+        Query qmin = em.createNamedQuery("Siniestro.estadoMinimo");
+        qmin.setParameter("idSiniestro", idSiniestro);
+        qmin.setFirstResult(0);
+        qmin.setMaxResults(1);
+        Integer min = qmin.getResultList().isEmpty() ? null : (Integer) qmin.getResultList().get(0);
+        if (s.getEstado() > 1 && s.getEstado() < 4) {
+            if (min.equals(2)) {
+                s.setEstado(4);
+            } else if (min.equals(3)) {
+                s.setEstado(5);
+            }
+            s.setFechaCierre(new Date());
+            edit(idSiniestro, s);
+        }
+    }
+    
+    @PUT
+    @Path("facturarSiniestro/{idSiniestro}")
+    @Consumes({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
+    public void facturarSiniestro(@PathParam("idSiniestro") Integer idSiniestro, Siniestro entity) {
+        Siniestro s = find(idSiniestro);
+        Query qmin = em.createNamedQuery("Siniestro.estadoMinimo");
+        qmin.setParameter("idSiniestro", idSiniestro);
+        qmin.setFirstResult(0);
+        qmin.setMaxResults(1);
+        Integer min = qmin.getResultList().isEmpty() ? null : (Integer) qmin.getResultList().get(0);
+        if (s.getEstado().equals(4) && min.equals(2)) {
+            List<Tarea> lt = tareaFacadeREST.obtenerTareas(idSiniestro);
+            for (Tarea t : lt) {
+                Tarea aux = tareaFacadeREST.find(t.getId());
+                if (aux.getEstado().equals(2)) {
+                    aux.setImporte(t.getImporte());
+                } else {
+                    aux.setImporte(new Float(0.0));
+                }
+                tareaFacadeREST.edit(aux);
+            }
+            s.setEstado(6);
+            edit(idSiniestro, s);
+        }
+    }
+    
+    @PUT
+    @Path("cobrarSiniestro/{idSiniestro}")
+    @Consumes({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
+    public void cobrarSiniestro(@PathParam("idSiniestro") Integer idSiniestro, Siniestro entity) {
+        Siniestro s = find(idSiniestro);
+        Query qmin = em.createNamedQuery("Siniestro.estadoMinimo");
+        qmin.setParameter("idSiniestro", idSiniestro);
+        qmin.setFirstResult(0);
+        qmin.setMaxResults(1);
+        Integer min = qmin.getResultList().isEmpty() ? null : (Integer) qmin.getResultList().get(0);
+        if (s.getEstado().equals(6) && min.equals(2)) {
+            s.setEstado(7);
+            edit(idSiniestro, s);
+        }
     }
 }

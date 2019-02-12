@@ -7,6 +7,7 @@ package reforms.service;
 
 import java.util.ArrayList;
 import java.util.List;
+import javax.ejb.EJB;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
@@ -32,6 +33,12 @@ import reforms.jpa.Trabajo;
 @Stateless
 @Path("tarea")
 public class TareaFacadeREST extends AbstractFacade<Tarea> {
+
+    @EJB
+    private SiniestroFacadeREST siniestroFacadeREST;
+
+    @EJB
+    private TrabajoFacadeREST trabajoFacadeREST;
 
     @PersistenceContext(unitName = "ReForms_ProviderPU")
     private EntityManager em;
@@ -97,6 +104,7 @@ public class TareaFacadeREST extends AbstractFacade<Tarea> {
     @Path("obtenerTareas/{idSiniestro}")
     @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
     public List<Tarea> obtenerTareas(@PathParam("idSiniestro") Integer idSiniestro) {
+        Siniestro siniestro = siniestroFacadeREST.find(idSiniestro);
         Query q = em.createNamedQuery("Tarea.obtenerTareas");
         q.setParameter("idSiniestro", idSiniestro);
         List<Tarea> lt = q.getResultList(),
@@ -126,16 +134,14 @@ public class TareaFacadeREST extends AbstractFacade<Tarea> {
             aux.setTrabajo(taux);
             Integer c = t.getCantidad();
             aux.setCantidad(c);
-            if (t.getImporte() == null || t.getImporte().equals(new Float(0.0))) {
+            if (siniestro.getEstado() < 5) {
                 if (c <= taux.getCantidadMin()) {
                     aux.setImporte(taux.getPrecioMin());
                 } else if (c <= taux.getCantidadMed()) {
-                    Float caux = c - taux.getCantidadMin();
-                    aux.setImporte(taux.getPrecioMin() + (caux * taux.getPrecioMed()));
+                    aux.setImporte(taux.getPrecioMed());
                 } else {
-                    Float caux1 = taux.getCantidadMed() - taux.getCantidadMin(),
-                          caux2 = c - taux.getCantidadMed();
-                    aux.setImporte(taux.getPrecioMin() + (caux1 * taux.getPrecioMed()) + (caux2 * taux.getPrecioExtra()));
+                    Float caux = c - taux.getCantidadMed();
+                    aux.setImporte(taux.getPrecioMed() + (caux * taux.getPrecioExtra()));
                 }
             } else {
                 aux.setImporte(t.getImporte());
@@ -144,5 +150,44 @@ public class TareaFacadeREST extends AbstractFacade<Tarea> {
             res.add(aux);
         }
         return res;
+    }
+    
+    @POST
+    @Path("agregarTarea")
+    @Consumes({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
+    public void agregarTarea(Tarea entity) {
+        Tarea nueva = new Tarea();
+        nueva.setSiniestro(siniestroFacadeREST.find(entity.getSiniestro().getId()));
+        nueva.setTrabajo(trabajoFacadeREST.find(entity.getTrabajo().getId()));
+        nueva.setCantidad(entity.getCantidad());
+        nueva.setObservaciones(entity.getObservaciones());
+        if (nueva.getCantidad() > 0 && nueva.getSiniestro().getEstado() < 4) {
+            if (nueva.getSiniestro().getEstado() > 1) {
+                nueva.getSiniestro().setEstado(1);
+                siniestroFacadeREST.edit(nueva.getSiniestro());
+            }
+            super.create(entity);
+        }
+    }
+
+    @PUT
+    @Path("actualizarTarea/{id}")
+    @Consumes({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
+    public void actualizarTarea(@PathParam("id") Integer id, Tarea entity) {
+        Tarea t = find(id);
+        if (t != null && t.getSiniestro().getEstado() < 4) {
+            boolean estado = !t.getEstado().equals(entity.getEstado());
+            t.setObservaciones(entity.getObservaciones());
+            t.setEstado(entity.getEstado());
+            super.edit(t);
+            if (estado) {
+                Integer e = siniestroFacadeREST.calcularEstado(t.getSiniestro().getId());
+                if (!t.getSiniestro().getEstado().equals(e)) {
+                    Siniestro s = siniestroFacadeREST.find(t.getSiniestro().getId());
+                    s.setEstado(e);
+                    siniestroFacadeREST.edit(s);
+                }
+            }
+        }
     }
 }
