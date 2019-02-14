@@ -134,7 +134,7 @@ public class TareaFacadeREST extends AbstractFacade<Tarea> {
             aux.setTrabajo(taux);
             Integer c = t.getCantidad();
             aux.setCantidad(c);
-            if (siniestro.getEstado() < 5) {
+            if (siniestro.getEstado() < 5 && taux.getCantidadMin()!=  null) {
                 if (c <= taux.getCantidadMin()) {
                     aux.setImporte(taux.getPrecioMin());
                 } else if (c <= taux.getCantidadMed()) {
@@ -166,6 +166,9 @@ public class TareaFacadeREST extends AbstractFacade<Tarea> {
                 nueva.getSiniestro().setEstado(1);
                 siniestroFacadeREST.edit(nueva.getSiniestro());
             }
+            if (nueva.getTrabajo().getCantidadMin() == null) {
+                nueva.setImporte(entity.getImporte());
+            }
             super.create(entity);
         }
     }
@@ -179,6 +182,10 @@ public class TareaFacadeREST extends AbstractFacade<Tarea> {
             boolean estado = !t.getEstado().equals(entity.getEstado());
             t.setObservaciones(entity.getObservaciones());
             t.setEstado(entity.getEstado());
+            if (t.getTrabajo().getCantidadMin() == null) {
+                t.setCantidad(entity.getCantidad());
+                t.setImporte(entity.getImporte());
+            }
             super.edit(t);
             if (estado) {
                 Integer e = siniestroFacadeREST.calcularEstado(t.getSiniestro().getId());

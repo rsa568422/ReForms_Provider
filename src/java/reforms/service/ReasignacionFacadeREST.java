@@ -6,7 +6,9 @@
 package reforms.service;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
+import javax.ejb.EJB;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
@@ -31,6 +33,12 @@ import reforms.jpa.Siniestro;
 @Stateless
 @Path("reasignacion")
 public class ReasignacionFacadeREST extends AbstractFacade<Reasignacion> {
+
+    @EJB
+    private SiniestroFacadeREST siniestroFacadeREST;
+
+    @EJB
+    private PeritoFacadeREST peritoFacadeREST;
 
     @PersistenceContext(unitName = "ReForms_ProviderPU")
     private EntityManager em;
@@ -143,5 +151,20 @@ public class ReasignacionFacadeREST extends AbstractFacade<Reasignacion> {
             res.add(aux);
         }
         return res;
+    }
+    
+    @POST
+    @Path("reasignarSiniestro")
+    @Consumes({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
+    public void reasignarSiniestro(Reasignacion entity) {
+        Siniestro s = siniestroFacadeREST.find(entity.getSiniestro().getId());
+        Perito p = peritoFacadeREST.find(entity.getPerito().getId());
+        if (s != null && s.getEstado() < 4 && p != null && s.getPoliza().getCliente().getAseguradora().getId().equals(p.getAseguradora().getId())) {
+            entity.setFecha(new Date());
+            entity.setSiniestro(s);
+            entity.setPerito(p);
+            siniestroFacadeREST.edit(s);
+            super.create(entity);
+        }
     }
 }

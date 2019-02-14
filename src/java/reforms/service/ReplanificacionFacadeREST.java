@@ -6,7 +6,9 @@
 package reforms.service;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
+import javax.ejb.EJB;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
@@ -30,6 +32,9 @@ import reforms.jpa.Siniestro;
 @Stateless
 @Path("replanificacion")
 public class ReplanificacionFacadeREST extends AbstractFacade<Replanificacion> {
+
+    @EJB
+    private SiniestroFacadeREST siniestroFacadeREST;
 
     @PersistenceContext(unitName = "ReForms_ProviderPU")
     private EntityManager em;
@@ -109,5 +114,20 @@ public class ReplanificacionFacadeREST extends AbstractFacade<Replanificacion> {
             res.add(aux);
         }
         return res;
+    }
+    
+    @POST
+    @Path("replanificarSiniestro")
+    @Consumes({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
+    public void replanificarSiniestro(Replanificacion entity) {
+        Siniestro s = siniestroFacadeREST.find(entity.getSiniestro().getId());
+        if (s != null && s.getEstado() < 4 && s.getFechaRegistro().before(entity.getFecha())) {
+            Date actual = s.getFechaRegistro();
+            s.setFechaRegistro(entity.getFecha());
+            entity.setFecha(actual);
+            entity.setSiniestro(s);
+            siniestroFacadeREST.edit(s);
+            super.create(entity);
+        }
     }
 }
