@@ -5,6 +5,7 @@
  */
 package reforms.service;
 
+import java.util.ArrayList;
 import java.util.List;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
@@ -19,7 +20,11 @@ import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
+import reforms.jpa.Aseguradora;
+import reforms.jpa.Cliente;
+import reforms.jpa.Localidad;
 import reforms.jpa.Poliza;
+import reforms.jpa.Propiedad;
 
 /**
  *
@@ -89,27 +94,7 @@ public class PolizaFacadeREST extends AbstractFacade<Poliza> {
         return em;
     }
     
-    @GET
-    @Path("buscarPolizaPorNumeroPoliza/{numero}")
-    @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
-    public List<Poliza> buscarPolizaPorNumeroPoliza(@PathParam("numero") String numero) {
-        Query q = em.createNamedQuery("Poliza.buscarPolizaPorNumeroPoliza");
-        q.setParameter("numero", numero);
-        List<Poliza> lp = q.getResultList();
-        return lp.isEmpty() ? null : lp;
-    }
-    
-    @GET
-    @Path("buscarPolizaPorNumeroPolizaA/{aseguradoraId}/{numero}")
-    @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
-    public Poliza buscarPolizaPorNumeroPolizaA(@PathParam("aseguradoraId") Integer aseguradoraId, @PathParam("numero") String numero) {
-        Query q = em.createNamedQuery("Poliza.buscarPolizaPorNumeroPolizaA");
-        q.setParameter("aseguradoraId", aseguradoraId);
-        q.setParameter("numero", numero);
-        List<Poliza> lp = q.getResultList();
-        return lp.isEmpty() ? null : lp.get(0);
-    }
-    
+    // Antiguo
     @GET
     @Path("buscarPolizaPorCliente/{clienteId}")
     @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
@@ -128,5 +113,52 @@ public class PolizaFacadeREST extends AbstractFacade<Poliza> {
         q.setParameter("propiedadId", propiedadId);
         List<Poliza> lp = q.getResultList();
         return lp.isEmpty() ? null : lp;
+    }
+    
+    // Nuevo
+    @GET
+    @Path("buscarPolizaPorNumeroPoliza/{aseguradoraId}/{numero}")
+    @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
+    public List<Poliza> buscarPolizaPorNumeroPoliza(@PathParam("aseguradoraId") Integer aseguradoraId, @PathParam("numero") String numero) {
+        Query q = em.createNamedQuery("Poliza.buscarPolizaPorNumeroPoliza");
+        q.setParameter("aseguradoraId", aseguradoraId);
+        q.setParameter("numero", numero);
+        List<Poliza> lp = q.getResultList(),
+                     res = new ArrayList<>();
+        if (!lp.isEmpty()) {
+            Poliza p = lp.get(0),
+                   aux = new Poliza();
+            aux.setId(p.getId());
+            aux.setNumero(p.getNumero());
+            Cliente c = new Cliente();
+            c.setId(p.getCliente().getId());
+            c.setNombre(p.getCliente().getNombre());
+            c.setApellido1(p.getCliente().getApellido1());
+            c.setApellido2(p.getCliente().getApellido2());
+            c.setTelefono1(p.getCliente().getTelefono1());
+            c.setTelefono2(p.getCliente().getTelefono2());
+            c.setTipo(p.getCliente().getTipo());
+            c.setObservaciones(p.getCliente().getObservaciones());
+            Aseguradora a = new Aseguradora();
+            a.setId(p.getCliente().getAseguradora().getId());
+            c.setAseguradora(a);
+            aux.setCliente(c);
+            Propiedad pr = new Propiedad();
+            pr.setId(p.getPropiedad().getId());
+            pr.setDireccion(p.getPropiedad().getDireccion());
+            pr.setNumero(p.getPropiedad().getNumero());
+            pr.setPiso(p.getPropiedad().getPiso());
+            pr.setGeolat(p.getPropiedad().getGeolat());
+            pr.setGeolong(p.getPropiedad().getGeolong());
+            pr.setObservaciones(p.getPropiedad().getObservaciones());
+            Localidad l = new Localidad();
+            l.setId(p.getPropiedad().getLocalidad().getId());
+            l.setNombre(p.getPropiedad().getLocalidad().getNombre());
+            l.setCp(p.getPropiedad().getLocalidad().getCp());
+            pr.setLocalidad(l);
+            aux.setPropiedad(pr);
+            res.add(aux);
+        }
+        return res;
     }
 }

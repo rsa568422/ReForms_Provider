@@ -5,6 +5,7 @@
  */
 package reforms.service;
 
+import java.util.ArrayList;
 import java.util.List;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
@@ -19,6 +20,7 @@ import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
+import reforms.jpa.Aseguradora;
 import reforms.jpa.Cliente;
 
 /**
@@ -89,6 +91,38 @@ public class ClienteFacadeREST extends AbstractFacade<Cliente> {
         return em;
     }
     
+    @GET
+    @Path("buscarCoincidenciasCliente/{idAseguradora}/{nombre}/{apellido1}/{apellido2:.*}/{telefono1}/{telefono2:.*}")
+    @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
+    public List<Cliente> buscarClientePorNombreMasTelefonoA(@PathParam("idAseguradora") Integer idAseguradora, @PathParam("nombre") String nombre, @PathParam("apellido1") String apellido1, @PathParam("apellido2") String apellido2, @PathParam("telefono1") String telefono1, @PathParam("telefono2") String telefono2) {
+        Query q = em.createNamedQuery("Cliente.buscarCoincidenciasCliente");
+        q.setParameter("idAseguradora", idAseguradora);
+        q.setParameter("nombre", nombre);
+        q.setParameter("apellido1", apellido1);
+        q.setParameter("apellido2", apellido2);
+        q.setParameter("telefono1", telefono1);
+        q.setParameter("telefono2", telefono2);
+        List<Cliente> lc = q.getResultList(),
+                      res = new ArrayList<>();
+        for (Cliente c : lc) {
+            Cliente aux = new Cliente();
+            aux.setId(c.getId());
+            aux.setNombre(c.getNombre());
+            aux.setApellido1(c.getApellido1());
+            aux.setApellido2(c.getApellido2());
+            aux.setTelefono1(c.getTelefono1());
+            aux.setTelefono2(c.getTelefono2());
+            aux.setTipo(c.getTipo());
+            Aseguradora a = new Aseguradora();
+            a.setId(c.getAseguradora().getId());
+            a.setNombre(c.getAseguradora().getNombre());
+            aux.setAseguradora(a);
+            res.add(aux);
+        }
+        return res;
+    }
+    
+    // PARA BORRAR
     @GET
     @Path("buscarClientePorTelefono/{telefono}")
     @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})

@@ -121,6 +121,7 @@ public class TareaFacadeREST extends AbstractFacade<Tarea> {
             Aseguradora aaux = new Aseguradora();
             aaux.setId(t.getTrabajo().getAseguradora().getId());
             taux.setAseguradora(aaux);
+            taux.setId(t.getTrabajo().getId());
             taux.setCantidadMed(t.getTrabajo().getCantidadMed());
             taux.setCantidadMin(t.getTrabajo().getCantidadMin());
             taux.setPrecioMed(t.getTrabajo().getPrecioMed());

@@ -5,6 +5,7 @@
  */
 package reforms.service;
 
+import java.util.ArrayList;
 import java.util.List;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
@@ -19,6 +20,7 @@ import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
+import reforms.jpa.Localidad;
 import reforms.jpa.Propiedad;
 
 /**
@@ -89,6 +91,37 @@ public class PropiedadFacadeREST extends AbstractFacade<Propiedad> {
         return em;
     }
     
+    @GET
+    @Path("buscarCoincidenciasPropiedad/{cp}/{direccion}/{numero}/{piso:.*}")
+    @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
+    public List<Propiedad> buscarCoincidenciasPropiedad(@PathParam("cp") String cp, @PathParam("direccion") String direccion, @PathParam("numero") Integer numero, @PathParam("piso") String piso) {
+        Query q = em.createNamedQuery("Propiedad.buscarCoincidenciasPropiedad");
+        q.setParameter("cp", cp);
+        q.setParameter("direccion", direccion);
+        q.setParameter("numero", numero);
+        q.setParameter("piso", piso);
+        List<Propiedad> lp = q.getResultList(),
+                        res = new ArrayList<>();
+        for (Propiedad p : lp) {
+            Propiedad aux = new Propiedad();
+            aux.setId(p.getId());
+            aux.setDireccion(p.getDireccion());
+            aux.setNumero(p.getNumero());
+            aux.setPiso(p.getPiso());
+            aux.setObservaciones(p.getObservaciones());
+            aux.setGeolat(p.getGeolat());
+            aux.setGeolong(p.getGeolong());
+            Localidad l = new Localidad();
+            l.setId(p.getLocalidad().getId());
+            l.setCp(p.getLocalidad().getCp());
+            l.setNombre(p.getLocalidad().getNombre());
+            aux.setLocalidad(l);
+            res.add(aux);
+        }
+        return res;
+    }
+    
+    // PARA BORRAR
     @GET
     @Path("buscarPropiedadPorDireccionCompleta/{cp}/{direccion}/{numero}/{piso:.*}")
     @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})

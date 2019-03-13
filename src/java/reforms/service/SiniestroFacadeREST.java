@@ -615,6 +615,7 @@ public class SiniestroFacadeREST extends AbstractFacade<Siniestro> {
                 tareaFacadeREST.edit(aux);
             }
             s.setEstado(6);
+            s.setAlbaran(entity.getAlbaran());
             edit(idSiniestro, s);
         }
     }
