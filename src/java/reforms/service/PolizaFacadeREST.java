@@ -96,16 +96,6 @@ public class PolizaFacadeREST extends AbstractFacade<Poliza> {
     
     // Antiguo
     @GET
-    @Path("buscarPolizaPorCliente/{clienteId}")
-    @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
-    public List<Poliza> buscarPolizaPorCliente(@PathParam("clienteId") Integer clienteId) {
-        Query q = em.createNamedQuery("Poliza.buscarPolizaPorCliente");
-        q.setParameter("clienteId", clienteId);
-        List<Poliza> lp = q.getResultList();
-        return lp.isEmpty() ? null : lp;
-    }
-    
-    @GET
     @Path("buscarPolizaPorPropiedad/{propiedadId}")
     @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
     public List<Poliza> buscarPolizaPorPropiedad(@PathParam("propiedadId") Integer propiedadId) {
@@ -157,6 +147,37 @@ public class PolizaFacadeREST extends AbstractFacade<Poliza> {
             l.setCp(p.getPropiedad().getLocalidad().getCp());
             pr.setLocalidad(l);
             aux.setPropiedad(pr);
+            res.add(aux);
+        }
+        return res;
+    }
+    
+    @GET
+    @Path("buscarPolizaPorCliente/{clienteId}")
+    @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
+    public List<Poliza> buscarPolizaPorCliente(@PathParam("clienteId") Integer clienteId) {
+        Query q = em.createNamedQuery("Poliza.buscarPolizaPorCliente");
+        q.setParameter("clienteId", clienteId);
+        List<Poliza> lp = q.getResultList(),
+                     res = new ArrayList<>();
+        for (Poliza p : lp) {
+            Poliza aux = new Poliza();
+            aux.setId(p.getId());
+            aux.setNumero(p.getNumero());
+            Cliente c = new Cliente();
+            c.setId(p.getCliente().getId());
+            c.setNombre(p.getCliente().getNombre());
+            c.setApellido1(p.getCliente().getApellido1());
+            c.setApellido2(p.getCliente().getApellido2());
+            c.setTelefono1(p.getCliente().getTelefono1());
+            c.setTelefono2(p.getCliente().getTelefono2());
+            c.setTipo(p.getCliente().getId());
+            c.setObservaciones(p.getCliente().getObservaciones());
+            Aseguradora a = new Aseguradora();
+            a.setId(p.getCliente().getAseguradora().getId());
+            a.setNombre(p.getCliente().getAseguradora().getNombre());
+            c.setAseguradora(a);
+            aux.setCliente(c);
             res.add(aux);
         }
         return res;

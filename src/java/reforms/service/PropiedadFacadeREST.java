@@ -121,6 +121,21 @@ public class PropiedadFacadeREST extends AbstractFacade<Propiedad> {
         return res;
     }
     
+    // Nuevo
+    @GET
+    @Path("relacionesPropiedad/{idPropiedad}")
+    @Produces(MediaType.TEXT_PLAIN)
+    public String relacionesPropiedad(@PathParam("idPropiedad") Integer idPropiedad) {
+        Propiedad p = find(idPropiedad);
+        String salida;
+        if (p != null) {
+            salida = "[" + !p.getPolizas().isEmpty() + ", " + !p.getSiniestros().isEmpty() + ", " + !p.getTrabajadores().isEmpty() + "]";
+        } else {
+            salida = "[false, false, false]";
+        }
+        return salida;
+    }
+    
     // PARA BORRAR
     @GET
     @Path("buscarPropiedadPorDireccionCompleta/{cp}/{direccion}/{numero}/{piso:.*}")

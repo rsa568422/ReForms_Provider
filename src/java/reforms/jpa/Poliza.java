@@ -38,8 +38,8 @@ import javax.xml.bind.annotation.XmlTransient;
     , @NamedQuery(name = "Poliza.findByNumero", query = "SELECT p FROM Poliza p WHERE p.numero = :numero")
     // Consultas diseñadas
     , @NamedQuery(name = "Poliza.buscarPolizaPorNumeroPoliza", query = "SELECT p FROM Poliza p WHERE (p.cliente.aseguradora.id = :aseguradoraId AND p.numero = :numero)")
-    // Consultas antiguas
     , @NamedQuery(name = "Poliza.buscarPolizaPorCliente", query = "SELECT p FROM Poliza p WHERE (p.cliente.id = :clienteId) ORDER BY p.cliente.aseguradora.nombre, p.numero")
+    // Consultas antiguas
     , @NamedQuery(name = "Poliza.buscarPolizaPorPropiedad", query = "SELECT p FROM Poliza p WHERE (p.propiedad.id = :propiedadId) ORDER BY p.cliente.aseguradora.nombre, p.numero")})
 public class Poliza implements Serializable {
 
