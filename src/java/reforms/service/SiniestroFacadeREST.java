@@ -23,6 +23,7 @@ import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
+import reforms.jpa.Adjunto;
 import reforms.jpa.Aseguradora;
 import reforms.jpa.Cliente;
 import reforms.jpa.Localidad;
@@ -283,6 +284,16 @@ public class SiniestroFacadeREST extends AbstractFacade<Siniestro> {
                 entity.getAfectado().setId(q.getFirstResult());
             }
             super.create(entity);
+        }
+    }
+
+    @DELETE
+    @Path("borrarSiniestro/{id}")
+    public void borrarSiniestro(@PathParam("id") Integer id) {
+        Siniestro s = super.find(id);
+        if (s != null && s.getEstado() < 4 && s.getPoliza() != null) {
+            super.remove(s);
+            recursoFacadeREST.remove(s.getOriginal());
         }
     }
     

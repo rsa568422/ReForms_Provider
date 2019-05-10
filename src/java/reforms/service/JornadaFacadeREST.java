@@ -135,4 +135,29 @@ public class JornadaFacadeREST extends AbstractFacade<Jornada> {
         List<Jornada> lj = q.getResultList();
         return lj.isEmpty() ? null : lj;
     }
+    
+    @POST
+    @Path("registrarJornada")
+    @Consumes({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
+    public void Jornada(Jornada entity) {
+        if (entity.getGerente().getGerente() == 1) {
+            if (entity.getObservaciones() != null && entity.getObservaciones().isEmpty()) {
+                entity.setObservaciones(null);
+            }
+            super.create(entity);
+        }
+    }
+
+    @PUT
+    @Path("actualizarJornada/{id}")
+    @Consumes({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
+    public void actualizarJornada(@PathParam("id") Integer id, Jornada entity) {
+        Jornada j = super.find(id);
+        if (entity.getObservaciones() != null && !entity.getObservaciones().isEmpty()) {
+            j.setObservaciones(entity.getObservaciones());
+        } else if (j.getObservaciones() != null) {
+            j.setObservaciones(null);
+        }
+        super.edit(j);
+    }
 }

@@ -174,11 +174,33 @@ public class TareaFacadeREST extends AbstractFacade<Tarea> {
         }
     }
 
+    @DELETE
+    @Path("borrarTarea/{id}")
+    public void borrarTarea(@PathParam("id") Integer id) {
+        Tarea t = super.find(id);
+        if (t != null && t.getSiniestro() != null && t.getSiniestro().getEstado() < 4) {
+            Siniestro s = t.getSiniestro();
+            if (t.getTareascitas() != null && !t.getTareascitas().isEmpty()) {
+                // borrar citas
+            }
+            if (t.getAmpliacion() != null || (t.getTareas() != null && !t.getTareas().isEmpty())) {
+                // borrar ampliaciones
+            }
+            super.remove(t);
+            Integer e = siniestroFacadeREST.calcularEstado(s.getId());
+            if (!s.getEstado().equals(e)) {
+                s = siniestroFacadeREST.find(t.getSiniestro().getId());
+                s.setEstado(e);
+                siniestroFacadeREST.edit(s);
+            }
+        }
+    }
+
     @PUT
     @Path("actualizarTarea/{id}")
     @Consumes({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
     public void actualizarTarea(@PathParam("id") Integer id, Tarea entity) {
-        Tarea t = find(id);
+        Tarea t = super.find(id);
         if (t != null && t.getSiniestro().getEstado() < 4) {
             boolean estado = !t.getEstado().equals(entity.getEstado());
             t.setObservaciones(entity.getObservaciones());
