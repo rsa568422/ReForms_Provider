@@ -31,7 +31,9 @@ import javax.xml.bind.annotation.XmlRootElement;
 @NamedQueries({
     // Consultas por defecto
       @NamedQuery(name = "Conductor.findAll", query = "SELECT c FROM Conductor c")
-    , @NamedQuery(name = "Conductor.findById", query = "SELECT c FROM Conductor c WHERE c.id = :id")})
+    , @NamedQuery(name = "Conductor.findById", query = "SELECT c FROM Conductor c WHERE c.id = :id")
+    // Consultas diseñadas
+    , @NamedQuery(name = "Conductor.obtenerConductorPorGrupo", query = "SELECT c FROM Conductor c JOIN c.grupo g WHERE (g.id = :idGrupo)")})
 public class Conductor implements Serializable {
 
     private static final long serialVersionUID = 1L;

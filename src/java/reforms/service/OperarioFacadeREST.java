@@ -5,6 +5,7 @@
  */
 package reforms.service;
 
+import java.util.ArrayList;
 import java.util.List;
 import javax.ejb.EJB;
 import javax.ejb.Stateless;
@@ -133,5 +134,28 @@ public class OperarioFacadeREST extends AbstractFacade<Operario> {
         o.setPass(entity.getPass());
         o.setCarnet(entity.getCarnet());
         super.edit(o);
+    }
+    
+    @GET
+    @Path("obtenerOperarioDisponiblePorJornada/{idJornada}")
+    @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
+    public List<Operario> obtenerOperarioDisponiblePorJornada(@PathParam("idJornada") Integer idJornada) {
+        Query q = em.createNamedQuery("Operario.obtenerOperarioDisponiblePorJornada");
+        q.setParameter("idJornada", idJornada);
+        List<Operario> lo = q.getResultList(),
+                       res = new ArrayList<>();
+        for (Operario o : lo) {
+            Operario aux = new Operario();
+            aux.setId(o.getId());
+            aux.setCarnet(o.getCarnet());
+            Trabajador t = new Trabajador();
+            t.setId(o.getTrabajador().getId());
+            t.setNombre(o.getTrabajador().getNombre());
+            t.setApellido1(o.getTrabajador().getApellido1());
+            t.setApellido2(o.getTrabajador().getApellido2());
+            aux.setTrabajador(t);
+            res.add(aux);
+        }
+        return res;
     }
 }

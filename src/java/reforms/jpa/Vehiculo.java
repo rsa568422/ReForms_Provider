@@ -44,7 +44,8 @@ import javax.xml.bind.annotation.XmlTransient;
     , @NamedQuery(name = "Vehiculo.findByKm", query = "SELECT v FROM Vehiculo v WHERE v.km = :km")
     , @NamedQuery(name = "Vehiculo.findByObservaciones", query = "SELECT v FROM Vehiculo v WHERE v.observaciones = :observaciones")
     // Consultas diseñadas
-    , @NamedQuery(name = "Vehiculo.obtenerVehiculos", query = "SELECT v FROM Vehiculo v ORDER BY v.marca, v.modelo, v.matricula")})
+    , @NamedQuery(name = "Vehiculo.obtenerVehiculos", query = "SELECT v FROM Vehiculo v ORDER BY v.marca, v.modelo, v.matricula")
+    , @NamedQuery(name = "Vehiculo.obtenerVehiculoDisponiblePorJornada", query = "SELECT v FROM Vehiculo v WHERE (v NOT IN (SELECT v2 FROM Jornada j JOIN j.grupos g JOIN g.conductor c JOIN c.vehiculo v2 WHERE (j.id = :idJornada))) ORDER BY v.matricula")})
 public class Vehiculo implements Serializable {
 
     private static final long serialVersionUID = 1L;

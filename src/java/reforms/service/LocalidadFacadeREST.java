@@ -98,4 +98,11 @@ public class LocalidadFacadeREST extends AbstractFacade<Localidad> {
         List<Localidad> ll = q.getResultList();
         return ll.isEmpty() ? null : ll.get(0);
     }
+    
+    public List<Localidad> obtenerLocalidadPorGrupo(@PathParam("idGrupo") Integer idGrupo) {
+        Query q = em.createNamedQuery("Localidad.obtenerLocalidadPorGrupo");
+        q.setParameter("idGrupo", idGrupo);
+        List<Localidad> ll = q.getResultList();
+        return ll;
+    }
 }

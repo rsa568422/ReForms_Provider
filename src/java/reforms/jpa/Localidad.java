@@ -36,7 +36,8 @@ import javax.xml.bind.annotation.XmlTransient;
     , @NamedQuery(name = "Localidad.findByNombre", query = "SELECT l FROM Localidad l WHERE l.nombre = :nombre")
     , @NamedQuery(name = "Localidad.findByCp", query = "SELECT l FROM Localidad l WHERE l.cp = :cp")
     // Consultas diseñadas
-    , @NamedQuery(name = "Localidad.buscarLocalidadPorCodigoPostal", query = "SELECT l FROM Localidad l WHERE (l.cp = :cp) ORDER BY l.nombre")})
+    , @NamedQuery(name = "Localidad.buscarLocalidadPorCodigoPostal", query = "SELECT l FROM Localidad l WHERE (l.cp = :cp) ORDER BY l.nombre")
+    , @NamedQuery(name = "Localidad.obtenerLocalidadPorGrupo", query = "SELECT l FROM Grupo g JOIN g.citas c JOIN c.evento e JOIN e.siniestro s JOIN s.poliza p JOIN p.propiedad pr JOIN pr.localidad l WHERE (g.id = :idGrupo) ORDER BY l.nombre")})
 public class Localidad implements Serializable {
 
     private static final long serialVersionUID = 1L;

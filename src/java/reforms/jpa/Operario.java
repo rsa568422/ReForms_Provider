@@ -41,7 +41,8 @@ import javax.xml.bind.annotation.XmlTransient;
     , @NamedQuery(name = "Operario.findByEmail", query = "SELECT o FROM Operario o WHERE o.email = :email")
     , @NamedQuery(name = "Operario.findByPass", query = "SELECT o FROM Operario o WHERE o.pass = :pass")
     // Consultas diseñadas
-    , @NamedQuery(name = "Operario.buscarOperarioPorTrabajador", query = "SELECT o FROM Operario o WHERE o.trabajador.id = :trabajadorId")})
+    , @NamedQuery(name = "Operario.buscarOperarioPorTrabajador", query = "SELECT o FROM Operario o WHERE o.trabajador.id = :trabajadorId")
+    , @NamedQuery(name = "Operario.obtenerOperarioDisponiblePorJornada", query = "SELECT o FROM Operario o WHERE (o NOT IN (SELECT o2 FROM Jornada j JOIN j.grupos g JOIN g.integrantes i JOIN i.operario o2 WHERE (j.id = :idJornada))) ORDER BY o.carnet DESC, o.trabajador.nombre, o.trabajador.apellido1, o.trabajador.apellido2")})
 public class Operario implements Serializable {
 
     private static final long serialVersionUID = 1L;

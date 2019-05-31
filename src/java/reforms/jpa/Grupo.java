@@ -36,7 +36,9 @@ import javax.xml.bind.annotation.XmlTransient;
     // Consultas por defecto
       @NamedQuery(name = "Grupo.findAll", query = "SELECT g FROM Grupo g")
     , @NamedQuery(name = "Grupo.findById", query = "SELECT g FROM Grupo g WHERE g.id = :id")
-    , @NamedQuery(name = "Grupo.findByObservaciones", query = "SELECT g FROM Grupo g WHERE g.observaciones = :observaciones")})
+    , @NamedQuery(name = "Grupo.findByObservaciones", query = "SELECT g FROM Grupo g WHERE g.observaciones = :observaciones")
+    // Consultas diseñadas
+    , @NamedQuery(name = "Grupo.buscarGrupoPorJornada", query = "SELECT g FROM Grupo g WHERE g.jornada.id = :idJornada ORDER BY g.id")})
 public class Grupo implements Serializable {
 
     private static final long serialVersionUID = 1L;

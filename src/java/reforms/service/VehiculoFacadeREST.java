@@ -5,6 +5,7 @@
  */
 package reforms.service;
 
+import java.util.ArrayList;
 import java.util.List;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
@@ -117,5 +118,25 @@ public class VehiculoFacadeREST extends AbstractFacade<Vehiculo> {
         v.setKm(entity.getKm());
         v.setObservaciones(entity.getObservaciones());
         super.edit(v);
+    }
+    
+    @GET
+    @Path("obtenerVehiculoDisponiblePorJornada/{idJornada}")
+    @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
+    public List<Vehiculo> obtenerVehiculoDisponiblePorJornada(@PathParam("idJornada") Integer idJornada) {
+        Query q = em.createNamedQuery("Vehiculo.obtenerVehiculoDisponiblePorJornada");
+        q.setParameter("idJornada", idJornada);
+        List<Vehiculo> lv = q.getResultList(),
+                       res = new ArrayList<>();
+        for (Vehiculo v : lv) {
+            Vehiculo aux = new Vehiculo();
+            aux.setId(v.getId());
+            aux.setMatricula(v.getMatricula());
+            aux.setMarca(v.getMarca());
+            aux.setModelo(v.getModelo());
+            aux.setObservaciones(v.getObservaciones());
+            res.add(aux);
+        }
+        return res;
     }
 }

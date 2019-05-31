@@ -30,7 +30,9 @@ import javax.xml.bind.annotation.XmlRootElement;
 @NamedQueries({
     // Consultas por defecto
       @NamedQuery(name = "Integrante.findAll", query = "SELECT i FROM Integrante i")
-    , @NamedQuery(name = "Integrante.findById", query = "SELECT i FROM Integrante i WHERE i.id = :id")})
+    , @NamedQuery(name = "Integrante.findById", query = "SELECT i FROM Integrante i WHERE i.id = :id")
+    // Consultas diseñadas
+    , @NamedQuery(name = "Integrante.obtenerIntegrantePorGrupo", query = "SELECT i FROM Integrante i JOIN i.grupo g WHERE (g.id = :idGrupo) ORDER BY i.operario.carnet DESC, i.operario.trabajador.nombre, i.operario.trabajador.apellido1, i.operario.trabajador.apellido2")})
 public class Integrante implements Serializable {
 
     private static final long serialVersionUID = 1L;
