@@ -39,7 +39,9 @@ import javax.xml.bind.annotation.XmlTransient;
       @NamedQuery(name = "Evento.findAll", query = "SELECT e FROM Evento e")
     , @NamedQuery(name = "Evento.findById", query = "SELECT e FROM Evento e WHERE e.id = :id")
     , @NamedQuery(name = "Evento.findByFecha", query = "SELECT e FROM Evento e WHERE e.fecha = :fecha")
-    , @NamedQuery(name = "Evento.findByDescripcion", query = "SELECT e FROM Evento e WHERE e.descripcion = :descripcion")})
+    , @NamedQuery(name = "Evento.findByDescripcion", query = "SELECT e FROM Evento e WHERE e.descripcion = :descripcion")
+    // Consultas diseñadas
+    , @NamedQuery(name = "Evento.obtenerEventos", query = "SELECT e FROM Evento e WHERE (e.siniestro.id = :idSiniestro) ORDER BY e.fecha DESC, e.id DESC")})
 public class Evento implements Serializable {
 
     private static final long serialVersionUID = 1L;
@@ -48,7 +50,7 @@ public class Evento implements Serializable {
     @Basic(optional = false)
     @Column(name = "id")
     private Integer id;
-    @Column(name = "fecha")
+    @Column(name = "fecha", nullable = false)
     @Temporal(TemporalType.DATE)
     private Date fecha;
     @Column(name = "descripcion", length = 250)

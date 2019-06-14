@@ -31,7 +31,9 @@ import javax.xml.bind.annotation.XmlRootElement;
     // Consultas por defecto
       @NamedQuery(name = "Llamada.findAll", query = "SELECT l FROM Llamada l")
     , @NamedQuery(name = "Llamada.findById", query = "SELECT l FROM Llamada l WHERE l.id = :id")
-    , @NamedQuery(name = "Llamada.findByTipo", query = "SELECT l FROM Llamada l WHERE l.tipo = :tipo")})
+    , @NamedQuery(name = "Llamada.findByTipo", query = "SELECT l FROM Llamada l WHERE l.tipo = :tipo")
+    // Consultas diseñadas
+    , @NamedQuery(name = "Llamada.obtenerLlamadas", query = "SELECT l FROM Llamada l WHERE (l.evento.siniestro.id = :idSiniestro) ORDER BY l.evento.fecha DESC, l.id DESC")})
 public class Llamada implements Serializable {
 
     private static final long serialVersionUID = 1L;

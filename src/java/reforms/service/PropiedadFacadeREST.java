@@ -163,4 +163,17 @@ public class PropiedadFacadeREST extends AbstractFacade<Propiedad> {
         List<Propiedad> lp = q.getResultList();
         return lp.isEmpty() ? null : lp;
     }
+    
+    @GET
+    @Path("puntos")
+    @Produces({MediaType.TEXT_PLAIN})
+    public String puntos() {
+        Query q = em.createNamedQuery("Propiedad.puntos");
+        List<Propiedad> lp = q.getResultList();
+        String salida = "";
+        for (Propiedad p : lp) {
+            salida += p.getGeolat() + ", " + p.getGeolong() + "\n";
+        }
+        return salida;
+    }
 }

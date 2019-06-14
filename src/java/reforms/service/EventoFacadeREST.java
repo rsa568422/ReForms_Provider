@@ -5,10 +5,12 @@
  */
 package reforms.service;
 
+import java.util.ArrayList;
 import java.util.List;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
+import javax.persistence.Query;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.DELETE;
 import javax.ws.rs.GET;
@@ -19,6 +21,9 @@ import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 import reforms.jpa.Evento;
+import reforms.jpa.Operador;
+import reforms.jpa.Siniestro;
+import reforms.jpa.Trabajador;
 
 /**
  *
@@ -88,4 +93,38 @@ public class EventoFacadeREST extends AbstractFacade<Evento> {
         return em;
     }
     
+    private Evento normalizar_evento(Evento e) {
+        Evento eaux = new Evento();
+        eaux.setId(e.getId());
+        eaux.setFecha(e.getFecha());
+        eaux.setDescripcion(e.getDescripcion());
+        Operador o = new Operador();
+        o.setId(e.getOperador().getId());
+        o.setGerente(e.getOperador().getGerente());
+        Trabajador t = new Trabajador();
+        t.setId(e.getOperador().getTrabajador().getId());
+        t.setNombre(e.getOperador().getTrabajador().getNombre());
+        t.setApellido1(e.getOperador().getTrabajador().getApellido1());
+        t.setApellido2(e.getOperador().getTrabajador().getApellido2());
+        o.setTrabajador(t);
+        eaux.setOperador(o);
+        Siniestro s = new Siniestro();
+        s.setId(e.getSiniestro().getId());
+        eaux.setSiniestro(s);
+        return eaux;
+    }
+    
+    @GET
+    @Path("obtenerEventos/{idSiniestro}")
+    @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
+    public List<Evento> obtenerEventos(@PathParam("idSiniestro") Integer idSiniestro) {
+        Query q = em.createNamedQuery("Evento.obtenerEventos");
+        q.setParameter("idSiniestro", idSiniestro);
+        List<Evento> le = q.getResultList(),
+                      res = new ArrayList<>();
+        for (Evento e : le) {
+            res.add(normalizar_evento(e));
+        }
+        return res;
+    }
 }

@@ -43,6 +43,7 @@ import javax.xml.bind.annotation.XmlTransient;
     , @NamedQuery(name = "Propiedad.findByGeolong", query = "SELECT p FROM Propiedad p WHERE p.geolong = :geolong")
     // Consultas diseñadas
     , @NamedQuery(name = "Propiedad.buscarCoincidenciasPropiedad", query = "SELECT p FROM Propiedad p WHERE (p.direccion LIKE :direccion AND p.numero = :numero AND (:piso IS NULL OR :piso = '' OR p.piso LIKE :piso) AND p.localidad.cp = :cp) ORDER BY p.localidad.nombre, p.direccion, p.numero, p.piso")
+    , @NamedQuery(name = "Propiedad.puntos", query = "SELECT pr FROM Siniestro s JOIN s.poliza p JOIN p.propiedad pr JOIN pr.localidad l WHERE (s.estado < 5) ORDER BY l.cp")
     // Consultas antiguas
     , @NamedQuery(name = "Propiedad.buscarPropiedadPorDireccionCompleta", query = "SELECT p FROM Propiedad p WHERE (p.direccion LIKE :direccion AND p.numero = :numero AND (p.piso IS NULL OR p.piso LIKE :piso) AND p.localidad.cp = :cp) ORDER BY p.localidad.nombre, p.direccion, p.numero, p.piso")
     , @NamedQuery(name = "Propiedad.buscarPropiedadPorDireccionCompletaA", query = "SELECT p FROM Propiedad p JOIN p.polizas po WHERE (po.cliente.aseguradora.id = :aseguradoraId AND p.direccion LIKE :direccion AND p.numero = :numero AND (p.piso IS NULL OR p.piso LIKE :piso) AND p.localidad.cp = :cp) ORDER BY p.localidad.nombre, p.direccion, p.numero, p.piso")})

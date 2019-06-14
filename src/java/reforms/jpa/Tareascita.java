@@ -30,7 +30,9 @@ import javax.xml.bind.annotation.XmlRootElement;
 @NamedQueries({
     // Consultas por defecto
       @NamedQuery(name = "Tareascita.findAll", query = "SELECT t FROM Tareascita t")
-    , @NamedQuery(name = "Tareascita.findById", query = "SELECT t FROM Tareascita t WHERE t.id = :id")})
+    , @NamedQuery(name = "Tareascita.findById", query = "SELECT t FROM Tareascita t WHERE t.id = :id")
+    // Consultas diseñadas
+    , @NamedQuery(name = "Tareascita.obtenerTareasPorCita", query = "SELECT t FROM Tareascita t WHERE (t.cita.id = :idCita) ORDER BY t.tarea.trabajo.gremio.nombre ASC, t.tarea.trabajo.descripcion ASC")})
 public class Tareascita implements Serializable {
 
     private static final long serialVersionUID = 1L;

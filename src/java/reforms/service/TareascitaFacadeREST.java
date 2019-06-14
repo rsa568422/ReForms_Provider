@@ -5,10 +5,12 @@
  */
 package reforms.service;
 
+import java.util.ArrayList;
 import java.util.List;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
+import javax.persistence.Query;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.DELETE;
 import javax.ws.rs.GET;
@@ -18,7 +20,11 @@ import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
+import reforms.jpa.Cita;
+import reforms.jpa.Grupo;
+import reforms.jpa.Tarea;
 import reforms.jpa.Tareascita;
+import reforms.jpa.Trabajo;
 
 /**
  *
@@ -88,4 +94,35 @@ public class TareascitaFacadeREST extends AbstractFacade<Tareascita> {
         return em;
     }
     
+    @GET
+    @Path("obtenerTareasPorCita/{idCita}")
+    @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
+    public List<Tareascita> obtenerTareasPorCita(@PathParam("idCita") Integer idCita) {
+        Query q = em.createNamedQuery("Tareascita.obtenerTareasPorCita");
+        q.setParameter("idCita", idCita);
+        List<Tareascita> ltc = q.getResultList(),
+                         res = new ArrayList<>();
+        for (Tareascita tc : ltc) {
+            Tareascita aux = new Tareascita();
+            aux.setId(tc.getId());
+            Tarea t = new Tarea();
+            t.setId(tc.getTarea().getId());
+            Trabajo tr = new Trabajo();
+            tr.setId(tc.getTarea().getTrabajo().getId());
+            tr.setCodigo(tc.getTarea().getTrabajo().getCodigo());
+            tr.setDescripcion(tc.getTarea().getTrabajo().getDescripcion());
+            t.setTrabajo(tr);
+            aux.setTarea(t);
+            Cita c = new Cita();
+            c.setId(tc.getCita().getId());
+            c.setHora(tc.getCita().getHora());
+            c.setMinuto(tc.getCita().getMinuto());
+            Grupo g = new Grupo();
+            g.setId(tc.getCita().getGrupo().getId());
+            c.setGrupo(g);
+            aux.setCita(c);
+            res.add(aux);
+        }
+        return res;
+    }
 }
