@@ -7,6 +7,7 @@ package reforms.service;
 
 import java.util.ArrayList;
 import java.util.List;
+import javax.ejb.EJB;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
@@ -21,6 +22,9 @@ import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 import reforms.jpa.Contacto;
+import reforms.jpa.Evento;
+import reforms.jpa.Llamada;
+import reforms.jpa.Siniestro;
 
 /**
  *
@@ -29,6 +33,15 @@ import reforms.jpa.Contacto;
 @Stateless
 @Path("contacto")
 public class ContactoFacadeREST extends AbstractFacade<Contacto> {
+    
+    @EJB
+    private SiniestroFacadeREST siniestroFacadeREST;
+    
+    @EJB
+    private EventoFacadeREST eventoFacadeREST;
+    
+    @EJB
+    private LlamadaFacadeREST llamadaFacadeREST;
 
     @PersistenceContext(unitName = "ReForms_ProviderPU")
     private EntityManager em;
@@ -137,6 +150,24 @@ public class ContactoFacadeREST extends AbstractFacade<Contacto> {
     @DELETE
     @Path("borrarContacto/{id}")
     public void borrarContacto(@PathParam("id") Integer id) {
+        Contacto c = super.find(id);
+        Siniestro s = c.getSiniestro();
+        for (Llamada l : c.getLlamadas()) {
+            Evento e = l.getEvento();
+            String tipo;
+            switch (l.getTipo()) {
+                case 0: tipo = "saliente"; break;
+                case 1: tipo = "entrante"; break;
+                case 2: tipo = "sin respuesta"; break;
+                case 3: tipo = "perdida"; break;
+                default:  tipo = "";
+            }
+            e.setDescripcion("Llamada " + tipo + " (" + l.getContacto().getTelefono1() + ")" + (e.getDescripcion() != null ? ("\n\n" + e.getDescripcion()) : ""));
+            e.getLlamadas().remove(l);
+            eventoFacadeREST.edit(e);
+        }
+        s.getContactos().remove(c);
+        siniestroFacadeREST.edit(s);
         super.remove(super.find(id));
     }
 }

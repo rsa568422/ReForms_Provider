@@ -38,6 +38,7 @@ import javax.xml.bind.annotation.XmlTransient;
     , @NamedQuery(name = "Cita.findByHora", query = "SELECT c FROM Cita c WHERE c.hora = :hora")
     , @NamedQuery(name = "Cita.findByMinuto", query = "SELECT c FROM Cita c WHERE c.minuto = :minuto")
     // Consultas diseñadas
+    , @NamedQuery(name = "Cita.obtenerCitas", query = "SELECT c FROM Cita c WHERE (c.evento.siniestro.id = :idSiniestro) ORDER BY c.grupo.jornada.fecha DESC")
     , @NamedQuery(name = "Cita.obtenerCitaPorGrupo", query = "SELECT c FROM Cita c WHERE (c.grupo.id = :idGrupo) ORDER BY c.hora ASC, c.minuto ASC")
     , @NamedQuery(name = "Cita.obtenerCitaPorEvento", query = "SELECT c FROM Cita c WHERE (c.evento.id = :idEvento) ORDER BY c.hora ASC, c.minuto ASC")})
 public class Cita implements Serializable {

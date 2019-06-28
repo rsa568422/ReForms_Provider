@@ -6,9 +6,8 @@
 package reforms.service;
 
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.List;
-import java.util.Locale;
+import java.util.regex.Pattern;
 import javax.ejb.EJB;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
@@ -41,6 +40,24 @@ import reforms.jpa.Trabajador;
 @Stateless
 @Path("llamada")
 public class LlamadaFacadeREST extends AbstractFacade<Llamada> {
+
+    @EJB
+    private EventoFacadeREST eventoFacadeREST;
+    
+    @EJB
+    private OperadorFacadeREST operadorFacadeREST;
+
+    @EJB
+    private SiniestroFacadeREST siniestroFacadeREST;
+
+    @EJB
+    private ClienteFacadeREST clienteFacadeREST;
+
+    @EJB
+    private ContactoFacadeREST contactoFacadeREST;
+
+    @EJB
+    private PeritoFacadeREST peritoFacadeREST;
 
     @EJB
     private GrupoFacadeREST grupoFacadeREST;
@@ -103,89 +120,6 @@ public class LlamadaFacadeREST extends AbstractFacade<Llamada> {
     @Override
     protected EntityManager getEntityManager() {
         return em;
-    }
-    
-    @GET
-    @Path("obtenerLlamadas/{idSiniestro}")
-    @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
-    public List<Llamada> obtenerLlamadas(@PathParam("idSiniestro") Integer idSiniestro) {
-        Query q = em.createNamedQuery("Llamada.obtenerLlamadas");
-        q.setParameter("idSiniestro", idSiniestro);
-        List<Llamada> ll = q.getResultList(),
-                      res = new ArrayList<>();
-        for (Llamada l : ll) {
-            Llamada aux = new Llamada();
-            aux.setId(l.getId());
-            aux.setTipo(l.getTipo());
-            Evento e = new Evento();
-            e.setId(l.getEvento().getId());
-            e.setFecha(l.getEvento().getFecha());
-            e.setDescripcion(l.getEvento().getDescripcion());
-            Operador o = new Operador();
-            o.setId(l.getEvento().getOperador().getId());
-            o.setGerente(l.getEvento().getOperador().getGerente());
-            Trabajador t = new Trabajador();
-            t.setId(l.getEvento().getOperador().getTrabajador().getId());
-            t.setNombre(l.getEvento().getOperador().getTrabajador().getNombre());
-            t.setApellido1(l.getEvento().getOperador().getTrabajador().getApellido1());
-            t.setApellido2(l.getEvento().getOperador().getTrabajador().getApellido2());
-            o.setTrabajador(t);
-            e.setOperador(o);
-            Siniestro s = new Siniestro();
-            s.setId(l.getEvento().getSiniestro().getId());
-            e.setSiniestro(s);
-            aux.setEvento(e);
-            if (l.getCliente() != null) {
-                Cliente c = new Cliente();
-                c.setId(l.getCliente().getId());
-                c.setNombre(l.getCliente().getNombre());
-                c.setApellido1(l.getCliente().getApellido1());
-                c.setApellido2(l.getCliente().getApellido2());
-                c.setTelefono1(l.getCliente().getTelefono1());
-                c.setTelefono2(l.getCliente().getTelefono2());
-                c.setTipo(l.getCliente().getTipo());
-                c.setObservaciones(l.getCliente().getObservaciones());
-                Aseguradora a = new Aseguradora();
-                a.setId(l.getCliente().getAseguradora().getId());
-                c.setAseguradora(a);
-                aux.setCliente(c);
-            }
-            if (l.getContacto()!= null) {
-                Contacto c = new Contacto();
-                c.setId(l.getContacto().getId());
-                c.setSiniestro(s);
-                c.setNombre(l.getContacto().getNombre());
-                c.setApellido1(l.getContacto().getApellido1());
-                c.setApellido2(l.getContacto().getApellido2());
-                c.setTelefono1(l.getContacto().getTelefono1());
-                c.setTelefono2(l.getContacto().getTelefono2());
-                c.setObservaciones(l.getContacto().getObservaciones());
-                aux.setContacto(c);
-            }
-            if (l.getPerito()!= null) {
-                Perito p = new Perito();
-                p.setId(l.getPerito().getId());
-                p.setNombre(l.getPerito().getNombre());
-                p.setApellido1(l.getPerito().getApellido1());
-                p.setApellido2(l.getPerito().getApellido2());
-                p.setTelefono1(l.getPerito().getTelefono1());
-                p.setTelefono2(l.getPerito().getTelefono2());
-                Aseguradora a = new Aseguradora();
-                a.setId(l.getPerito().getAseguradora().getId());
-                p.setAseguradora(a);
-                aux.setPerito(p);
-            }
-            if (l.getGrupo()!= null) {
-                Grupo g = new Grupo();
-                g.setId(l.getGrupo().getId());
-                String texto = l.getGrupo().getJornada().getFecha().toString().subSequence(0, l.getGrupo().getJornada().getFecha().toString().indexOf('T')).toString();
-                texto = "[Jornada " + texto + "] " + grupoFacadeREST.obtenerNombreGrupo(g.getId());
-                g.setObservaciones(texto);
-                aux.setGrupo(g);
-            }
-            res.add(aux);
-        }
-        return res;
     }
     
     private Evento normalizar_evento(Evento e) {
@@ -267,6 +201,20 @@ public class LlamadaFacadeREST extends AbstractFacade<Llamada> {
     }
     
     @GET
+    @Path("obtenerLlamadas/{idSiniestro}")
+    @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
+    public List<Llamada> obtenerLlamadas(@PathParam("idSiniestro") Integer idSiniestro) {
+        Query q = em.createNamedQuery("Llamada.obtenerLlamadas");
+        q.setParameter("idSiniestro", idSiniestro);
+        List<Llamada> ll = q.getResultList(),
+                      res = new ArrayList<>();
+        for (Llamada l : ll) {
+            res.add(normalizar_llamada(l));
+        }
+        return res;
+    }
+    
+    @GET
     @Path("obtenerEventos/{idSiniestro}")
     @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
     public List<Llamada> obtenerEventos(@PathParam("idSiniestro") Integer idSiniestro) {
@@ -288,5 +236,122 @@ public class LlamadaFacadeREST extends AbstractFacade<Llamada> {
             }
         }
         return res;
+    }
+    
+    private boolean test_info_evento(Evento e) {
+        return e != null && e.getFecha() != null && e.getOperador() != null && e.getOperador().getId() != null && e.getSiniestro()!= null && e.getSiniestro().getId() != null;
+    }
+    
+    private boolean test_info_llamada(Llamada l) {
+        boolean test = l != null && (l.getId() == null || l.getId() == -1) && l.getTipo() >= 0 && l.getTipo() < 4;
+        if (test && test_info_evento(l.getEvento())) {
+            if (l.getCliente() != null) {
+                test = l.getCliente().getId() != null;
+            } else if (l.getContacto() != null) {
+                if (l.getContacto().getId() != null) {
+                    test = true;
+                } else {
+                    test = Pattern.matches("^[69]\\d{8}$", l.getContacto().getTelefono1());
+                    if (l.getContacto().getTelefono2() != null && !l.getContacto().getTelefono2().isEmpty()) {
+                        test &= Pattern.matches("^[69]\\d{8}$", l.getContacto().getTelefono2());
+                    }
+                }
+            } else if (l.getPerito() != null) {
+                test = l.getPerito().getId() != null;
+            } else if (l.getGrupo() != null) {
+                test = l.getGrupo().getId() != null;
+            } else {
+                test = false;
+            }
+        } else {
+            test = false;
+        }
+        return test;
+    }
+    
+    @POST
+    @Path("agregarEvento")
+    @Consumes({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
+    @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
+    public Llamada agregarEvento(Llamada entity) {
+        if (test_info_llamada(entity)) {
+            Operador o = operadorFacadeREST.find(entity.getEvento().getOperador().getId());
+            Siniestro s = siniestroFacadeREST.find(entity.getEvento().getSiniestro().getId());
+            entity.getEvento().setOperador(o);
+            entity.getEvento().setSiniestro(s);
+            if (entity.getEvento().getDescripcion() != null && entity.getEvento().getDescripcion().isEmpty()) {
+                entity.getEvento().setDescripcion(null);
+            }
+            eventoFacadeREST.create(entity.getEvento());
+            Query q = em.createNativeQuery("SELECT LAST_INSERT_ID()");
+            entity.getEvento().setId(q.getFirstResult());
+            o.getEventos().add(entity.getEvento());
+            operadorFacadeREST.edit(o);
+            s.getEventos().add(entity.getEvento());
+            siniestroFacadeREST.edit(s);
+            if (entity.getId() == null) {
+                if (entity.getCliente() != null) {
+                    Cliente c = clienteFacadeREST.find(entity.getCliente().getId());
+                    entity.setCliente(c);
+                    super.create(entity);
+                    entity.setId(q.getFirstResult());
+                    c.getLlamadas().add(entity);
+                    clienteFacadeREST.edit(c);
+                } else if (entity.getContacto() != null) {
+                    if (entity.getContacto().getId() != null) {
+                        Contacto c = contactoFacadeREST.find(entity.getContacto().getId());
+                        entity.setContacto(c);
+                        super.create(entity);
+                        entity.setId(q.getFirstResult());
+                        c.getLlamadas().add(entity);
+                        contactoFacadeREST.edit(c);
+                    } else {
+                        Contacto c = new Contacto();
+                        c.setTelefono1(entity.getContacto().getTelefono1());
+                        if (entity.getContacto().getNombre() != null && !entity.getContacto().getNombre().isEmpty()) {
+                            c.setNombre(entity.getContacto().getNombre());
+                        }
+                        if (entity.getContacto().getApellido1()!= null && !entity.getContacto().getApellido1().isEmpty()) {
+                            c.setApellido1(entity.getContacto().getApellido1());
+                        }
+                        if (entity.getContacto().getApellido2()!= null && !entity.getContacto().getApellido2().isEmpty()) {
+                            c.setApellido2(entity.getContacto().getApellido2());
+                        }
+                        if (entity.getContacto().getTelefono2()!= null && !entity.getContacto().getTelefono2().isEmpty()) {
+                            c.setTelefono2(entity.getContacto().getTelefono2());
+                        }
+                        c.setSiniestro(s);
+                        contactoFacadeREST.create(c);
+                        c.setId(q.getFirstResult());
+                        s.getContactos().add(c);
+                        siniestroFacadeREST.edit(s);
+                        entity.setContacto(c);
+                        super.create(entity);
+                        entity.setId(q.getFirstResult());
+                        c.getLlamadas().add(entity);
+                        contactoFacadeREST.edit(c);
+                    }
+                } else if (entity.getPerito() != null) {
+                    Perito p = peritoFacadeREST.find(entity.getPerito().getId());
+                    entity.setPerito(p);
+                    super.create(entity);
+                    entity.setId(q.getFirstResult());
+                    p.getLlamadas().add(entity);
+                    peritoFacadeREST.edit(p);
+                } else if (entity.getGrupo() != null) {
+                    Grupo g = grupoFacadeREST.find(entity.getGrupo().getId());
+                    entity.setGrupo(g);
+                    super.create(entity);
+                    entity.setId(q.getFirstResult());
+                    g.getLlamadas().add(entity);
+                    grupoFacadeREST.edit(g);
+                }
+                entity.getEvento().getLlamadas().add(entity);
+                eventoFacadeREST.edit(entity.getEvento());
+            }
+        } else {
+            entity = null;
+        }
+        return normalizar_llamada(entity);
     }
 }

@@ -111,13 +111,17 @@ public class CitaFacadeREST extends AbstractFacade<Cita> {
             aux.setMinuto(c.getMinuto());
             Grupo g = new Grupo();
             g.setId(c.getGrupo().getId());
+            String texto = "[" + c.getGrupo().getJornada().getFecha().getTime() + "] " + grupoFacadeREST.obtenerNombreGrupo(g.getId());
+            g.setObservaciones(texto);
+            aux.setGrupo(g);
             aux.setGrupo(g);
             Evento e = new Evento();
             e.setId(c.getEvento().getId());
-            String texto = "[" + c.getEvento().getSiniestro().getNumero() + "] " + c.getEvento().getSiniestro().getPoliza().getPropiedad().getDireccion() + " " + c.getEvento().getSiniestro().getPoliza().getPropiedad().getNumero();
+            texto = "[" + c.getEvento().getSiniestro().getNumero() + "] " + c.getEvento().getSiniestro().getPoliza().getPropiedad().getDireccion() + " " + c.getEvento().getSiniestro().getPoliza().getPropiedad().getNumero();
             if (c.getEvento().getSiniestro().getPoliza().getPropiedad().getPiso() != null && !c.getEvento().getSiniestro().getPoliza().getPropiedad().getPiso().isEmpty()) {
                 texto += ", " + c.getEvento().getSiniestro().getPoliza().getPropiedad().getPiso();
             }
+            texto += ", " + c.getEvento().getSiniestro().getPoliza().getPropiedad().getLocalidad().getNombre() + " [" + c.getEvento().getSiniestro().getPoliza().getPropiedad().getLocalidad().getCp() + "]";
             e.setDescripcion(texto);
             aux.setEvento(e);
             res.add(aux);
@@ -149,6 +153,39 @@ public class CitaFacadeREST extends AbstractFacade<Cita> {
             if (c.getEvento().getSiniestro().getPoliza().getPropiedad().getPiso() != null && !c.getEvento().getSiniestro().getPoliza().getPropiedad().getPiso().isEmpty()) {
                 texto += ", " + c.getEvento().getSiniestro().getPoliza().getPropiedad().getPiso();
             }
+            texto += ", " + c.getEvento().getSiniestro().getPoliza().getPropiedad().getLocalidad().getNombre() + " [" + c.getEvento().getSiniestro().getPoliza().getPropiedad().getLocalidad().getCp() + "]";
+            e.setDescripcion(texto);
+            aux.setEvento(e);
+            res.add(aux);
+        }
+        return res;
+    }
+    
+    @GET
+    @Path("obtenerCitas/{idSiniestro}")
+    @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
+    public List<Cita> obtenerCitas(@PathParam("idSiniestro") Integer idSiniestro) {
+        Query q = em.createNamedQuery("Cita.obtenerCitas");
+        q.setParameter("idSiniestro", idSiniestro);
+        List<Cita> lc = q.getResultList(),
+                        res = new ArrayList<>();
+        for (Cita c : lc) {
+            Cita aux = new Cita();
+            aux.setId(c.getId());
+            aux.setHora(c.getHora());
+            aux.setMinuto(c.getMinuto());
+            Grupo g = new Grupo();
+            g.setId(c.getGrupo().getId());
+            String texto = "[" + c.getGrupo().getJornada().getFecha().getTime() + "] " + grupoFacadeREST.obtenerNombreGrupo(g.getId());
+            g.setObservaciones(texto);
+            aux.setGrupo(g);
+            Evento e = new Evento();
+            e.setId(c.getEvento().getId());
+            texto = "[" + c.getEvento().getSiniestro().getNumero() + "] " + c.getEvento().getSiniestro().getPoliza().getPropiedad().getDireccion() + " " + c.getEvento().getSiniestro().getPoliza().getPropiedad().getNumero();
+            if (c.getEvento().getSiniestro().getPoliza().getPropiedad().getPiso() != null && !c.getEvento().getSiniestro().getPoliza().getPropiedad().getPiso().isEmpty()) {
+                texto += ", " + c.getEvento().getSiniestro().getPoliza().getPropiedad().getPiso();
+            }
+            texto += ", " + c.getEvento().getSiniestro().getPoliza().getPropiedad().getLocalidad().getNombre() + " [" + c.getEvento().getSiniestro().getPoliza().getPropiedad().getLocalidad().getCp() + "]";
             e.setDescripcion(texto);
             aux.setEvento(e);
             res.add(aux);

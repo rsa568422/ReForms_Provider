@@ -228,4 +228,22 @@ public class GrupoFacadeREST extends AbstractFacade<Grupo> {
         }
         return entity;
     }
+    
+    @GET
+    @Path("obtenerGruposPorSiniestro/{idSiniestro}")
+    @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
+    public List<Grupo> obtenerGruposPorSiniestro(@PathParam("idSiniestro") Integer idSiniestro) {
+        Query q = em.createNamedQuery("Grupo.obtenerGruposPorSiniestro");
+        q.setParameter("idSiniestro", idSiniestro);
+        List<Grupo> lg = q.getResultList(),
+                    res = new ArrayList<>();
+        for (Grupo g : lg) {
+            Grupo aux = new Grupo();
+            aux.setId(g.getId());
+            String texto = "[" + g.getJornada().getFecha().getTime() + "] " + obtenerNombreGrupo(g.getId());
+            aux.setObservaciones(texto);
+            res.add(aux);
+        }
+        return res;
+    }
 }

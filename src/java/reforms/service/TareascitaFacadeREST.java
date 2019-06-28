@@ -107,9 +107,11 @@ public class TareascitaFacadeREST extends AbstractFacade<Tareascita> {
             aux.setId(tc.getId());
             Tarea t = new Tarea();
             t.setId(tc.getTarea().getId());
+            t.setCantidad(tc.getTarea().getCantidad());
             Trabajo tr = new Trabajo();
             tr.setId(tc.getTarea().getTrabajo().getId());
             tr.setCodigo(tc.getTarea().getTrabajo().getCodigo());
+            tr.setMedida(tc.getTarea().getTrabajo().getMedida());
             tr.setDescripcion(tc.getTarea().getTrabajo().getDescripcion());
             t.setTrabajo(tr);
             aux.setTarea(t);

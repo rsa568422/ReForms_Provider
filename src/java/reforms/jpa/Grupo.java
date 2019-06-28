@@ -38,7 +38,8 @@ import javax.xml.bind.annotation.XmlTransient;
     , @NamedQuery(name = "Grupo.findById", query = "SELECT g FROM Grupo g WHERE g.id = :id")
     , @NamedQuery(name = "Grupo.findByObservaciones", query = "SELECT g FROM Grupo g WHERE g.observaciones = :observaciones")
     // Consultas diseñadas
-    , @NamedQuery(name = "Grupo.buscarGrupoPorJornada", query = "SELECT g FROM Grupo g WHERE g.jornada.id = :idJornada ORDER BY g.id")})
+    , @NamedQuery(name = "Grupo.buscarGrupoPorJornada", query = "SELECT g FROM Grupo g JOIN g.jornada j WHERE (j.id = :idJornada) ORDER BY g.id")
+    , @NamedQuery(name = "Grupo.obtenerGruposPorSiniestro", query = "SELECT g FROM Grupo g JOIN g.citas c JOIN c.evento e JOIN e.siniestro s WHERE (s.id = :idSiniestro) ORDER BY g.id")})
 public class Grupo implements Serializable {
 
     private static final long serialVersionUID = 1L;

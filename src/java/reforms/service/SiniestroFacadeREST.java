@@ -769,4 +769,14 @@ public class SiniestroFacadeREST extends AbstractFacade<Siniestro> {
             edit(idSiniestro, s);
         }
     }
+    
+    @GET
+    @Path("obtenerSiniestro/{idSiniestro}")
+    @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
+    public Siniestro obtenerSiniestro(@PathParam("idSiniestro") Integer idSiniestro) {
+        Query q = em.createNamedQuery("Siniestro.findById");
+        q.setParameter("id", idSiniestro);
+        List<Siniestro> ls = q.getResultList();
+        return ls.isEmpty() ? null : ls.get(0);
+    }
 }
