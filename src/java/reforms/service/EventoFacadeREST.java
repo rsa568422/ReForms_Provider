@@ -7,6 +7,7 @@ package reforms.service;
 
 import java.util.ArrayList;
 import java.util.List;
+import javax.ejb.EJB;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
@@ -32,6 +33,12 @@ import reforms.jpa.Trabajador;
 @Stateless
 @Path("evento")
 public class EventoFacadeREST extends AbstractFacade<Evento> {
+
+    @EJB
+    private SiniestroFacadeREST siniestroFacadeREST;
+
+    @EJB
+    private OperadorFacadeREST operadorFacadeREST;
 
     @PersistenceContext(unitName = "ReForms_ProviderPU")
     private EntityManager em;
@@ -126,5 +133,41 @@ public class EventoFacadeREST extends AbstractFacade<Evento> {
             res.add(normalizar_evento(e));
         }
         return res;
+    }
+    
+    private boolean test_info_evento(Evento e) {
+        boolean test = e.getFecha() != null && e.getSiniestro()!= null && e.getSiniestro().getId() != null && e.getOperador() != null && e.getOperador().getId() != null;
+        if (test) {
+            Siniestro s = siniestroFacadeREST.find(e.getSiniestro().getId());
+            Operador o = operadorFacadeREST.find(e.getOperador().getId());
+            test = s != null && o != null;
+        }
+        return test;
+    }
+    
+    @POST
+    @Path("agregarEvento")
+    @Consumes({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
+    @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
+    public Evento agregarEvento(Evento entity) {
+        if (test_info_evento(entity)) {
+            Siniestro s = siniestroFacadeREST.find(entity.getSiniestro().getId());
+            Operador o = operadorFacadeREST.find(entity.getOperador().getId());
+            if (s != null && o != null) {
+                entity.setSiniestro(s);
+                entity.setOperador(o);
+                if (entity.getDescripcion() != null && entity.getDescripcion().isEmpty()) {
+                    entity.setDescripcion(null);
+                }
+                super.create(entity);
+                Query q = em.createNativeQuery("SELECT LAST_INSERT_ID()");
+                entity.setId(q.getFirstResult());
+                s.getEventos().add(entity);
+                siniestroFacadeREST.edit(s);
+                o.getEventos().add(entity);
+                operadorFacadeREST.edit(o);
+            }
+        }
+        return entity;
     }
 }

@@ -7,6 +7,7 @@ package reforms.service;
 
 import java.util.ArrayList;
 import java.util.List;
+import javax.ejb.EJB;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
@@ -33,6 +34,15 @@ import reforms.jpa.Trabajo;
 @Stateless
 @Path("tareascita")
 public class TareascitaFacadeREST extends AbstractFacade<Tareascita> {
+
+    @EJB
+    private SiniestroFacadeREST siniestroFacadeREST;
+
+    @EJB
+    private CitaFacadeREST citaFacadeREST;
+
+    @EJB
+    private TareaFacadeREST tareaFacadeREST;
 
     @PersistenceContext(unitName = "ReForms_ProviderPU")
     private EntityManager em;
@@ -126,5 +136,44 @@ public class TareascitaFacadeREST extends AbstractFacade<Tareascita> {
             res.add(aux);
         }
         return res;
+    }
+    
+    @POST
+    @Path("agregarTarea")
+    @Consumes({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
+    @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
+    public Tareascita agregarTarea(Tareascita entity) {
+        if (entity.getCita()!= null && entity.getCita().getId() != null && entity.getTarea() != null && entity.getTarea().getId() != null) {
+            Cita caux = entity.getCita(),
+                 c = citaFacadeREST.find(entity.getCita().getId());
+            Tarea taux = entity.getTarea(),
+                  t = tareaFacadeREST.find(entity.getTarea().getId());
+            if (c != null && t!= null) {
+                entity.setCita(c);
+                entity.setTarea(t);
+                super.create(entity);
+                Query q = em.createNativeQuery("SELECT LAST_INSERT_ID()");
+                entity.setId(q.getFirstResult());
+                
+                c.getTareascitas().add(entity);
+                citaFacadeREST.edit(c);
+                t.getTareascitas().add(entity);
+                if (t.getEstado() == 0) {
+                    t.setEstado(1);
+                    if (t.getSiniestro().getEstado() == 0) {
+                        t.getSiniestro().setEstado(1);
+                        siniestroFacadeREST.edit(t.getSiniestro());
+                    }
+                }
+                tareaFacadeREST.edit(t);
+                entity.setCita(caux);
+                entity.setTarea(taux);
+            } else {
+                entity = null;
+            }
+        } else {
+            entity = null;
+        }
+        return entity;
     }
 }

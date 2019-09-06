@@ -24,6 +24,7 @@ import javax.ws.rs.core.MediaType;
 import reforms.jpa.Cita;
 import reforms.jpa.Evento;
 import reforms.jpa.Grupo;
+import reforms.jpa.Siniestro;
 
 /**
  *
@@ -32,6 +33,12 @@ import reforms.jpa.Grupo;
 @Stateless
 @Path("cita")
 public class CitaFacadeREST extends AbstractFacade<Cita> {
+    
+    @EJB
+    private ReasignacionFacadeREST reasignacionFacadeREST;
+
+    @EJB
+    private EventoFacadeREST eventoFacadeREST;
 
     @EJB
     private GrupoFacadeREST grupoFacadeREST;
@@ -117,6 +124,15 @@ public class CitaFacadeREST extends AbstractFacade<Cita> {
             aux.setGrupo(g);
             Evento e = new Evento();
             e.setId(c.getEvento().getId());
+            Siniestro s = new Siniestro();
+            s.setId(c.getEvento().getSiniestro().getId());
+            s.setAfectado(c.getEvento().getSiniestro().getAfectado());
+            s.setFechaRegistro(c.getEvento().getSiniestro().getFechaRegistro());
+            s.setNumero(c.getEvento().getSiniestro().getNumero());
+            s.setObservaciones(c.getEvento().getSiniestro().getObservaciones());
+            s.setPeritoOriginal(reasignacionFacadeREST.obtenerUltimaReasignacion(s.getId()).getPerito());
+            s.setPoliza(c.getEvento().getSiniestro().getPoliza());
+            e.setSiniestro(s);
             texto = "[" + c.getEvento().getSiniestro().getNumero() + "] " + c.getEvento().getSiniestro().getPoliza().getPropiedad().getDireccion() + " " + c.getEvento().getSiniestro().getPoliza().getPropiedad().getNumero();
             if (c.getEvento().getSiniestro().getPoliza().getPropiedad().getPiso() != null && !c.getEvento().getSiniestro().getPoliza().getPropiedad().getPiso().isEmpty()) {
                 texto += ", " + c.getEvento().getSiniestro().getPoliza().getPropiedad().getPiso();
@@ -191,5 +207,38 @@ public class CitaFacadeREST extends AbstractFacade<Cita> {
             res.add(aux);
         }
         return res;
+    }
+    
+    private boolean test_info_cita(Cita c) {
+        return c != null && c.getHora() >= 0 && c.getHora() < 24 && c.getMinuto() >= 0 && c.getMinuto() < 60 && c.getEvento() != null && c.getEvento().getId() != null && c.getGrupo() != null && c.getGrupo().getId() != null;
+    }
+    
+    @POST
+    @Path("agregarCita")
+    @Consumes({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
+    @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
+    public Cita agregarCita(Cita entity) {
+        if (test_info_cita(entity)) {
+            Evento eaux = entity.getEvento(),
+                   e = eventoFacadeREST.find(eaux.getId());
+            Grupo gaux = entity.getGrupo(),
+                  g = grupoFacadeREST.find(gaux.getId());
+            if (e != null && g != null) {
+                entity.setEvento(e);
+                entity.setGrupo(g);
+                super.create(entity);
+                Query q = em.createNativeQuery("SELECT LAST_INSERT_ID()");
+                entity.setId(q.getFirstResult());
+                e.getCitas().add(entity);
+                eventoFacadeREST.edit(e);
+                g.getCitas().add(entity);
+                grupoFacadeREST.edit(g);
+            } else {
+                entity = null;
+            }
+        } else {
+            entity = null;
+        }
+        return entity;
     }
 }

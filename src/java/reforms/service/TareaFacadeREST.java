@@ -220,4 +220,44 @@ public class TareaFacadeREST extends AbstractFacade<Tarea> {
             }
         }
     }
+    
+    @GET
+    @Path("obtenerTodasLasTareas/{idSiniestro}")
+    @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
+    public List<Tarea> obtenerTodasLasTareas(@PathParam("idSiniestro") Integer idSiniestro) {
+        Query q = em.createNamedQuery("Tarea.obtenerTodasLasTareas");
+        q.setParameter("idSiniestro", idSiniestro);
+        List<Tarea> lt = q.getResultList(),
+                    res = new ArrayList<>();
+        for (Tarea t : lt) {
+            Tarea aux = new Tarea();
+            aux.setId(t.getId());
+            Siniestro s = new Siniestro();
+            s.setId(t.getSiniestro().getId());
+            aux.setSiniestro(s);
+            aux.setEstado(t.getEstado());
+            aux.setObservaciones(t.getObservaciones());
+            Trabajo taux = new Trabajo();
+            Aseguradora aaux = new Aseguradora();
+            aaux.setId(t.getTrabajo().getAseguradora().getId());
+            taux.setAseguradora(aaux);
+            taux.setId(t.getTrabajo().getId());
+            taux.setCantidadMed(t.getTrabajo().getCantidadMed());
+            taux.setCantidadMin(t.getTrabajo().getCantidadMin());
+            taux.setPrecioMed(t.getTrabajo().getPrecioMed());
+            taux.setPrecioMin(t.getTrabajo().getPrecioMin());
+            taux.setPrecioExtra(t.getTrabajo().getPrecioExtra());
+            taux.setCodigo(t.getTrabajo().getCodigo());
+            taux.setDescripcion(t.getTrabajo().getDescripcion());
+            taux.setDificultad(t.getTrabajo().getDificultad());
+            taux.setGremio(t.getTrabajo().getGremio());
+            taux.setMedida(t.getTrabajo().getMedida());
+            aux.setTrabajo(taux);
+            Integer c = t.getCantidad();
+            aux.setCantidad(c);
+            aux.setFechaAmpliacion(t.getFechaAmpliacion());
+            res.add(aux);
+        }
+        return res;
+    }
 }

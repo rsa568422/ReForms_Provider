@@ -238,120 +238,100 @@ public class LlamadaFacadeREST extends AbstractFacade<Llamada> {
         return res;
     }
     
-    private boolean test_info_evento(Evento e) {
-        return e != null && e.getFecha() != null && e.getOperador() != null && e.getOperador().getId() != null && e.getSiniestro()!= null && e.getSiniestro().getId() != null;
-    }
-    
     private boolean test_info_llamada(Llamada l) {
-        boolean test = l != null && (l.getId() == null || l.getId() == -1) && l.getTipo() >= 0 && l.getTipo() < 4;
-        if (test && test_info_evento(l.getEvento())) {
+        boolean test = l.getEvento() != null && l.getEvento().getId() != null && l.getTipo() != null && l.getTipo() >= 0 && l.getTipo() < 4;
+        if (test) {
+            test = eventoFacadeREST.find(l.getEvento().getId()) != null;
             if (l.getCliente() != null) {
-                test = l.getCliente().getId() != null;
+                test &= clienteFacadeREST.find(l.getCliente().getId()) != null;
             } else if (l.getContacto() != null) {
-                if (l.getContacto().getId() != null) {
-                    test = true;
-                } else {
-                    test = Pattern.matches("^[69]\\d{8}$", l.getContacto().getTelefono1());
+                if (l.getContacto().getId() == null) {
+                    test &= Pattern.matches("^[69]\\d{8}$", l.getContacto().getTelefono1());
                     if (l.getContacto().getTelefono2() != null && !l.getContacto().getTelefono2().isEmpty()) {
                         test &= Pattern.matches("^[69]\\d{8}$", l.getContacto().getTelefono2());
                     }
+                } else {
+                    test &= contactoFacadeREST.find(l.getContacto().getId()) != null;
                 }
             } else if (l.getPerito() != null) {
-                test = l.getPerito().getId() != null;
+                test &= peritoFacadeREST.find(l.getPerito().getId()) != null;
             } else if (l.getGrupo() != null) {
-                test = l.getGrupo().getId() != null;
+                test &= grupoFacadeREST.find(l.getGrupo().getId()) != null;
             } else {
                 test = false;
             }
-        } else {
-            test = false;
         }
         return test;
     }
     
     @POST
-    @Path("agregarEvento")
+    @Path("agregarLlamada")
     @Consumes({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
     @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
-    public Llamada agregarEvento(Llamada entity) {
+    public Llamada agregarLlamada(Llamada entity) {
         if (test_info_llamada(entity)) {
-            Operador o = operadorFacadeREST.find(entity.getEvento().getOperador().getId());
-            Siniestro s = siniestroFacadeREST.find(entity.getEvento().getSiniestro().getId());
-            entity.getEvento().setOperador(o);
-            entity.getEvento().setSiniestro(s);
-            if (entity.getEvento().getDescripcion() != null && entity.getEvento().getDescripcion().isEmpty()) {
-                entity.getEvento().setDescripcion(null);
-            }
-            eventoFacadeREST.create(entity.getEvento());
             Query q = em.createNativeQuery("SELECT LAST_INSERT_ID()");
-            entity.getEvento().setId(q.getFirstResult());
-            o.getEventos().add(entity.getEvento());
-            operadorFacadeREST.edit(o);
-            s.getEventos().add(entity.getEvento());
-            siniestroFacadeREST.edit(s);
-            if (entity.getId() == null) {
-                if (entity.getCliente() != null) {
-                    Cliente c = clienteFacadeREST.find(entity.getCliente().getId());
-                    entity.setCliente(c);
+            Evento e = eventoFacadeREST.find(entity.getEvento().getId());
+            entity.setEvento(e);
+            if (entity.getCliente() != null) {
+                Cliente c = clienteFacadeREST.find(entity.getCliente().getId());
+                entity.setCliente(c);
+                super.create(entity);
+                entity.setId(q.getFirstResult());
+                c.getLlamadas().add(entity);
+                clienteFacadeREST.edit(c);
+            } else if (entity.getContacto() != null) {
+                if (entity.getContacto().getId() != null) {
+                    Contacto c = contactoFacadeREST.find(entity.getContacto().getId());
+                    entity.setContacto(c);
                     super.create(entity);
                     entity.setId(q.getFirstResult());
                     c.getLlamadas().add(entity);
-                    clienteFacadeREST.edit(c);
-                } else if (entity.getContacto() != null) {
-                    if (entity.getContacto().getId() != null) {
-                        Contacto c = contactoFacadeREST.find(entity.getContacto().getId());
-                        entity.setContacto(c);
-                        super.create(entity);
-                        entity.setId(q.getFirstResult());
-                        c.getLlamadas().add(entity);
-                        contactoFacadeREST.edit(c);
-                    } else {
-                        Contacto c = new Contacto();
-                        c.setTelefono1(entity.getContacto().getTelefono1());
-                        if (entity.getContacto().getNombre() != null && !entity.getContacto().getNombre().isEmpty()) {
-                            c.setNombre(entity.getContacto().getNombre());
-                        }
-                        if (entity.getContacto().getApellido1()!= null && !entity.getContacto().getApellido1().isEmpty()) {
-                            c.setApellido1(entity.getContacto().getApellido1());
-                        }
-                        if (entity.getContacto().getApellido2()!= null && !entity.getContacto().getApellido2().isEmpty()) {
-                            c.setApellido2(entity.getContacto().getApellido2());
-                        }
-                        if (entity.getContacto().getTelefono2()!= null && !entity.getContacto().getTelefono2().isEmpty()) {
-                            c.setTelefono2(entity.getContacto().getTelefono2());
-                        }
-                        c.setSiniestro(s);
-                        contactoFacadeREST.create(c);
-                        c.setId(q.getFirstResult());
-                        s.getContactos().add(c);
-                        siniestroFacadeREST.edit(s);
-                        entity.setContacto(c);
-                        super.create(entity);
-                        entity.setId(q.getFirstResult());
-                        c.getLlamadas().add(entity);
-                        contactoFacadeREST.edit(c);
+                    contactoFacadeREST.edit(c);
+                } else {
+                    Contacto c = new Contacto();
+                    c.setTelefono1(entity.getContacto().getTelefono1());
+                    if (entity.getContacto().getNombre() != null && !entity.getContacto().getNombre().isEmpty()) {
+                        c.setNombre(entity.getContacto().getNombre());
                     }
-                } else if (entity.getPerito() != null) {
-                    Perito p = peritoFacadeREST.find(entity.getPerito().getId());
-                    entity.setPerito(p);
+                    if (entity.getContacto().getApellido1()!= null && !entity.getContacto().getApellido1().isEmpty()) {
+                        c.setApellido1(entity.getContacto().getApellido1());
+                    }
+                    if (entity.getContacto().getApellido2()!= null && !entity.getContacto().getApellido2().isEmpty()) {
+                        c.setApellido2(entity.getContacto().getApellido2());
+                    }
+                    if (entity.getContacto().getTelefono2()!= null && !entity.getContacto().getTelefono2().isEmpty()) {
+                        c.setTelefono2(entity.getContacto().getTelefono2());
+                    }
+                    c.setSiniestro(e.getSiniestro());
+                    contactoFacadeREST.create(c);
+                    c.setId(q.getFirstResult());
+                    e.getSiniestro().getContactos().add(c);
+                    siniestroFacadeREST.edit(e.getSiniestro());
+                    entity.setContacto(c);
                     super.create(entity);
                     entity.setId(q.getFirstResult());
-                    p.getLlamadas().add(entity);
-                    peritoFacadeREST.edit(p);
-                } else if (entity.getGrupo() != null) {
-                    Grupo g = grupoFacadeREST.find(entity.getGrupo().getId());
-                    entity.setGrupo(g);
-                    super.create(entity);
-                    entity.setId(q.getFirstResult());
-                    g.getLlamadas().add(entity);
-                    grupoFacadeREST.edit(g);
+                    c.getLlamadas().add(entity);
+                    contactoFacadeREST.edit(c);
                 }
-                entity.getEvento().getLlamadas().add(entity);
-                eventoFacadeREST.edit(entity.getEvento());
+            } else if (entity.getPerito() != null) {
+                Perito p = peritoFacadeREST.find(entity.getPerito().getId());
+                entity.setPerito(p);
+                super.create(entity);
+                entity.setId(q.getFirstResult());
+                p.getLlamadas().add(entity);
+                peritoFacadeREST.edit(p);
+            } else if (entity.getGrupo() != null) {
+                Grupo g = grupoFacadeREST.find(entity.getGrupo().getId());
+                entity.setGrupo(g);
+                super.create(entity);
+                entity.setId(q.getFirstResult());
+                g.getLlamadas().add(entity);
+                grupoFacadeREST.edit(g);
             }
-        } else {
-            entity = null;
+            entity.getEvento().getLlamadas().add(entity);
+            eventoFacadeREST.edit(entity.getEvento());
         }
-        return normalizar_llamada(entity);
+        return entity;
     }
 }
