@@ -24,6 +24,7 @@ import javax.ws.rs.core.MediaType;
 import reforms.jpa.Cita;
 import reforms.jpa.Evento;
 import reforms.jpa.Grupo;
+import reforms.jpa.Operador;
 import reforms.jpa.Siniestro;
 
 /**
@@ -33,9 +34,6 @@ import reforms.jpa.Siniestro;
 @Stateless
 @Path("cita")
 public class CitaFacadeREST extends AbstractFacade<Cita> {
-    
-    @EJB
-    private ReasignacionFacadeREST reasignacionFacadeREST;
 
     @EJB
     private EventoFacadeREST eventoFacadeREST;
@@ -130,10 +128,10 @@ public class CitaFacadeREST extends AbstractFacade<Cita> {
             s.setFechaRegistro(c.getEvento().getSiniestro().getFechaRegistro());
             s.setNumero(c.getEvento().getSiniestro().getNumero());
             s.setObservaciones(c.getEvento().getSiniestro().getObservaciones());
-            s.setPeritoOriginal(reasignacionFacadeREST.obtenerUltimaReasignacion(s.getId()).getPerito());
             s.setPoliza(c.getEvento().getSiniestro().getPoliza());
+            s.setPeritoOriginal(c.getEvento().getSiniestro().getPeritoOriginal());
             e.setSiniestro(s);
-            texto = "[" + c.getEvento().getSiniestro().getNumero() + "] " + c.getEvento().getSiniestro().getPoliza().getPropiedad().getDireccion() + " " + c.getEvento().getSiniestro().getPoliza().getPropiedad().getNumero();
+            texto = c.getEvento().getSiniestro().getPoliza().getCliente().getAseguradora().getNombre() + "[" + c.getEvento().getSiniestro().getNumero() + "] " + c.getEvento().getSiniestro().getPoliza().getPropiedad().getDireccion() + " " + c.getEvento().getSiniestro().getPoliza().getPropiedad().getNumero();
             if (c.getEvento().getSiniestro().getPoliza().getPropiedad().getPiso() != null && !c.getEvento().getSiniestro().getPoliza().getPropiedad().getPiso().isEmpty()) {
                 texto += ", " + c.getEvento().getSiniestro().getPoliza().getPropiedad().getPiso();
             }
@@ -197,7 +195,7 @@ public class CitaFacadeREST extends AbstractFacade<Cita> {
             aux.setGrupo(g);
             Evento e = new Evento();
             e.setId(c.getEvento().getId());
-            texto = "[" + c.getEvento().getSiniestro().getNumero() + "] " + c.getEvento().getSiniestro().getPoliza().getPropiedad().getDireccion() + " " + c.getEvento().getSiniestro().getPoliza().getPropiedad().getNumero();
+            texto = c.getEvento().getSiniestro().getPoliza().getCliente().getAseguradora().getNombre() + "[" + c.getEvento().getSiniestro().getNumero() + "] " + c.getEvento().getSiniestro().getPoliza().getPropiedad().getDireccion() + " " + c.getEvento().getSiniestro().getPoliza().getPropiedad().getNumero();
             if (c.getEvento().getSiniestro().getPoliza().getPropiedad().getPiso() != null && !c.getEvento().getSiniestro().getPoliza().getPropiedad().getPiso().isEmpty()) {
                 texto += ", " + c.getEvento().getSiniestro().getPoliza().getPropiedad().getPiso();
             }
@@ -218,6 +216,7 @@ public class CitaFacadeREST extends AbstractFacade<Cita> {
     @Consumes({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
     @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
     public Cita agregarCita(Cita entity) {
+        System.out.println("test_info_cita(entity) = " + test_info_cita(entity));
         if (test_info_cita(entity)) {
             Evento eaux = entity.getEvento(),
                    e = eventoFacadeREST.find(eaux.getId());
@@ -229,10 +228,12 @@ public class CitaFacadeREST extends AbstractFacade<Cita> {
                 super.create(entity);
                 Query q = em.createNativeQuery("SELECT LAST_INSERT_ID()");
                 entity.setId(q.getFirstResult());
-                e.getCitas().add(entity);
+                /*e.getCitas().add(entity);
                 eventoFacadeREST.edit(e);
                 g.getCitas().add(entity);
-                grupoFacadeREST.edit(g);
+                grupoFacadeREST.edit(g);*/
+                entity.setEvento(eaux);
+                entity.setGrupo(gaux);
             } else {
                 entity = null;
             }

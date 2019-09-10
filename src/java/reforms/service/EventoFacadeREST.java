@@ -162,12 +162,13 @@ public class EventoFacadeREST extends AbstractFacade<Evento> {
                 super.create(entity);
                 Query q = em.createNativeQuery("SELECT LAST_INSERT_ID()");
                 entity.setId(q.getFirstResult());
-                s.getEventos().add(entity);
+                /*s.getEventos().add(entity);
                 siniestroFacadeREST.edit(s);
                 o.getEventos().add(entity);
-                operadorFacadeREST.edit(o);
+                operadorFacadeREST.edit(o);*/
             }
         }
+        //return normalizar_evento(entity);
         return entity;
     }
 }
